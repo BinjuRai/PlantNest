@@ -1,23 +1,46 @@
-
 require("dotenv").config();
-const http = require("http");
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+// const connectDB = require("./config/db");
+const connectDB = require("./src/config/db");
 
-const app = require("./index");
-const cors = require('cors');
+const app = express();
 
-const PORT = process.env.PORT || 5050;
+// middleware
+app.use(cors());
+app.use(express.json());
+app.use(morgan("dev"));
 
-// Create HTTP server
-const server = http.createServer(app);
+// connect DB
+connectDB();
 
-
-app.set("connectedUsers", connectedUsers);
-
-// // This line is **redundant** — you already attached this route in index.js:
-// const lessonRoutes = require('./routes/admin/lessonContentRoute');
-// app.use('/api/admin/lesson', lessonRoutes);  // <-- REMOVE this from here to avoid double registration
-
-// Start server
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// default test route
+app.get("/", (req, res) => {
+    res.send("PlantNest Backend Running...");
 });
+
+// import routes
+const userRoutes = require("./src/routes/userRoutes");
+const productRoutes = require("./src/routes/productRoutes");
+const categoryRoutes = require("./src/routes/categoryRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
+const wishlistRoutes = require("./src/routes/wishlistRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
+const paymentRoutes = require("./src/routes/paymentRoutes");
+const deliveryTrackingRoutes = require("./src/routes/deliveryTrackingRoutes");
+
+// route middleware
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/tracking", deliveryTrackingRoutes);
+app.use("/api/users", userRoutes);
+
+
+// start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
