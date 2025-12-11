@@ -39,3 +39,25 @@ class DeliveryTrackingService {
 }
 
 module.exports = new DeliveryTrackingService();
+
+// const Delivery = require("../models/deliveryModel");
+
+// class DeliveryService {
+//   async createTracking(orderId) {
+//     return await Delivery.create({ order: orderId });
+//   }
+
+//   async updateTracking(deliveryId, status, location) {
+//     return await Delivery.findByIdAndUpdate(
+//       deliveryId,
+//       { status, location },
+//       { new: true }
+//     );
+//   }
+
+//   async trackOrder(orderId) {
+//     return await Delivery.findOne({ order: orderId });
+//   }
+// }
+
+// module.exports = new DeliveryService();

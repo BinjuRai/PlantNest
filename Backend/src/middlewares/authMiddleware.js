@@ -1,4 +1,7 @@
-import jwt from "jsonwebtoken";
+
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
+
 
 export const auth = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -18,4 +21,11 @@ export const adminOnly = (req, res, next) => {
     return res.status(403).json({ message: "Admins only" });
   next();
 };
+
+// module.exports = (req, res, next) => {
+//   if (!req.user || req.user.role !== "admin")
+//     return res.status(403).json({ message: "Admin access denied" });
+
+//   next();
+// };
 
