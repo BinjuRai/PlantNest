@@ -49,7 +49,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ======================= REGISTER =======================
 
 exports.registerUser = async (req, res) => {
   console.log(">>> registerUser called");
@@ -98,7 +97,59 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// ======================= LOGIN =======================
+
+
+// exports.loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "Missing email or password",
+//     });
+//   }
+
+//   try {
+//     const getUser = await User.findOne({ email: email });
+
+//     if (!getUser) {
+//       return res.status(403).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+
+//     const passwordCheck = await bcrypt.compare(password, getUser.password);
+//     if (!passwordCheck) {
+//       return res.status(403).json({
+//         success: false,
+//         message: "Invalid credentials",
+//       });
+//     }
+
+//     const payload = {
+//       _id: getUser._id,
+//       email: getUser.email,
+//       name: getUser.name,
+//       role: getUser.role,
+//     };
+
+//     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Login Successful",
+//       data: getUser,
+//       token: token,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//     });
+//   }
+// };
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -111,7 +162,7 @@ exports.loginUser = async (req, res) => {
   }
 
   try {
-    const getUser = await User.findOne({ email: email });
+    const getUser = await User.findOne({ email });
 
     if (!getUser) {
       return res.status(403).json({
@@ -135,16 +186,19 @@ exports.loginUser = async (req, res) => {
       role: getUser.role,
     };
 
-    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+    // ✅ Fix: Wrap user inside 'data.user'
     return res.status(200).json({
       success: true,
       message: "Login Successful",
-      data: getUser,
-      token: token,
+      data: {
+        user: getUser, // now frontend can do { user } = response.data
+        token: token,  // optional: you could also just keep token separate
+      },
     });
   } catch (err) {
-    console.log(err);
+    console.log("LOGIN ERROR:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -152,7 +206,6 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// ======================= SEND RESET LINK =======================
 
 exports.sendResetLink = async (req, res) => {
   const { email } = req.body;
@@ -192,14 +245,14 @@ exports.sendResetLink = async (req, res) => {
   }
 };
 
-// ======================= RESET PASSWORD =======================
+
 
 exports.resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
   try {
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const hashed = await bcrypt.hash(password, 10);
 
     await User.findByIdAndUpdate(decoded.id, { password: hashed });
@@ -213,7 +266,6 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-// ======================= GET PROFILE =======================
 
 exports.getProfile = async (req, res) => {
   try {
@@ -228,7 +280,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// ======================= UPDATE PROFILE =======================
+
 
 exports.updateProfile = async (req, res) => {
   try {
@@ -252,7 +304,6 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// ======================= CHANGE PASSWORD =======================
 
 exports.changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;

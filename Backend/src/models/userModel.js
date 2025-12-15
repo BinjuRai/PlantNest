@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema(
         phone: String,
       }
     ],
-    role: { type: String, enum: ["user", "admin"], default: "user" }
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    filepath: {
+            type: String
+        }
   },
   { timestamps: true }
 );

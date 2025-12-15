@@ -1,76 +1,37 @@
-import Link from "next/link"
-import { Facebook, Instagram, Twitter } from "lucide-react"
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-primary text-white mt-20">
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
+       {/* Footer */}
+      <div className="bg-green-700 text-white px-8 py-12">
+        <div className="grid md:grid-cols-4 gap-8 text-sm">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <span className="text-primary font-bold text-sm">PN</span>
-              </div>
-              <span className="font-bold text-lg">Plant Nest</span>
-            </div>
-            <p className="text-sm text-white/80">Your premium online plant shop bringing nature to your home.</p>
+            <h3 className="font-semibold mb-3">PLANT NEST</h3>
+            <p>Bringing nature closer to you.</p>
           </div>
-
-          {/* Shop */}
           <div>
-            <h3 className="font-bold mb-4">Shop</h3>
-            <ul className="space-y-2 text-sm text-white/80">
-              <li>
-                <Link href="/categories" className="hover:text-white transition">
-                  Categories
-                </Link>
-              </li>
-              <li>
-                <Link href="/new" className="hover:text-white transition">
-                  New Arrivals
-                </Link>
-              </li>
-              <li>
-                <Link href="/bestsellers" className="hover:text-white transition">
-                  Bestsellers
-                </Link>
-              </li>
-              <li>
-                <Link href="/deals" className="hover:text-white transition">
-                  Deals
-                </Link>
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-3">My Account</h4>
+            <p>Login</p>
+            <p>My Orders</p>
+            <p>My Wishlist</p>
           </div>
-
-          {/* Company */}
           <div>
-            <h3 className="font-bold mb-4">Company</h3>
-            <ul className="space-y-2 text-sm text-white/80">
-              <li>
-                <Link href="/about" className="hover:text-white transition">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-white transition">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-white transition">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:text-white transition">
-                  FAQ
-                </Link>
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-3">Payment Options</h4>
+            <p>Cash on Delivery</p>
+            <p>eSewa</p>
           </div>
+          <div>
+            <h4 className="font-semibold mb-3">Contact Us</h4>
+            <p>plantnest@gmail.com</p>
+            <p>Kathmandu, Nepal</p>
+          </div>
+        </div>
 
+       
+      
           {/* Social */}
           <div>
             <h3 className="font-bold mb-4">Follow Us</h3>
@@ -91,15 +52,16 @@ export default function Footer() {
         <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-white/60">
           <p>&copy; 2025 Plant Nest. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link href="/privacy" className="hover:text-white transition">
+            <a href="/privacy" className="hover:text-white transition">
               Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-white transition">
+            </a>
+            <a href="/terms" className="hover:text-white transition">
               Terms of Service
-            </Link>
+            </a>
           </div>
         </div>
       </div>
+      </div>
     </footer>
-  )
+  );
 }

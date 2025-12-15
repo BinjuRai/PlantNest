@@ -1,0 +1,165 @@
+const User = require("../models/userModel");
+const bcrypt = require("bcrypt")
+const Payment = require("../models/payment");
+exports.createUser = async (req, res) => {
+  try {
+    const filename = req.file?.path;
+    const { username, email, firstName, lastName, password, phoneno } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ success: false, message: "Missing fields" });
+    }
+
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }]
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "User exists" });
+    }
+
+    const hashedPass = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      username,
+      email,
+      firstName,
+      lastName,
+      password: hashedPass,
+      phoneno,
+      filepath: filename,
+    });
+
+    await newUser.save();
+
+    return res.status(201).json({ success: true, message: "User Registered" });
+  } catch (err) {
+    console.error("create user error: ", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+
+exports.getUsers = async (req, res ) => {
+    try{
+        const users = await User.find();
+        return res.status(200).json(
+            {
+                "success": true,
+                "message": "All users",
+                "data":users
+            }
+        )
+    }catch(err){
+        return res.status(500).json(
+            { "success": false, "message": "Server error" }
+        )
+    }
+}
+
+exports.getOneUser = async (req, res) => {
+    try{
+        // unique identifier
+        const id = req.params.id // mongodb id
+        const user = await User.findOne(
+            {
+                "_id": id
+            }
+        )
+        return res.status(200).json(
+            {
+                "succes": true,
+                "message": "One user fetched",
+                "data": user
+            }
+        )
+    }catch(err){
+        return res.status(500).json(
+            { "success": false, "message": "Server error" }
+        )
+    }
+}
+
+
+exports.updateOne = async (req, res) => {
+    const { username, firstName, lastName } = req.body
+    const _id = req.params.id // mongodb id
+    try{
+        const user = await User.updateOne(
+            {
+                "_id": _id
+            },
+            {
+                $set : {
+                    "username" : username,
+                    "firstName": firstName,
+                    "lastName": lastName
+                }
+            }
+        )
+        return res.status(200).json(
+            { "success": true, "message": "User updated"}
+        )
+    }catch(err){
+        return res.status(500).json(
+            { "success": false, "message": "Server error" }
+        )
+    }
+}
+
+
+exports.deleteOne = async (req, res) => {
+    const _id = req.params.id
+    try{
+        const user = await User.deleteOne(
+            {
+                "_id": _id
+            }
+        )
+        return res.status(200).json(
+            {"success" : true, "message": "User Deleted"}
+        )
+    }catch(err){
+        return res.status(500).json(
+            {"success": false, "message": "Server Error"}
+        )
+    }
+}
+
+
+
+exports.getUsersWithPayments = async (req, res) => {
+  try {
+    const users = await User.find();
+    const userIds = users.map(user => user._id);
+
+    const payments = await Payment.find({
+      userId: { $in: userIds },
+      paymentStatus: "completed"
+    });
+
+    const paymentMap = {};
+    payments.forEach(payment => {
+      const uid = payment.userId.toString();
+      if (!paymentMap[uid] || new Date(payment.paymentDate) > new Date(paymentMap[uid].paymentDate)) {
+        paymentMap[uid] = payment;
+      }
+    });
+
+    const usersWithPayments = users.map(user => ({
+      ...user.toObject(),
+      payment: paymentMap[user._id.toString()] ? {
+        pricePaid: paymentMap[user._id.toString()].pricePaid,
+        paymentMethod: paymentMap[user._id.toString()].paymentMethod,
+        paymentStatus: paymentMap[user._id.toString()].paymentStatus,
+        paymentDate: paymentMap[user._id.toString()].paymentDate,
+      } : null,
+    }));
+
+    res.json(usersWithPayments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error fetching users with payments" });
+  }
+};

@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const paymentController = require("../controllers/paymentController");
-const { isAuthenticated } = require("../middlewares/auth");
+const { auth } = require("../middlewares/authMiddleware");
 
 // Cash on Delivery
-router.post("/cod", isAuthenticated, paymentController.cod);
+router.post("/cod", auth, paymentController.cod);
 
+// eSewa payment
+router.post("/esewa", auth, paymentController.stripe);
 
-router.post("/esewa", isAuthenticated, paymentController.esewa);
-
-
-router.post("/khalti", isAuthenticated, paymentController.khalti);
+// Khalti payment
+router.post("/khalti", auth, paymentController.razorpay);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const wishlistService = require("../services/wishlistDervice");
+const wishlistService = require("../services/wishlistService");
 
 class WishlistController {
   async add(req, res) {

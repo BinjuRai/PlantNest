@@ -2,78 +2,125 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { AuthContext } from '../auth/authProvider';
-import { FaRegHeart, FaUserCircle } from "react-icons/fa";
-import NotificationBell from '../components/NotificationBell';
-import { useWishlist } from '../assets/WishListcontext';
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  ShoppingCart,
+  Bell,
+  User
+} from "lucide-react";
+// import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
-  const { wishlist, isLoading } = useWishlist();  // Use WishlistContext hook here
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(() => navigate("/login"));
-  };
+  logout();
+  navigate("/login");
+};
+
 
   const goToDashboard = () => {
     navigate('normal/dashboard');
   };
 
   return (
-    <header className='bg-[#ffff] py-1'>
+    <header > 
+    
+    <div className="bg-green-700 bg-opacity-90 text-white flex justify-between items-center py-2 px-4">
+      {/* Empty div for left spacing if needed */}
+      <div></div>
+
+      {/* Center text */}
+      <span className="font-semibold text-lg">PlantNest NEPAL</span>
+
+      {/* Social icons */}
+      <div className="flex space-x-3">
+        <a
+          href="#"
+          className="bg-white text-black p-1.5 rounded-full hover:text-green-400 transition"
+        >
+          <Facebook className="w-5 h-5" />
+        </a>
+        <a
+          href="#"
+          className="bg-white text-black p-1.5 rounded-full hover:text-pink-500 transition"
+        >
+          <Instagram className="w-5 h-5" />
+        </a>
+        <a
+          href="#"
+          className="bg-white text-black p-1.5 rounded-full hover:text-red-600 transition"
+        >
+          <Youtube className="w-5 h-5" />
+        </a>
+      </div>
+    </div>
+      {/* <div className='top-header bg-blue' >
+        <div>
+
+        </div>
+          <span>PlantNest NEPAL</span>
+        <div className='social-icons'>
+          <a href="#" className="hover:text-accent transition">
+            <Facebook className="w-5 h-5" />
+          </a>
+              <a href="#" className="hover:text-accent transition">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="#" className="hover:text-accent transition">
+                <Youtube className="w-5 h-5" />
+              </a>
+      </div>
+      </div> */}
+
       <div className="container">
-        <nav className="space-x-4 flex justify-between items-center light">
-          <NavLink to="/" className="logoo py-7 light font-extrabold text-3xl tracking-wide">MelodyMe</NavLink>
+        {/* Top Bar */}
+      {/* <div className="bg-green-700 text-white text-sm py-2 flex justify-center">
+        <span className="font-semibold">PlantNest NEPAL</span>
+      </div> */}
+    
+
+      {/* Navbar */}
+      <nav className="w-full flex items-center justify-between px-8 py-4 bg-white shadow">
+        <div className="flex items-center gap-2">
+          <img src="/src/assets/images/plantnestlogo.svg" alt="Plant Nest Logo" className="w-15 h-15 " />
+
           
-          <div className='flex gap-5'>
-            <NavLink to="/" className="light">Categories</NavLink>
-            <NavLink to="/" className="light">About us</NavLink>
-            <NavLink to="/" className="light">Blog</NavLink>
-            <NavLink to="/contact" className="light">Contact us</NavLink>
-          </div>
+        </div>
 
-          <div className='flex gap-5 flex-row justify-center items-center'>
-            <NavLink to="/normal/wishlist" className="relative text-[#fff] hover:text-red-600 transition-colors duration-300 text-2xl">
-              <FaRegHeart />
-              {!isLoading && wishlist?.length > 0 && (
-                <span className="absolute -top-2 -right-3 bg-[#dfd5d5dd] text-red-500 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                  {wishlist.length}
-                </span>
-              )}
-            </NavLink>
+        <ul className="hidden md:flex gap-8 text-sm">
+          <li className="cursor-pointer">About us</li>
+          <li className="cursor-pointer">Categories</li>
+          <li className="cursor-pointer">Wishlist</li>
+        </ul>
 
-            <NavLink>
-              <NotificationBell />
-            </NavLink>
+        <div className="flex items-center gap-4">
+          <ShoppingCart size={18} />
+          <Bell size={18} />
+          <User size={18} />
+         {user ? (
+    <button
+      onClick={handleLogout}
+      className="bg-yellow-400 text-black text-sm px-4 py-1 rounded hover:bg-yellow-500 transition"
+    >
+      Logout
+    </button>
+  ) : (
+    <button
+      onClick={() => navigate("/login")}
+      className="bg-green-700 text-white text-sm px-4 py-1 rounded"
+    >
+      Login
+    </button>
+  )}
+</div>
+      </nav>
 
-            {!user ? (
-              <>
-          
-                <NavLink to="/login" className='px-5 py-2 bg-green-930 rounded-[18px] text-[#fff] hover:bg-gray-300'>
-                  Login
-                </NavLink>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={goToDashboard}
-                  title="Go to Dashboard"
-                  className="text-white text-3xl hover:text-[#ded5a2fc] transition-colors"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  <FaUserCircle />
-                </button>
-                <span className="ml-2 text-white">Welcome, {user.username}</span>
-                <button
-                  onClick={handleLogout}
-                  className="px-5 py-1 border border-[#0a1229] text-[#0a1229] bg-white rounded-[22px] font-medium hover:bg-[#0a1229] hover:text-white transition-colors duration-200 ml-4"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
-        </nav>
       </div>
     </header>
   );

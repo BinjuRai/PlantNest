@@ -1,4 +1,4 @@
-const Product = require("../models/productModel");
+const Product = require("../models/admin/productModel");
 
 class ProductService {
   async createProduct(data) {
@@ -6,11 +6,11 @@ class ProductService {
   }
 
   async getAllProducts(filter = {}) {
-    return await Product.find(filter).populate("category");
+    return await Product.find(filter).populate("categoryId");
   }
 
   async getProductById(id) {
-    return await Product.findById(id).populate("category");
+    return await Product.findById(id).populate("categoryId");
   }
 
   async updateProduct(id, data) {
