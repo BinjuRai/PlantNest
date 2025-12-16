@@ -49,7 +49,7 @@ const PlantSection = ({ plants }) => {
   return (
     <section className="py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        {/* <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-text-light dark:text-text-dark">
             Our Plants
           </h2>
@@ -61,7 +61,19 @@ const PlantSection = ({ plants }) => {
               Featured
             </button>
           </div>
-        </div>
+        </div> */}
+         <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-serif font-semibold text-[#274E36] dark:text-green-100">
+          Our Latest Products
+        </h2>
+        
+        <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
+         View More
+        <span className="bg-[#EAB87B] text-black secondary-font font-light rounded-full px-2 py-1 flex items-center justify-center">
+          ➜
+        </span>
+      </button>
+      </div>
         
         {plants && plants.length > 0 ? (<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {plants.map((plant) => (

@@ -14,3 +14,17 @@
 .secondary-font {
   font-family: "Arima", system-ui;
 }
+
+@keyframes category-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-80%);
+  }
+}
+
+.animate-category-carousel {
+  display: flex;
+  animation: category-scroll 3s linear infinite;
+}

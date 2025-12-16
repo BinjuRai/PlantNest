@@ -29,14 +29,14 @@ const Header = () => {
   };
 
   return (
-    <header > 
+    <header className=''> 
     
-    <div className="bg-green-700 bg-opacity-90 text-white flex justify-between items-center py-2 px-4">
+    <div className="bg-[#538767e7] bg-opacity-80 text-white flex justify-between items-center py-2 px-4">
       {/* Empty div for left spacing if needed */}
       <div></div>
 
       {/* Center text */}
-      <span className="font-semibold text-lg">PlantNest NEPAL</span>
+      <span className="font-regular text-lg secondary-font">PlantNest NEPAL</span>
 
       {/* Social icons */}
       <div className="flex space-x-3">
@@ -60,25 +60,9 @@ const Header = () => {
         </a>
       </div>
     </div>
-      {/* <div className='top-header bg-blue' >
-        <div>
+     
 
-        </div>
-          <span>PlantNest NEPAL</span>
-        <div className='social-icons'>
-          <a href="#" className="hover:text-accent transition">
-            <Facebook className="w-5 h-5" />
-          </a>
-              <a href="#" className="hover:text-accent transition">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="hover:text-accent transition">
-                <Youtube className="w-5 h-5" />
-              </a>
-      </div>
-      </div> */}
-
-      <div className="container">
+      <div >
         {/* Top Bar */}
       {/* <div className="bg-green-700 text-white text-sm py-2 flex justify-center">
         <span className="font-semibold">PlantNest NEPAL</span>
@@ -86,23 +70,26 @@ const Header = () => {
     
 
       {/* Navbar */}
-      <nav className="w-full flex items-center justify-between px-8 py-4 bg-white shadow">
+      <nav className="w-full flex items-center justify-between px-8 py-4 bg-white shadow-lg">
         <div className="flex items-center gap-2">
           <img src="/src/assets/images/plantnestlogo.svg" alt="Plant Nest Logo" className="w-15 h-15 " />
-
-          
         </div>
 
-        <ul className="hidden md:flex gap-8 text-sm">
+        <ul className="hidden md:flex gap-12 text-sxl font-semibold text-[#274E36]">
           <li className="cursor-pointer">About us</li>
           <li className="cursor-pointer">Categories</li>
           <li className="cursor-pointer">Wishlist</li>
+           <li className="cursor-pointer">Blog</li>
         </ul>
 
         <div className="flex items-center gap-4">
-          <ShoppingCart size={18} />
-          <Bell size={18} />
-          <User size={18} />
+      
+          <ShoppingCart size={18}  />
+          
+          <Bell size={18}  />
+     
+          <User size={18}  />
+       
          {user ? (
     <button
       onClick={handleLogout}
@@ -111,13 +98,16 @@ const Header = () => {
       Logout
     </button>
   ) : (
+    
     <button
       onClick={() => navigate("/login")}
-      className="bg-green-700 text-white text-sm px-4 py-1 rounded"
+      className= "bg-[#274E36] text-white px-10 py-2 rounded-lg font-semibold transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md focus:outline-none focus:ring-2 focus:ring-[#274E36]/50"
     >
       Login
     </button>
   )}
+ 
+  
 </div>
       </nav>
 

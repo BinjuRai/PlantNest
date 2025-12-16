@@ -123,8 +123,56 @@ import ErrorMessage from "../components/common/ErrorMessage";
 import HeroSection from "../components/home/HeroSection";
 import CategorySection from "../components/home/CategorySection";
 import PlantSection from "../components/home/PlantSection";
+import WhyChoose from "../components/home/WhyChoose";
+import CTASection from "../components/home/CTASection";
+import indoorPlant from "/src/assets/images/indoorpl.png";
+
+import FavouriteProducts from "..//components/home/FavouriteProduct"
+const samplePlants = [
+  {
+    _id: "1",
+    name: "Monstera Deliciosa",
+    price: 29.99,
+    stock: 10,
+    isWishlisted: true,
+    imagepath: indoorPlant, // 👈 no image yet
+  },
+  {
+    _id: "2",
+    name: "Snake Plant",
+    price: 19.99,
+    stock: 5,
+    isWishlisted: false,
+    imagepath: null,
+  },
+  {
+    _id: "3",
+    name: "Peace Lily",
+    price: 24.99,
+    stock: 8,
+    isWishlisted: false,
+    imagepath: null,
+  },
+  {
+    _id: "4",
+    name: "Fiddle Leaf Fig",
+    price: 39.99,
+    stock: 2,
+    isWishlisted: true,
+    imagepath: null,
+  },
+  {
+    _id: "5",
+    name: "Aloe Vera",
+    price: 14.99,
+    stock: 12,
+    isWishlisted: false,
+    imagepath: null,
+  },
+];
 
 const Homepage = () => {
+  
   // Fetch plants
   const { 
     data: plants, 
@@ -168,6 +216,7 @@ const Homepage = () => {
     );
   }
 
+
   // Log for debugging
   console.log("Plants data:", plants);
   console.log("Categories data:", categories);
@@ -177,6 +226,12 @@ const Homepage = () => {
       <HeroSection />
       <CategorySection categories={categories} />
       <PlantSection plants={plants} onAddToCart={handleAddToCart} />
+      <WhyChoose />
+    
+     <FavouriteProducts plants={samplePlants} />
+
+
+      <CTASection />
     </div>
   );
 };
