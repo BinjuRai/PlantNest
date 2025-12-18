@@ -91,6 +91,7 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
+app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", userRoutes);
 app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/admin/categories", adminCategoryRoutes);

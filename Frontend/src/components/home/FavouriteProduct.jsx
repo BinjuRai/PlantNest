@@ -21,7 +21,6 @@ export default function FavouriteProducts({ plants }) {
           <div className="col-span-2 row-span-2">
             <FavouriteCard plant={plants[0]} large />
           </div>
-
           {plants.slice(1, 5).map((plant) => (
             <FavouriteCard key={plant._id} plant={plant} />
           ))}

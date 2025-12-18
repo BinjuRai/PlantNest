@@ -68,7 +68,7 @@ const PlantCard = ({ plant, onAddToCart, onBuyNow }) => {
         )}
 
         <p className="text-2xl font-bold text-primary mb-3">
-          ${plant.price.toFixed(2)}
+          Rs.{plant.price.toFixed(2)}
         </p>
 
         {plant.description && (

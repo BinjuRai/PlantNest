@@ -87,50 +87,80 @@
 
 
 
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
+import AdminLayout from "../layouts/AdminLayout.jsx";
+
+// Pages
 import Homepage from "../pages/homepage.jsx";
 import LoginPage from "../pages/login.jsx";
 import RegisterPage from "../pages/register.jsx";
 import Checkout from "../pages/Checkout.jsx";
-import ProtectedRoute from "./ProtectedRoutes.jsx";
+
+// Admin Pages
+import AdminDashboard from "../pages/admin/Dashboard.jsx";
+import Products from "../pages/admin/Products.jsx";
+import AddProduct from "../pages/admin/AddProduct.jsx";
+import EditProduct from "../pages/admin/EditProduct.jsx";
+import Categories from "../pages/admin/Category.jsx"; 
+import AddCategory from "../pages/admin/AddCategory.jsx";
+
+// Route Guards
 import GuestRoute from "./GuestRouter.jsx";
+import ProtectedRoute from "./ProtectedRoutes.jsx";
+import AdminRoute from "./AdminRouter.jsx";
+import Aboutus from "../pages/aboutus.jsx";
+import CategoryPage from "../pages/Categories.jsx";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Routes WITHOUT MainLayout (No Header/Footer) */}
+        {/* ================= PUBLIC ROUTES ================= */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/aboutus" element={<Aboutus />} />
+          <Route path="/categories" element={<CategoryPage />} />
+          {/* Other public pages like About, Contact can go here */}
+        </Route>
+
+        {/* ================= GUEST-ONLY ROUTES ================= */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+                <Route path="/aboutus" element={<Aboutus />} />
         </Route>
 
-        {/* Routes WITH MainLayout (Header + Footer) */}
-        <Route element={<MainLayout />}>
-          {/* Public Routes */}
-          <Route path="/" element={<Homepage />} />
-
-          {/* Protected Routes - Only accessible when logged in */}
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* 404 Route */}
-          <Route 
-            path="*" 
-            element={
-              <div className="min-h-screen flex items-center justify-center text-2xl">
-                404 - Page Not Found 🌿
-              </div>
-            } 
-          />
+        {/* ================= AUTHENTICATED USER ROUTES ================= */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/checkout" element={<Checkout />} />
+          {/* Add Wishlist or Profile pages here */}
         </Route>
+
+        {/* ================= ADMIN ROUTES ================= */}
+        <Route element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<Products />} />
+            <Route path="/admin/products/add" element={<AddProduct />} />
+            <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+            <Route path="/admin/categories" element={<Categories />} />
+            <Route path="/admin/categories/add" element={<AddCategory />} />
+          </Route>
+        </Route>
+
+        {/* ================= 404 PAGE ================= */}
+        <Route
+          path="*"
+          element={
+            <div className="min-h-screen flex items-center justify-center text-2xl">
+              404 - Page Not Found 🌿
+            </div>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

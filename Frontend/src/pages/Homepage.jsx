@@ -126,8 +126,9 @@ import PlantSection from "../components/home/PlantSection";
 import WhyChoose from "../components/home/WhyChoose";
 import CTASection from "../components/home/CTASection";
 import indoorPlant from "/src/assets/images/indoorpl.png";
+import FavouriteProducts from "../components/home/FavouriteProduct";
 
-import FavouriteProducts from "..//components/home/FavouriteProduct"
+
 const samplePlants = [
   {
     _id: "1",

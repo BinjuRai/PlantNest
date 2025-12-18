@@ -41,7 +41,7 @@ const HeroSection = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="w-full pl-12 pr-4 py-3 rounded-full border border-green-200 focus:ring-2 focus:ring-green-600 outline-none shadow-lg"
+            className="w-full pl-12 pr-4 py-3 rounded-full border border-[#274E36] focus:ring-2 focus:ring-green-600 outline-none shadow-lg"
           />
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-700">
             🔍

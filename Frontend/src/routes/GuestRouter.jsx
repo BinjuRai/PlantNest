@@ -40,7 +40,8 @@ export default function GuestRoute() {
 
   // If user is logged in, redirect based on role
   if (user) {
-    if (user.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+    if (user.role === "admin") return <Navigate to="/admin" replace />;
+;
     return <Navigate to="/" replace />; // Normal users go to homepage
   }
 

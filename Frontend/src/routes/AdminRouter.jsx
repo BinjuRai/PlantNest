@@ -18,11 +18,10 @@
 // }
 
 
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../auth/authProvider";
 
-export default function AdminRoute() {
+const AdminRoute = () => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -33,9 +32,16 @@ export default function AdminRoute() {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />; // Fixed typo
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-  if (user.role !== "admin") return <Navigate to="/" replace />;
+  if (user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
 
   return <Outlet />;
-}
+};
+
+
+export default AdminRoute;
