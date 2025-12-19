@@ -1,10 +1,4 @@
-// import axios from "../api/api";
 
-// // Get all categories
-// export const getAllCategoriesApi = () => axios.get("/categories");
-
-// // Get single category by ID
-// export const getCategoryByIdApi = (id) => axios.get(`/categories/${id}`);
 
 import axios from "../api/api";
 

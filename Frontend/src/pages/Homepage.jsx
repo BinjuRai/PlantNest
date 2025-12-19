@@ -112,6 +112,7 @@
 //     </div>
 //   );
 // }
+
 import { useQuery } from "@tanstack/react-query";
 import { getAllPlantsApi } from "../services/plantService";
 import { getAllCategoriesApi } from "../services/categoryService";
@@ -125,55 +126,10 @@ import CategorySection from "../components/home/CategorySection";
 import PlantSection from "../components/home/PlantSection";
 import WhyChoose from "../components/home/WhyChoose";
 import CTASection from "../components/home/CTASection";
-import indoorPlant from "/src/assets/images/indoorpl.png";
 import FavouriteProducts from "../components/home/FavouriteProduct";
-
-
-const samplePlants = [
-  {
-    _id: "1",
-    name: "Monstera Deliciosa",
-    price: 29.99,
-    stock: 10,
-    isWishlisted: true,
-    imagepath: indoorPlant, // 👈 no image yet
-  },
-  {
-    _id: "2",
-    name: "Snake Plant",
-    price: 19.99,
-    stock: 5,
-    isWishlisted: false,
-    imagepath: null,
-  },
-  {
-    _id: "3",
-    name: "Peace Lily",
-    price: 24.99,
-    stock: 8,
-    isWishlisted: false,
-    imagepath: null,
-  },
-  {
-    _id: "4",
-    name: "Fiddle Leaf Fig",
-    price: 39.99,
-    stock: 2,
-    isWishlisted: true,
-    imagepath: null,
-  },
-  {
-    _id: "5",
-    name: "Aloe Vera",
-    price: 14.99,
-    stock: 12,
-    isWishlisted: false,
-    imagepath: null,
-  },
-];
+import indoorPlant from "/src/assets/images/indoorpl.png";
 
 const Homepage = () => {
-  
   // Fetch plants
   const { 
     data: plants, 
@@ -189,13 +145,14 @@ const Homepage = () => {
   const { 
     data: categories, 
     isLoading: categoriesLoading,
-    error: categoriesError 
+    error: categoriesError,
+    refetch: refetchCategories 
   } = useQuery({
     queryKey: ["categories"],
     queryFn: getAllCategoriesApi,
   });
 
-  // Handle add to cart (for now just show toast)
+  // Handle add to cart
   const handleAddToCart = (plant) => {
     toast.success(`${plant.name} added to cart! 🛒`);
     // TODO: Implement actual cart functionality
@@ -203,10 +160,10 @@ const Homepage = () => {
 
   // Loading state
   if (plantsLoading || categoriesLoading) {
-    return <Loading message="Loading plants..." />;
+    return <Loading message="Loading..." />;
   }
 
-  // Error state
+  // Error state for plants
   if (plantsError) {
     return (
       <ErrorMessage 
@@ -217,6 +174,12 @@ const Homepage = () => {
     );
   }
 
+  // Error state for categories
+  if (categoriesError) {
+    console.error("Categories error:", categoriesError);
+    // Don't block the entire page, just log the error
+    // Categories section will handle empty state
+  }
 
   // Log for debugging
   console.log("Plants data:", plants);
@@ -225,13 +188,15 @@ const Homepage = () => {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
       <HeroSection />
-      <CategorySection categories={categories} />
+      
+      {/* Categories Section - only show if we have categories */}
+      {categories && categories.length > 0 && (
+        <CategorySection categories={categories} />
+      )}
+      
       <PlantSection plants={plants} onAddToCart={handleAddToCart} />
       <WhyChoose />
-    
-     <FavouriteProducts plants={samplePlants} />
-
-
+      <FavouriteProducts plants={plants || samplePlants} />
       <CTASection />
     </div>
   );

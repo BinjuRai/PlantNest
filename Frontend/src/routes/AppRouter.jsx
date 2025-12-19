@@ -112,6 +112,9 @@ import ProtectedRoute from "./ProtectedRoutes.jsx";
 import AdminRoute from "./AdminRouter.jsx";
 import Aboutus from "../pages/aboutus.jsx";
 import CategoryPage from "../pages/Categories.jsx";
+import EditCategory from "../pages/admin/EditCategory.jsx";
+import WishlistPage from "../pages/wishlistPage.jsx";
+import AllProductsPage from "../pages/allProductPage.jsx";
 
 export default function AppRouter() {
   return (
@@ -124,6 +127,7 @@ export default function AppRouter() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/categories" element={<CategoryPage />} />
+          <Route path="products" element={<AllProductsPage />} />
           {/* Other public pages like About, Contact can go here */}
         </Route>
 
@@ -137,6 +141,7 @@ export default function AppRouter() {
         {/* ================= AUTHENTICATED USER ROUTES ================= */}
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           {/* Add Wishlist or Profile pages here */}
         </Route>
 
@@ -149,6 +154,7 @@ export default function AppRouter() {
             <Route path="/admin/products/edit/:id" element={<EditProduct />} />
             <Route path="/admin/categories" element={<Categories />} />
             <Route path="/admin/categories/add" element={<AddCategory />} />
+            <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
           </Route>
         </Route>
 

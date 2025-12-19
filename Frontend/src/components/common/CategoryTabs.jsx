@@ -1,25 +1,37 @@
-const categories = [
-  { label: "Indoor Plants", value: "indoor" },
-  { label: "Outdoor Plants", value: "outdoor" },
-  { label: "Hanging Plants", value: "hanging" },
-  { label: "Flower Plants", value: "flower" },
-];
 
-export default function CategoryTabs({ active, onChange }) {
+
+// import { useEffect, useState } from "react";
+// import { getAllCategoriesApi } from "../../services/categoryService";
+
+
+export default function CategoryTabs({ categories, active, onChange }) {
   return (
-    <div className="flex gap-4 justify-center bg-white py-4 shadow-sm">
+    <div className="flex gap-6 justify-center bg-white py-4 shadow-sm overflow-x-auto">
+      {/* All */}
+      <button
+        onClick={() => onChange("all")}
+        className={`px-4 py-1.5 rounded-full text-sm font-semibold transition
+          ${
+            active === "all"
+              ? "bg-[#274E36] text-white"
+              : "text-[#274E36] hover:bg-[#274E36]/10"
+          }`}
+      >
+        All
+      </button>
+
       {categories.map((cat) => (
         <button
-          key={cat.value}
-          onClick={() => onChange(cat.value)}
+          key={cat._id}
+          onClick={() => onChange(cat._id)}
           className={`px-4 py-1.5 rounded-full text-sm font-semibold transition
             ${
-              active === cat.value
+              active === cat._id
                 ? "bg-[#274E36] text-white"
                 : "text-[#274E36] hover:bg-[#274E36]/10"
             }`}
         >
-          {cat.label}
+          {cat.name}
         </button>
       ))}
     </div>

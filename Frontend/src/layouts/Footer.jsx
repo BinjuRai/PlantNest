@@ -11,14 +11,7 @@ export default function Footer() {
 
           {/* BRAND */}
           <div >
-            {/* <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-full border border-white flex items-center justify-center">
-                🌿
-              </div>
-              <h3 className="text-lg font-semibold tracking-wide">
-                PLANT<br />NEST
-              </h3>
-            </div> */}
+          
             <img src="/src/assets/images/whitelogoo.svg" alt="Plant Nest Logo" className="w-15 h-15" />
             
             

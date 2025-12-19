@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/api";
 import { toast } from "react-toastify";
+import api from "../../api/api";
+import { getAdminCategories } from "../../api/categoryApi";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const AddProduct = () => {
     plantType: "",
     stock: "",
     careInstructions: "",
+    scientificName: "",
     isFeatured: false,
   });
 
@@ -25,10 +27,16 @@ const AddProduct = () => {
 
   // Fetch categories
   useEffect(() => {
-    api
-      .get("/admin/categories")
-      .then((res) => setCategories(res.data.categories || res.data))
-      .catch((err) => console.error(err));
+    const fetchCategories = async () => {
+      try {
+        const { data } = await getAdminCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load categories");
+      }
+    };
+    fetchCategories();
   }, []);
 
   const handleChange = (e) => {
@@ -41,38 +49,64 @@ const AddProduct = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImageFile(file);
-    setImagePreview(file ? URL.createObjectURL(file) : null);
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
-    setVideoFile(file);
-    setVideoPreview(file ? URL.createObjectURL(file) : null);
+    if (file) {
+      if (!file.type.startsWith("video/")) {
+        toast.error("Please select a video file");
+        return;
+      }
+      if (file.size > 25 * 1024 * 1024) {
+        toast.error("Video size should be less than 25MB");
+        return;
+      }
+      setVideoFile(file);
+      setVideoPreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!formData.name || !formData.price || !formData.categoryId) {
       return toast.error("Name, price, and category are required!");
     }
 
     const data = new FormData();
-    for (let key in formData) {
+    
+    // Append all form fields
+    Object.keys(formData).forEach(key => {
       data.append(key, formData[key]);
-    }
+    });
+    
+    // Append files
     if (imageFile) data.append("imagepath", imageFile);
     if (videoFile) data.append("filepath", videoFile);
 
     try {
       setLoading(true);
-      await api.post("/admin/products/add-product", data), {
+      const response = await api.post("/admin/products/add-product", data, {
         headers: { "Content-Type": "multipart/form-data" },
-      };
-      toast.success("Product created successfully!");
+      });
+      
+      toast.success("✅ Product created successfully!");
       navigate("/admin/products");
     } catch (err) {
-      console.error(err);
+      console.error("Create product error:", err);
       toast.error(err.response?.data?.message || "Failed to create product");
     } finally {
       setLoading(false);
@@ -80,118 +114,226 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded shadow max-w-2xl mx-auto mt-6">
-      <h2 className="text-2xl font-bold mb-6">Add Product</h2>
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg max-w-3xl mx-auto mt-6">
+      <h2 className="text-3xl font-bold mb-6 text-green-800 dark:text-green-400">
+        🌿 Add New Product
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Product Name"
-          className="input w-full"
-        />
+        {/* Product Name */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            Product Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="e.g., Monstera Deliciosa"
+            className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+            required
+          />
+        </div>
 
-        <input
-          name="price"
-          type="number"
-          value={formData.price}
-          onChange={handleChange}
-          placeholder="Price"
-          className="input w-full"
-        />
+        {/* Scientific Name */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            Scientific Name
+          </label>
+          <input
+            name="scientificName"
+            value={formData.scientificName}
+            onChange={handleChange}
+            placeholder="e.g., Monstera deliciosa"
+            className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
 
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Description"
-          className="input w-full"
-        />
+        {/* Price & Stock */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Price (Rs) <span className="text-red-500">*</span>
+            </label>
+            <input
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="299"
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+              required
+            />
+          </div>
 
-        <select
-          name="categoryId"
-          value={formData.categoryId}
-          onChange={handleChange}
-          className="input w-full"
-        >
-          <option value="">Select Category</option>
-          {categories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Stock
+            </label>
+            <input
+              name="stock"
+              type="number"
+              value={formData.stock}
+              onChange={handleChange}
+              placeholder="10"
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+            />
+          </div>
+        </div>
 
-        <select
-          name="plantType"
-          value={formData.plantType}
-          onChange={handleChange}
-          className="input w-full"
-        >
-          <option value="">Select Plant Type</option>
-          <option value="indoor">Indoor</option>
-          <option value="outdoor">Outdoor</option>
-          <option value="hanging">Hanging</option>
-          <option value="succulent">Succulent</option>
-          <option value="flowering">Flowering</option>
-        </select>
+        {/* Description */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            Description
+          </label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Product description..."
+            className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 resize-none"
+            rows={4}
+          />
+        </div>
 
-        <input
-          name="stock"
-          type="number"
-          value={formData.stock}
-          onChange={handleChange}
-          placeholder="Stock"
-          className="input w-full"
-        />
+        {/* Category & Plant Type */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Category <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="categoryId"
+              value={formData.categoryId}
+              onChange={handleChange}
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <textarea
-          name="careInstructions"
-          value={formData.careInstructions}
-          onChange={handleChange}
-          placeholder="Care Instructions"
-          className="input w-full"
-        />
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Plant Type
+            </label>
+            <select
+              name="plantType"
+              value={formData.plantType}
+              onChange={handleChange}
+              className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
+            >
+              <option value="">Select Type</option>
+              <option value="indoor">Indoor</option>
+              <option value="outdoor">Outdoor</option>
+              <option value="hanging">Hanging</option>
+              <option value="succulent">Succulent</option>
+              <option value="flowering">Flowering</option>
+            </select>
+          </div>
+        </div>
 
-        <label className="flex items-center space-x-2">
+        {/* Care Instructions */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            Care Instructions
+          </label>
+          <textarea
+            name="careInstructions"
+            value={formData.careInstructions}
+            onChange={handleChange}
+            placeholder="How to care for this plant..."
+            className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 resize-none"
+            rows={3}
+          />
+        </div>
+
+        {/* Featured */}
+        <label className="flex items-center space-x-2 cursor-pointer">
           <input
             type="checkbox"
             name="isFeatured"
             checked={formData.isFeatured}
             onChange={handleChange}
+            className="w-5 h-5"
           />
-          <span>Featured Product</span>
+          <span className="font-semibold">⭐ Featured Product</span>
         </label>
 
+        {/* Product Image */}
         <div>
-          <label>Product Image</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <label className="block text-sm font-semibold mb-2">
+            Product Image
+          </label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageChange}
+            className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+          />
           {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className="mt-2 w-32 h-32 object-cover rounded"
-            />
+            <div className="mt-4 relative">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-64 object-cover rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setImageFile(null);
+                  setImagePreview(null);
+                }}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+              >
+                ✕
+              </button>
+            </div>
           )}
         </div>
 
+        {/* Product Video */}
         <div>
-          <label>Product Video</label>
-          <input type="file" accept="video/*" onChange={handleVideoChange} />
+          <label className="block text-sm font-semibold mb-2">
+            Product Video (Optional)
+          </label>
+          <input 
+            type="file" 
+            accept="video/*" 
+            onChange={handleVideoChange}
+            className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+          />
           {videoPreview && (
-            <video
-              src={videoPreview}
-              controls
-              className="mt-2 w-64 h-36 object-cover rounded"
-            />
+            <div className="mt-4 relative">
+              <video
+                src={videoPreview}
+                controls
+                className="w-full h-64 object-cover rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setVideoFile(null);
+                  setVideoPreview(null);
+                }}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+              >
+                ✕
+              </button>
+            </div>
           )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="bg-green-600 text-white px-6 py-2 rounded mt-2"
+          className="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg font-semibold disabled:opacity-50 transition"
         >
           {loading ? "Creating..." : "Create Product"}
         </button>

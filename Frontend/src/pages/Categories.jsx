@@ -55,7 +55,6 @@ export default function CategoryPage({ plants = [] }) {
       {/* CONTENT */}
       <div className="bg-[#cdddcf] min-h-screen py-12">
         <div className="max-w-7xl mx-auto px-6">
-
           <FiltersBar
             search={search}
             setSearch={setSearch}

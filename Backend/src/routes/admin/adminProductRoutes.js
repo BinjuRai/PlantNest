@@ -27,21 +27,41 @@
 const express = require("express");
 const router = express.Router();
 
-const controller = require("../../controllers/admin/adminProductController"); // your ProductController
+const controller = require("../../controllers/admin/adminProductController");
 const { auth, adminOnly } = require("../../middlewares/authMiddleware");
 const upload = require("../../../utils/multer");
 
 /* ================= ADMIN PRODUCT ROUTES ================= */
 
-// Create product (basic)
+// Get all products
+router.get(
+  "/",
+  auth,
+  adminOnly,
+  controller.getAllProducts
+);
+
+// Get single product
+router.get(
+  "/:id",
+  auth,
+  adminOnly,
+  controller.getProductById
+);
+
+// Create product with image/video upload
 router.post(
   "/",
   auth,
   adminOnly,
+  upload.fields([
+    { name: "imagepath", maxCount: 1 },
+    { name: "filepath", maxCount: 1 }
+  ]),
   controller.createProduct
 );
 
-// Create product with image/video upload
+// Alternative route for add-product
 router.post(
   "/add-product",
   auth,
@@ -50,47 +70,19 @@ router.post(
     { name: "imagepath", maxCount: 1 },
     { name: "filepath", maxCount: 1 }
   ]),
-  async (req, res, next) => {
-    try {
-      if (req.files) {
-        if (req.files.imagepath) req.body.imagepath = req.files.imagepath[0].path;
-        if (req.files.filepath) req.body.filepath = req.files.filepath[0].path;
-      }
-      await controller.createProduct(req, res);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// Update product (basic)
-router.put(
-  "/:id",
-  auth,
-  adminOnly,
-  controller.updateProduct
+  controller.createProduct
 );
 
 // Update product with image/video
 router.put(
-  "/update/:id",
+  "/:id",
   auth,
   adminOnly,
   upload.fields([
     { name: "imagepath", maxCount: 1 },
     { name: "filepath", maxCount: 1 }
   ]),
-  async (req, res, next) => {
-    try {
-      if (req.files) {
-        if (req.files.imagepath) req.body.imagepath = req.files.imagepath[0].path;
-        if (req.files.filepath) req.body.filepath = req.files.filepath[0].path;
-      }
-      await controller.updateProduct(req, res);
-    } catch (err) {
-      next(err);
-    }
-  }
+  controller.updateProduct
 );
 
 // Delete product
@@ -101,21 +93,4 @@ router.delete(
   controller.deleteProduct
 );
 
-// Get all products
-router.get(
-  "/",
-  auth,
-  adminOnly,
-  controller.getProducts
-);
-
-// Get single product
-router.get(
-  "/:id",
-  auth,
-  adminOnly,
-  controller.getProduct
-);
-
 module.exports = router;
-
