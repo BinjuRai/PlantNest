@@ -36,105 +36,130 @@
 
 // module.exports = new WishlistService();
 
-
-const Wishlist = require("../models/Wishlist");
+const Wishlist = require("../models/wishlist");
+const Product = require("../models/admin/productModel");
 
 class WishlistService {
-  // Get user's wishlist with populated products
   async getWishlist(userId) {
-    let wishlist = await Wishlist.findOne({ user: userId })
-      .populate({
-        path: "products",
-        select: "name price imagepath stock plantType isFeatured description"
-      });
+    try {
+      let wishlist = await Wishlist.findOne({ user: userId })
+        .populate({
+          path: "products",
+          select: "name price imagepath stock plantType isFeatured description categoryId"
+        });
 
-    if (!wishlist) {
-      wishlist = await Wishlist.create({ user: userId, products: [] });
+      if (!wishlist) {
+        wishlist = await Wishlist.create({ user: userId, products: [] });
+      }
+
+      return wishlist;
+    } catch (err) {
+      console.error("Get wishlist error:", err);
+      throw err;
     }
-
-    return wishlist;
   }
 
-  // Add product to wishlist
   async addToWishlist(userId, productId) {
-    let wishlist = await Wishlist.findOne({ user: userId });
+    try {
+      // Verify product exists
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error("Product not found");
+      }
 
-    if (!wishlist) {
-      wishlist = await Wishlist.create({ 
-        user: userId, 
-        products: [productId] 
-      });
-    } else {
-      // Check if product already exists
-      if (!wishlist.products.includes(productId)) {
+      let wishlist = await Wishlist.findOne({ user: userId });
+
+      if (!wishlist) {
+        wishlist = await Wishlist.create({ 
+          user: userId, 
+          products: [productId] 
+        });
+      } else {
+        if (!wishlist.products.includes(productId)) {
+          wishlist.products.push(productId);
+          await wishlist.save();
+        }
+      }
+
+      return await Wishlist.findOne({ user: userId })
+        .populate({
+          path: "products",
+          select: "name price imagepath stock plantType isFeatured description categoryId"
+        });
+    } catch (err) {
+      console.error("Add to wishlist error:", err);
+      throw err;
+    }
+  }
+
+  async removeFromWishlist(userId, productId) {
+    try {
+      const wishlist = await Wishlist.findOne({ user: userId });
+
+      if (!wishlist) {
+        throw new Error("Wishlist not found");
+      }
+
+      wishlist.products = wishlist.products.filter(
+        (id) => id.toString() !== productId
+      );
+      await wishlist.save();
+
+      return await Wishlist.findOne({ user: userId })
+        .populate({
+          path: "products",
+          select: "name price imagepath stock plantType isFeatured description categoryId"
+        });
+    } catch (err) {
+      console.error("Remove from wishlist error:", err);
+      throw err;
+    }
+  }
+
+  async toggleWishlist(userId, productId) {
+    try {
+      // Verify product exists
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      let wishlist = await Wishlist.findOne({ user: userId });
+
+      if (!wishlist) {
+        wishlist = await Wishlist.create({ 
+          user: userId, 
+          products: [productId] 
+        });
+        return { 
+          added: true, 
+          wishlist: await this.getWishlist(userId) 
+        };
+      }
+
+      const index = wishlist.products.findIndex(
+        (id) => id.toString() === productId
+      );
+
+      if (index > -1) {
+        wishlist.products.splice(index, 1);
+        await wishlist.save();
+        return { 
+          added: false, 
+          wishlist: await this.getWishlist(userId) 
+        };
+      } else {
         wishlist.products.push(productId);
         await wishlist.save();
+        return { 
+          added: true, 
+          wishlist: await this.getWishlist(userId) 
+        };
       }
+    } catch (err) {
+      console.error("Toggle wishlist error:", err);
+      throw err;
     }
-
-    // Return populated wishlist
-    return await Wishlist.findOne({ user: userId })
-      .populate({
-        path: "products",
-        select: "name price imagepath stock plantType isFeatured description"
-      });
-  }
-
-  // Remove product from wishlist
-  async removeFromWishlist(userId, productId) {
-    const wishlist = await Wishlist.findOne({ user: userId });
-
-    if (!wishlist) {
-      throw new Error("Wishlist not found");
-    }
-
-    wishlist.products = wishlist.products.filter(
-      (id) => id.toString() !== productId
-    );
-    await wishlist.save();
-
-    // Return populated wishlist
-    return await Wishlist.findOne({ user: userId })
-      .populate({
-        path: "products",
-        select: "name price imagepath stock plantType isFeatured description"
-      });
-  }
-
-  // Toggle product in wishlist (add if not present, remove if present)
-  async toggleWishlist(userId, productId) {
-    let wishlist = await Wishlist.findOne({ user: userId });
-
-    if (!wishlist) {
-      wishlist = await Wishlist.create({ 
-        user: userId, 
-        products: [productId] 
-      });
-      return { added: true, wishlist: await this.getWishlist(userId) };
-    }
-
-    const index = wishlist.products.findIndex(
-      (id) => id.toString() === productId
-    );
-
-    if (index > -1) {
-      // Remove if exists
-      wishlist.products.splice(index, 1);
-      await wishlist.save();
-      return { added: false, wishlist: await this.getWishlist(userId) };
-    } else {
-      // Add if doesn't exist
-      wishlist.products.push(productId);
-      await wishlist.save();
-      return { added: true, wishlist: await this.getWishlist(userId) };
-    }
-  }
-
-  // Check if product is in wishlist
-  async isInWishlist(userId, productId) {
-    const wishlist = await Wishlist.findOne({ user: userId });
-    if (!wishlist) return false;
-    return wishlist.products.some((id) => id.toString() === productId);
   }
 }
 

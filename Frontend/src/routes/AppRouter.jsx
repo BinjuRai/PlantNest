@@ -88,6 +88,95 @@
 
 
 
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import MainLayout from "../layouts/MainLayout.jsx";
+// import AdminLayout from "../layouts/AdminLayout.jsx";
+
+// // Pages
+// import Homepage from "../pages/homepage.jsx";
+// import LoginPage from "../pages/login.jsx";
+// import RegisterPage from "../pages/register.jsx";
+// import Checkout from "../pages/Checkout.jsx";
+
+// // Admin Pages
+// import AdminDashboard from "../pages/admin/Dashboard.jsx";
+// import Products from "../pages/admin/Products.jsx";
+// import AddProduct from "../pages/admin/AddProduct.jsx";
+// import EditProduct from "../pages/admin/EditProduct.jsx";
+// import Categories from "../pages/admin/Category.jsx"; 
+// import AddCategory from "../pages/admin/AddCategory.jsx";
+
+// // Route Guards
+// import GuestRoute from "./GuestRouter.jsx";
+// import ProtectedRoute from "./ProtectedRoutes.jsx";
+// import AdminRoute from "./AdminRouter.jsx";
+// import Aboutus from "../pages/aboutus.jsx";
+// import CategoryPage from "../pages/Categories.jsx";
+// import EditCategory from "../pages/admin/EditCategory.jsx";
+// import WishlistPage from "../pages/wishlistPage.jsx";
+// import AllProductsPage from "../pages/allProductPage.jsx";
+// import CartPage from "../pages/cart.jsx";
+// import ProductDetailsPage from "../pages/plantDetails.jsx";
+
+// export default function AppRouter() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         {/* ================= PUBLIC ROUTES ================= */}
+//         <Route element={<MainLayout />}>
+//           <Route path="/" element={<Homepage />} />
+//           <Route path="/login" element={<LoginPage />} />
+//           <Route path="/register" element={<RegisterPage />} />
+//           <Route path="/aboutus" element={<Aboutus />} />
+//           <Route path="/categories" element={<CategoryPage />} />
+//           <Route path="products" element={<AllProductsPage />} />
+//           {/* Other public pages like About, Contact can go here */}
+//         </Route>
+
+//         {/* ================= GUEST-ONLY ROUTES ================= */}
+//         <Route element={<GuestRoute />}>
+//           <Route path="/login" element={<LoginPage />} />
+//           <Route path="/register" element={<RegisterPage />} />
+//                 <Route path="/aboutus" element={<Aboutus />} />
+//         </Route>
+
+//         {/* ================= AUTHENTICATED USER ROUTES ================= */}
+//         <Route element={<ProtectedRoute />}>
+//           <Route path="/checkout" element={<Checkout />} />
+//           <Route path="/wishlist" element={<WishlistPage />} />
+//           <Route path="/cart" element={<CartPage />} />
+//           <Route path="/products/:id" element={<ProductDetailsPage />} />   
+//           {/* Add Wishlist or Profile pages here */}
+//         </Route>
+
+//         {/* ================= ADMIN ROUTES ================= */}
+//         <Route element={<AdminRoute />}>
+//           <Route element={<AdminLayout />}>
+//             <Route path="/admin" element={<AdminDashboard />} />
+//             <Route path="/admin/products" element={<Products />} />
+//             <Route path="/admin/products/add" element={<AddProduct />} />
+//             <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+//             <Route path="/admin/categories" element={<Categories />} />
+//             <Route path="/admin/categories/add" element={<AddCategory />} />
+//             <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
+//           </Route>
+//         </Route>
+
+//         {/* ================= 404 PAGE ================= */}
+//         <Route
+//           path="*"
+//           element={
+//             <div className="min-h-screen flex items-center justify-center text-2xl">
+//               404 - Page Not Found 🌿
+//             </div>
+//           }
+//         />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
@@ -97,6 +186,9 @@ import Homepage from "../pages/homepage.jsx";
 import LoginPage from "../pages/login.jsx";
 import RegisterPage from "../pages/register.jsx";
 import Checkout from "../pages/Checkout.jsx";
+import OrderSuccess from "../pages/orderSuccess.jsx";
+import MyOrders from "../pages/MyOrder.jsx";
+import NotificationsPage from "../pages/Notfication.jsx";
 
 // Admin Pages
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
@@ -105,6 +197,7 @@ import AddProduct from "../pages/admin/AddProduct.jsx";
 import EditProduct from "../pages/admin/EditProduct.jsx";
 import Categories from "../pages/admin/Category.jsx"; 
 import AddCategory from "../pages/admin/AddCategory.jsx";
+import AdminOrdersPage from "../pages/admin/AdminOrderpage.jsx";
 
 // Route Guards
 import GuestRoute from "./GuestRouter.jsx";
@@ -115,6 +208,8 @@ import CategoryPage from "../pages/Categories.jsx";
 import EditCategory from "../pages/admin/EditCategory.jsx";
 import WishlistPage from "../pages/wishlistPage.jsx";
 import AllProductsPage from "../pages/allProductPage.jsx";
+import CartPage from "../pages/cart.jsx";
+import ProductDetailsPage from "../pages/plantDetails.jsx";
 
 export default function AppRouter() {
   return (
@@ -127,22 +222,26 @@ export default function AppRouter() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/categories" element={<CategoryPage />} />
-          <Route path="products" element={<AllProductsPage />} />
-          {/* Other public pages like About, Contact can go here */}
+          <Route path="/products" element={<AllProductsPage />} />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
         </Route>
 
         {/* ================= GUEST-ONLY ROUTES ================= */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-                <Route path="/aboutus" element={<Aboutus />} />
         </Route>
 
         {/* ================= AUTHENTICATED USER ROUTES ================= */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          {/* Add Wishlist or Profile pages here */}
+          <Route element={<MainLayout />}>
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/orders" element={<MyOrders />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/cart" element={<CartPage />} />
+          </Route>
         </Route>
 
         {/* ================= ADMIN ROUTES ================= */}
@@ -155,6 +254,7 @@ export default function AppRouter() {
             <Route path="/admin/categories" element={<Categories />} />
             <Route path="/admin/categories/add" element={<AddCategory />} />
             <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
+            <Route path="/admin/orders" element={<AdminOrdersPage />} />
           </Route>
         </Route>
 

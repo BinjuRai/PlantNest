@@ -1,5 +1,5 @@
 const Cart = require("../models/cartModel");
-const Product = require("../models/productModel");
+const Product = require("../models/admin/productModel");
 
 class CartService {
   // Get user's cart

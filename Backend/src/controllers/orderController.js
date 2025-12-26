@@ -69,25 +69,122 @@
 
 // module.exports = new OrderController();
 
+// const OrderService = require("../services/orderService");
+
+// class OrderController {
+//   constructor() {
+//     // Bind all methods so `this` works when passed to Express
+//     this.createOrder = this.createOrder.bind(this);
+//     this.getMyOrders = this.getMyOrders.bind(this);
+//     this.getOrderById = this.getOrderById.bind(this);
+//     this.adminGetOrders = this.adminGetOrders.bind(this);
+//     this.adminUpdateStatus = this.adminUpdateStatus.bind(this);
+//   }
+
+//   // User creates an order
+//   async createOrder(req, res) {
+//     try {
+//       const { shippingInfo, paymentMethod } = req.body;
+
+//       if (!shippingInfo || !paymentMethod) {
+//         return res.status(400).json({ success: false, message: "Missing shipping info or payment method" });
+//       }
+
+//       const order = await OrderService.createOrder(
+//         req.user.id,
+//         shippingInfo,
+//         paymentMethod
+//       );
+
+//       res.json({ success: true, order });
+//     } catch (err) {
+//       res.status(400).json({ success: false, message: err.message });
+//     }
+//   }
+
+//   // User views their own orders
+//   async getMyOrders(req, res) {
+//     try {
+//       const orders = await OrderService.getUserOrders(req.user.id);
+//       res.json({ success: true, orders });
+//     } catch (err) {
+//       res.status(500).json({ success: false, message: err.message });
+//     }
+//   }
+
+//   // User views a specific order by ID (ownership checked here)
+//   async getOrderById(req, res) {
+//     try {
+//       const order = await OrderService.getOrderById(req.params.orderId);
+
+//       if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+
+//       // Ownership check: only owner or admin can view
+//       if (order.user.toString() !== req.user.id && !req.user.role === "admin"
+// ) {
+//         return res.status(403).json({ success: false, message: "Not allowed to view this order" });
+//       }
+
+//       res.json({ success: true, order });
+//     } catch (err) {
+//       res.status(500).json({ success: false, message: err.message });
+//     }
+//   }
+
+//   // Admin: get all orders
+//   async adminGetOrders(req, res) {
+//     try {
+//       const orders = await OrderService.getAllOrders();
+//       res.json({ success: true, orders });
+//     } catch (err) {
+//       res.status(500).json({ success: false, message: err.message });
+//     }
+//   }
+
+//   // Admin: update order status
+//   async adminUpdateStatus(req, res) {
+//     try {
+//       const { status } = req.body;
+
+//       if (!status) {
+//         return res.status(400).json({ success: false, message: "Status is required" });
+//       }
+
+//       const updated = await OrderService.updateOrderStatus(
+//         req.params.orderId,
+//         status
+//       );
+
+//       res.json({ success: true, order: updated });
+//     } catch (err) {
+//       res.status(400).json({ success: false, message: err.message });
+//     }
+//   }
+// }
+
+// module.exports = new OrderController();
+
 const OrderService = require("../services/orderService");
 
 class OrderController {
   constructor() {
-    // Bind all methods so `this` works when passed to Express
     this.createOrder = this.createOrder.bind(this);
     this.getMyOrders = this.getMyOrders.bind(this);
     this.getOrderById = this.getOrderById.bind(this);
     this.adminGetOrders = this.adminGetOrders.bind(this);
     this.adminUpdateStatus = this.adminUpdateStatus.bind(this);
+    this.adminUpdatePayment = this.adminUpdatePayment.bind(this);
   }
 
-  // User creates an order
   async createOrder(req, res) {
     try {
       const { shippingInfo, paymentMethod } = req.body;
 
       if (!shippingInfo || !paymentMethod) {
-        return res.status(400).json({ success: false, message: "Missing shipping info or payment method" });
+        return res.status(400).json({ 
+          success: false, 
+          message: "Missing shipping info or payment method" 
+        });
       }
 
       const order = await OrderService.createOrder(
@@ -102,7 +199,6 @@ class OrderController {
     }
   }
 
-  // User views their own orders
   async getMyOrders(req, res) {
     try {
       const orders = await OrderService.getUserOrders(req.user.id);
@@ -112,17 +208,23 @@ class OrderController {
     }
   }
 
-  // User views a specific order by ID (ownership checked here)
   async getOrderById(req, res) {
     try {
       const order = await OrderService.getOrderById(req.params.orderId);
 
-      if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+      if (!order) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Order not found" 
+        });
+      }
 
-      // Ownership check: only owner or admin can view
-      if (order.user.toString() !== req.user.id && !req.user.role === "admin"
-) {
-        return res.status(403).json({ success: false, message: "Not allowed to view this order" });
+      // Ownership check
+      if (order.user._id.toString() !== req.user.id && req.user.role !== "admin") {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Not allowed to view this order" 
+        });
       }
 
       res.json({ success: true, order });
@@ -131,7 +233,6 @@ class OrderController {
     }
   }
 
-  // Admin: get all orders
   async adminGetOrders(req, res) {
     try {
       const orders = await OrderService.getAllOrders();
@@ -141,18 +242,43 @@ class OrderController {
     }
   }
 
-  // Admin: update order status
   async adminUpdateStatus(req, res) {
     try {
       const { status } = req.body;
 
       if (!status) {
-        return res.status(400).json({ success: false, message: "Status is required" });
+        return res.status(400).json({ 
+          success: false, 
+          message: "Status is required" 
+        });
       }
 
       const updated = await OrderService.updateOrderStatus(
         req.params.orderId,
         status
+      );
+
+      res.json({ success: true, order: updated });
+    } catch (err) {
+      res.status(400).json({ success: false, message: err.message });
+    }
+  }
+
+  async adminUpdatePayment(req, res) {
+    try {
+      const { paymentStatus, transactionId } = req.body;
+
+      if (!paymentStatus) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Payment status is required" 
+        });
+      }
+
+      const updated = await OrderService.updatePaymentStatus(
+        req.params.orderId,
+        paymentStatus,
+        transactionId
       );
 
       res.json({ success: true, order: updated });

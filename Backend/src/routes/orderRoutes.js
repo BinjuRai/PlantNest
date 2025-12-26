@@ -33,25 +33,80 @@
 // module.exports = router;
 
 
+// const express = require("express");
+// const router = express.Router();
+
+// const OrderController = require("../controllers/orderController");
+// // const authMiddleware = require("../middlewares/authMiddleware");
+// const orderOwner = require("../middlewares/orderOwner");
+// // const adminMiddleware = require("../middlewares/adminMiddleware");
+// const { auth, adminOnly } = require("../middlewares/authMiddleware");
+// router.post("/", auth, OrderController.createOrder);
+
+// router.get("/my-orders", auth, OrderController.getMyOrders);
+
+// router.get("/:orderId", auth, orderOwner, OrderController.getOrderById);
+
+// router.get("/admin/all", auth, adminOnly, OrderController.adminGetOrders);
+
+// router.put(
+//   "/admin/:orderId/status",
+//   auth,
+//   adminOnly,
+//   OrderController.adminUpdateStatus
+// );
+
+
+// const express = require("express");
+// const router = express.Router();
+// const OrderController = require("../controllers/orderController");
+// const { authenticate, isAdmin } = require("../middleware/auth");
+
+// // User routes
+// router.post("/", authenticate, OrderController.createOrder);
+// router.get("/my-orders", authenticate, OrderController.getMyOrders);
+// router.get("/:orderId", authenticate, OrderController.getOrderById);
+
+// // Admin routes
+// router.get("/admin/all", authenticate, isAdmin, OrderController.adminGetOrders);
+// router.put("/admin/:orderId/status", authenticate, isAdmin, OrderController.adminUpdateStatus);
+// router.put("/admin/:orderId/payment", authenticate, isAdmin, OrderController.adminUpdatePayment);
+
+// module.exports = router;
+
+// const express = require("express");
+// const router = express.Router();
+// const OrderController = require("../controllers/orderController");
+// const { authenticate, isAdmin } = require("../middleware/auth");
+
+// // User routes
+// router.post("/", authenticate, OrderController.createOrder);
+// router.get("/my-orders", authenticate, OrderController.getMyOrders);
+// router.get("/:orderId", authenticate, OrderController.getOrderById);
+
+// // Admin routes
+// router.get("/admin/all", authenticate, isAdmin, OrderController.adminGetOrders);
+// router.put("/admin/:orderId/status", authenticate, isAdmin, OrderController.adminUpdateStatus);
+// router.put("/admin/:orderId/payment", authenticate, isAdmin, OrderController.adminUpdatePayment);
+
+// module.exports = router;
+
+
+
 const express = require("express");
 const router = express.Router();
+const PaymentController = require("../controllers/paymentController");
+const { authenticate } = require("../middleware/auth");
 
-const OrderController = require("../controllers/orderController");
-// const authMiddleware = require("../middlewares/authMiddleware");
-const orderOwner = require("../middlewares/orderOwner");
-// const adminMiddleware = require("../middlewares/adminMiddleware");
-const { auth, adminOnly } = require("../middlewares/authMiddleware");
-router.post("/", auth, OrderController.createOrder);
+// COD Payment
+router.post("/cod/:orderId", authenticate, PaymentController.cod);
 
-router.get("/my-orders", auth, OrderController.getMyOrders);
+// eSewa Payment
+router.post("/esewa/initialize/:orderId", authenticate, PaymentController.esewaInitialize);
+router.get("/esewa/verify", PaymentController.esewaVerify);
 
-router.get("/:orderId", auth, orderOwner, OrderController.getOrderById);
+// Khalti Payment
+router.post("/khalti/initialize/:orderId", authenticate, PaymentController.khaltiInitialize);
+router.post("/khalti/verify", authenticate, PaymentController.khaltiVerify);
 
-router.get("/admin/all", auth, adminOnly, OrderController.adminGetOrders);
-
-router.put(
-  "/admin/:orderId/status",
-  auth,
-  adminOnly,
-  OrderController.adminUpdateStatus
-);
+module.exports = router;
