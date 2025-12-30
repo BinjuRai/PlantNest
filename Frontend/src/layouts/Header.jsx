@@ -1,4 +1,3 @@
-
 // import { NavLink, useNavigate } from "react-router-dom";
 // import React, { useContext } from "react";
 // import { AuthContext } from "../auth/authProvider";
@@ -243,10 +242,11 @@
 // };
 
 // export default Header;
+
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../auth/authProvider";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/cartContext";
 import { useSocket } from "../context/socketContext";
 import {
   Facebook,
@@ -274,13 +274,15 @@ const Header = () => {
     unreadCount = 0,
     markAsRead = () => {},
     setNotifications = () => {},
-    setUnreadCount = () => {}
+    setUnreadCount = () => {},
   } = socketContext || {};
 
   // Notification dropdown state
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   useEffect(() => {
     if (user) {
@@ -293,6 +295,10 @@ const Header = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsNotificationOpen(false);
       }
+
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -301,7 +307,8 @@ const Header = () => {
 
   const fetchNotifications = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050/api';
+      const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
       const { data } = await axios.get(`${API_URL}/notifications`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -314,7 +321,8 @@ const Header = () => {
 
   const handleMarkAsRead = async (notificationId) => {
     try {
-      const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050/api';
+      const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
       await axios.put(
         `${API_URL}/notifications/${notificationId}/read`,
         {},
@@ -331,7 +339,8 @@ const Header = () => {
   const handleMarkAllAsRead = async () => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050/api';
+      const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
       await axios.put(
         `${API_URL}/notifications/mark-all-read`,
         {},
@@ -351,13 +360,11 @@ const Header = () => {
   const handleDelete = async (notificationId, e) => {
     e.stopPropagation();
     try {
-      const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050/api';
-      await axios.delete(
-        `${API_URL}/notifications/${notificationId}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
+      const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
+      await axios.delete(`${API_URL}/notifications/${notificationId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setNotifications((prev) => prev.filter((n) => n._id !== notificationId));
     } catch (error) {
       console.error("Failed to delete notification");
@@ -506,7 +513,10 @@ const Header = () => {
                   <div className="overflow-y-auto flex-1">
                     {notifications.length === 0 ? (
                       <div className="p-8 text-center">
-                        <Bell size={48} className="mx-auto text-gray-300 mb-3" />
+                        <Bell
+                          size={48}
+                          className="mx-auto text-gray-300 mb-3"
+                        />
                         <p className="text-gray-500">No notifications yet</p>
                       </div>
                     ) : (
@@ -582,9 +592,41 @@ const Header = () => {
           )}
 
           {/* User Icon */}
-          <NavLink to={user ? "/profile" : "/login"}>
-            <User size={24} className="hover:text-green-700" />
-          </NavLink>
+          {/* User Avatar Dropdown */}
+          <div className="relative" ref={profileRef}>
+            <button
+              onClick={() =>
+                user ? setIsProfileOpen(!isProfileOpen) : navigate("/login")
+              }
+              className="p-2 hover:bg-gray-100 rounded-full transition"
+            >
+              <User size={24} className="hover:text-green-700" />
+            </button>
+
+            {user && isProfileOpen && (
+              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-xl border z-50">
+                <button
+                  onClick={() => {
+                    navigate("/orders");
+                    setIsProfileOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition"
+                >
+                  My Orders
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigate("/profile");
+                    setIsProfileOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition"
+                >
+                  My Profile
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* AUTH BUTTON */}
           {user ? (

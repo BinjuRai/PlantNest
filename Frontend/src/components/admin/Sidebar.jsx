@@ -27,48 +27,54 @@ const Sidebar = () => {
       path: "/admin",
       icon: "📊",
       label: "Dashboard",
-      end: true
+      end: true,
     },
     {
       path: "/admin/products",
       icon: "🌱",
       label: "Products",
-      badge: null
+      badge: null,
+    },
+    {
+      path: "/admin/blogs",
+      icon: "📝",
+      label: "Blogs",
+      badge: null,
     },
     {
       path: "/admin/categories",
       icon: "📦",
       label: "Categories",
-      badge: null
+      badge: null,
     },
     {
       path: "/admin/orders",
       icon: "🛒",
       label: "Orders",
-      badge: "3"
+      badge: "3",
     },
     {
       path: "/admin/customers",
       icon: "👥",
       label: "Customers",
-      badge: null
+      badge: null,
     },
     {
       path: "/admin/analytics",
       icon: "📈",
       label: "Analytics",
-      badge: null
+      badge: null,
     },
     {
       path: "/admin/settings",
       icon: "⚙️",
       label: "Settings",
-      badge: null
-    }
+      badge: null,
+    },
   ];
 
   return (
-    <aside 
+    <aside
       className={`${
         isCollapsed ? "w-20" : "w-64"
       } bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen transition-all duration-300 shadow-2xl relative`}
@@ -164,7 +170,9 @@ const Sidebar = () => {
           <div className="text-center">
             <p className="text-xs text-green-100 mb-1">Store Status</p>
             <p className="text-2xl font-bold">🟢 Online</p>
-            <p className="text-xs text-green-100 mt-1">All systems operational</p>
+            <p className="text-xs text-green-100 mt-1">
+              All systems operational
+            </p>
           </div>
         </div>
       )}

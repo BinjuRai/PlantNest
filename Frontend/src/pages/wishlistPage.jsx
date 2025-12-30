@@ -19,18 +19,32 @@ const WishlistPage = () => {
     fetchWishlist();
   }, [user, navigate]);
 
+  // const fetchWishlist = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const data = await getWishlist();
+  //     setWishlist(data.wishlist);
+  //   } catch (err) {
+  //     console.error("Failed to fetch wishlist:", err);
+  //     toast.error("Failed to load wishlist");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchWishlist = async () => {
-    try {
-      setLoading(true);
-      const data = await getWishlist();
-      setWishlist(data.wishlist);
-    } catch (err) {
-      console.error("Failed to fetch wishlist:", err);
-      toast.error("Failed to load wishlist");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const data = await getWishlist();
+    console.log("Wishlist API:", data); // debug structure
+    setWishlist({ products: data.wishlist?.products || data.products || [] });
+  } catch (err) {
+    console.error("Failed to fetch wishlist:", err);
+    toast.error("Failed to load wishlist");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleRemove = async (productId, productName) => {
     try {

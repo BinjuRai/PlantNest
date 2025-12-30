@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
@@ -7,7 +6,12 @@ import { toggleWishlist } from "../../services/wishlistService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export const FavouriteCard = ({ plant, large, isWishlisted, onWishlistUpdate }) => {
+export const FavouriteCard = ({
+  plant,
+  large,
+  isWishlisted,
+  onWishlistUpdate,
+}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isInWishlist, setIsInWishlist] = useState(isWishlisted);
@@ -19,9 +23,40 @@ export const FavouriteCard = ({ plant, large, isWishlisted, onWishlistUpdate }) 
     ? `http://localhost:5050/uploads/${plant.imagepath}`
     : null;
 
+  // const handleWishlistClick = async (e) => {
+  //   e.stopPropagation();
+
+  //   if (!user) {
+  //     toast.error("Please login to add to wishlist");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await toggleWishlist(plant._id);
+
+  //     setIsInWishlist(response.added);
+
+  //     if (onWishlistUpdate) {
+  //       onWishlistUpdate(plant._id, response.added);
+  //     }
+
+  //     toast.success(
+  //       response.added
+  //         ? `💚 ${plant.name} added to wishlist!`
+  //         : `Removed ${plant.name} from wishlist`
+  //     );
+  //   } catch (err) {
+  //     console.error("Wishlist error:", err);
+  //     toast.error("Failed to update wishlist");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const handleWishlistClick = async (e) => {
     e.stopPropagation();
-    
+
     if (!user) {
       toast.error("Please login to add to wishlist");
       navigate("/login");
@@ -31,16 +66,18 @@ export const FavouriteCard = ({ plant, large, isWishlisted, onWishlistUpdate }) 
     try {
       setIsLoading(true);
       const response = await toggleWishlist(plant._id);
-      
-      setIsInWishlist(response.added);
-      
+
+      // Check API response
+      const added = response.added ?? true; // fallback to true if missing
+      setIsInWishlist(added);
+
       if (onWishlistUpdate) {
-        onWishlistUpdate(plant._id, response.added);
+        onWishlistUpdate(plant._id, added);
       }
 
       toast.success(
-        response.added 
-          ? `💚 ${plant.name} added to wishlist!` 
+        added
+          ? `💚 ${plant.name} added to wishlist!`
           : `Removed ${plant.name} from wishlist`
       );
     } catch (err) {
@@ -81,9 +118,7 @@ export const FavouriteCard = ({ plant, large, isWishlisted, onWishlistUpdate }) 
 
       {/* Product Info - Shows on Hover */}
       <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-        <h3 className="text-white font-bold text-lg mb-1">
-          {plant.name}
-        </h3>
+        <h3 className="text-white font-bold text-lg mb-1">{plant.name}</h3>
         <p className="text-green-100 text-sm mb-2">
           {plant.scientificName || plant.plantType}
         </p>
@@ -115,24 +150,22 @@ export const FavouriteCard = ({ plant, large, isWishlisted, onWishlistUpdate }) 
         onClick={handleWishlistClick}
         disabled={isLoading}
         className={`absolute top-3 right-3 p-2.5 rounded-full shadow-lg transition-all duration-300 z-10 ${
-          isInWishlist 
-            ? "bg-red-500 hover:bg-red-600" 
+          isInWishlist
+            ? "bg-red-500 hover:bg-red-600"
             : "bg-white/90 hover:bg-white"
         } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <Heart
           size={20}
           className={`transition-all ${
-            isInWishlist 
-              ? "fill-white text-white" 
-              : "text-gray-700"
+            isInWishlist ? "fill-white text-white" : "text-gray-700"
           }`}
         />
       </button>
 
       {/* Quick View on Hover (Optional) */}
       <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             handleCardClick();

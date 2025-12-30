@@ -1,165 +1,196 @@
-const User = require("../models/userModel");
-const bcrypt = require("bcrypt")
-const Payment = require("../models/payment");
-exports.createUser = async (req, res) => {
-  try {
-    const filename = req.file?.path;
-    const { username, email, firstName, lastName, password, phoneno } = req.body;
+const User = require("../../models/userModel");
+const bcrypt = require("bcrypt");
 
-    if (!username || !email || !password) {
-      return res.status(400).json({ success: false, message: "Missing fields" });
+class AdminUserController {
+  // Get all users
+  async getAllUsers(req, res) {
+    try {
+      const users = await User.find()
+        .select("-password")
+        .sort({ createdAt: -1 });
+
+      res.json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
-
-    const existingUser = await User.findOne({
-      $or: [{ username }, { email }]
-    });
-
-    if (existingUser) {
-      return res.status(400).json({ success: false, message: "User exists" });
-    }
-
-    const hashedPass = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      username,
-      email,
-      firstName,
-      lastName,
-      password: hashedPass,
-      phoneno,
-      filepath: filename,
-    });
-
-    await newUser.save();
-
-    return res.status(201).json({ success: true, message: "User Registered" });
-  } catch (err) {
-    console.error("create user error: ", err);
-    return res.status(500).json({ success: false, message: "Server error" });
   }
-};
 
+  // Get single user
+  async getUserById(req, res) {
+    try {
+      const user = await User.findById(req.params.userId).select("-password");
 
-
-exports.getUsers = async (req, res ) => {
-    try{
-        const users = await User.find();
-        return res.status(200).json(
-            {
-                "success": true,
-                "message": "All users",
-                "data":users
-            }
-        )
-    }catch(err){
-        return res.status(500).json(
-            { "success": false, "message": "Server error" }
-        )
-    }
-}
-
-exports.getOneUser = async (req, res) => {
-    try{
-        // unique identifier
-        const id = req.params.id // mongodb id
-        const user = await User.findOne(
-            {
-                "_id": id
-            }
-        )
-        return res.status(200).json(
-            {
-                "succes": true,
-                "message": "One user fetched",
-                "data": user
-            }
-        )
-    }catch(err){
-        return res.status(500).json(
-            { "success": false, "message": "Server error" }
-        )
-    }
-}
-
-
-exports.updateOne = async (req, res) => {
-    const { username, firstName, lastName } = req.body
-    const _id = req.params.id // mongodb id
-    try{
-        const user = await User.updateOne(
-            {
-                "_id": _id
-            },
-            {
-                $set : {
-                    "username" : username,
-                    "firstName": firstName,
-                    "lastName": lastName
-                }
-            }
-        )
-        return res.status(200).json(
-            { "success": true, "message": "User updated"}
-        )
-    }catch(err){
-        return res.status(500).json(
-            { "success": false, "message": "Server error" }
-        )
-    }
-}
-
-
-exports.deleteOne = async (req, res) => {
-    const _id = req.params.id
-    try{
-        const user = await User.deleteOne(
-            {
-                "_id": _id
-            }
-        )
-        return res.status(200).json(
-            {"success" : true, "message": "User Deleted"}
-        )
-    }catch(err){
-        return res.status(500).json(
-            {"success": false, "message": "Server Error"}
-        )
-    }
-}
-
-
-
-exports.getUsersWithPayments = async (req, res) => {
-  try {
-    const users = await User.find();
-    const userIds = users.map(user => user._id);
-
-    const payments = await Payment.find({
-      userId: { $in: userIds },
-      paymentStatus: "completed"
-    });
-
-    const paymentMap = {};
-    payments.forEach(payment => {
-      const uid = payment.userId.toString();
-      if (!paymentMap[uid] || new Date(payment.paymentDate) > new Date(paymentMap[uid].paymentDate)) {
-        paymentMap[uid] = payment;
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
       }
-    });
 
-    const usersWithPayments = users.map(user => ({
-      ...user.toObject(),
-      payment: paymentMap[user._id.toString()] ? {
-        pricePaid: paymentMap[user._id.toString()].pricePaid,
-        paymentMethod: paymentMap[user._id.toString()].paymentMethod,
-        paymentStatus: paymentMap[user._id.toString()].paymentStatus,
-        paymentDate: paymentMap[user._id.toString()].paymentDate,
-      } : null,
-    }));
-
-    res.json(usersWithPayments);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error fetching users with payments" });
+      res.json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
   }
-};
+
+  // Create new user
+  async createUser(req, res) {
+    try {
+      const { name, email, password, phone, role } = req.body;
+
+      // Check if user already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: "User with this email already exists",
+        });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        phone,
+        role: role || "user",
+      });
+
+      res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // Update user role
+  async updateUserRole(req, res) {
+    try {
+      const { role } = req.body;
+      const { userId } = req.params;
+
+      if (!["user", "admin"].includes(role)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid role. Must be 'user' or 'admin'",
+        });
+      }
+
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { role },
+        { new: true }
+      ).select("-password");
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "User role updated successfully",
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // Delete user
+  async deleteUser(req, res) {
+    try {
+      const { userId } = req.params;
+
+      // Prevent deleting yourself
+      if (userId === req.user.id) {
+        return res.status(400).json({
+          success: false,
+          message: "You cannot delete your own account",
+        });
+      }
+
+      const user = await User.findByIdAndDelete(userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "User deleted successfully",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // Get user statistics
+  async getUserStats(req, res) {
+    try {
+      const totalUsers = await User.countDocuments();
+      const adminUsers = await User.countDocuments({ role: "admin" });
+      const regularUsers = await User.countDocuments({ role: "user" });
+
+      // Get new users in last 30 days
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const newUsers = await User.countDocuments({
+        createdAt: { $gte: thirtyDaysAgo },
+      });
+
+      res.json({
+        success: true,
+        stats: {
+          totalUsers,
+          adminUsers,
+          regularUsers,
+          newUsersThisMonth: newUsers,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+}
+
+module.exports = new AdminUserController();

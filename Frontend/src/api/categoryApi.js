@@ -1,8 +1,5 @@
 import api from "./api";
 
-
-
-
 // Public APIs
 export const getAllCategoriesApi = async () => {
   const response = await api.get("/categories");

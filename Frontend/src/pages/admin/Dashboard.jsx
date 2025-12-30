@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../api/api";
@@ -10,7 +9,7 @@ const AdminDashboard = () => {
     totalOrders: 0,
     totalRevenue: 0,
     lowStockProducts: 0,
-    recentOrders: []
+    recentOrders: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -18,26 +17,64 @@ const AdminDashboard = () => {
     fetchDashboardData();
   }, []);
 
+  // const fetchDashboardData = async () => {
+  //   try {
+  //     // Fetch products
+  //     const productsRes = await api.get("/admin/products");
+  //     const products = productsRes.data.products || productsRes.data;
+
+  //     // Fetch categories
+  //     const categoriesRes = await api.get("/admin/categories");
+  //     const categories = categoriesRes.data.categories || categoriesRes.data;
+
+  //     // Calculate stats
+  //     const lowStock = products.filter(p => p.stock < 5).length;
+
+  //     setStats({
+  //       totalProducts: products.length,
+  //       totalCategories: categories.length,
+  //       totalOrders: 0, // You can add this when you have orders
+  //       totalRevenue: 0, // You can calculate this from orders
+  //       lowStockProducts: lowStock,
+  //       recentOrders: []
+  //     });
+  //   } catch (err) {
+  //     console.error("Failed to fetch dashboard data:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchDashboardData = async () => {
     try {
       // Fetch products
       const productsRes = await api.get("/admin/products");
       const products = productsRes.data.products || productsRes.data;
-      
+
       // Fetch categories
       const categoriesRes = await api.get("/admin/categories");
       const categories = categoriesRes.data.categories || categoriesRes.data;
 
+      // Fetch orders
+      let orders = [];
+      let revenue = 0;
+      try {
+        const ordersRes = await api.get("/orders/admin/all");
+        orders = ordersRes.data.orders || [];
+        revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+      } catch (err) {
+        console.error("Failed to fetch orders:", err);
+      }
+
       // Calculate stats
-      const lowStock = products.filter(p => p.stock < 5).length;
+      const lowStock = products.filter((p) => p.stock < 5).length;
 
       setStats({
         totalProducts: products.length,
         totalCategories: categories.length,
-        totalOrders: 0, // You can add this when you have orders
-        totalRevenue: 0, // You can calculate this from orders
+        totalOrders: orders.length,
+        totalRevenue: revenue,
         lowStockProducts: lowStock,
-        recentOrders: []
+        recentOrders: orders.slice(0, 5), // Get 5 most recent orders
       });
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
@@ -84,8 +121,8 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="mt-4">
-            <Link 
-              to="/admin/products" 
+            <Link
+              to="/admin/products"
               className="text-green-600 dark:text-green-400 text-sm font-semibold hover:underline"
             >
               View all products →
@@ -109,8 +146,8 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="mt-4">
-            <Link 
-              to="/admin/categories" 
+            <Link
+              to="/admin/categories"
               className="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline"
             >
               Manage categories →
@@ -231,8 +268,8 @@ const AdminDashboard = () => {
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
               🌿 Product Management
             </h2>
-            <Link 
-              to="/admin/products" 
+            <Link
+              to="/admin/products"
               className="text-green-600 dark:text-green-400 font-semibold hover:underline"
             >
               View All →
@@ -250,7 +287,7 @@ const AdminDashboard = () => {
                 {stats.totalProducts} items
               </span>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-yellow-50 dark:bg-gray-700 rounded-lg">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">⚠️</span>
@@ -278,8 +315,8 @@ const AdminDashboard = () => {
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
               📦 Category Management
             </h2>
-            <Link 
-              to="/admin/categories" 
+            <Link
+              to="/admin/categories"
               className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
             >
               View All →
@@ -297,7 +334,7 @@ const AdminDashboard = () => {
                 {stats.totalCategories} categories
               </span>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-gray-700 rounded-lg">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🎯</span>
@@ -327,8 +364,9 @@ const AdminDashboard = () => {
           <div>
             <h3 className="text-2xl font-bold mb-2">Pro Tip</h3>
             <p className="text-green-50">
-              Keep your inventory updated regularly! Products with low stock ({stats.lowStockProducts} items) 
-              should be restocked soon to avoid running out of popular plants.
+              Keep your inventory updated regularly! Products with low stock (
+              {stats.lowStockProducts} items) should be restocked soon to avoid
+              running out of popular plants.
             </p>
           </div>
         </div>

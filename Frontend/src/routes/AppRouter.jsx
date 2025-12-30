@@ -15,7 +15,7 @@
 //           <Route path="/" element={<Homepage />} />
 //         <Route path="/login" element={<LoginPage />} />
 //         <Route path="/register" element={<RegisterPage />} />
-       
+
 //           {/* <Route path="lesson" element={<UserLessonTable />} /> */}
 
 //           {/* <Route element={<GuestRoute />}>
@@ -37,7 +37,7 @@
 //             <Route path="wishlist" element={<UserWishlistTable />} />
 //             <Route path="course/:id/join" element={<JoinCoursePayment />} />
 //             <Route path="lessons/:id" element={<ViewLessonForUser />} />
-            
+
 //             <Route path="dashboard" element={<DashboardScreen />} />
 //             <Route path="dashboard/profile" element={<Profile />} />
 //             <Route
@@ -80,14 +80,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import MainLayout from "../layouts/MainLayout.jsx";
 // import AdminLayout from "../layouts/AdminLayout.jsx";
@@ -103,7 +95,7 @@
 // import Products from "../pages/admin/Products.jsx";
 // import AddProduct from "../pages/admin/AddProduct.jsx";
 // import EditProduct from "../pages/admin/EditProduct.jsx";
-// import Categories from "../pages/admin/Category.jsx"; 
+// import Categories from "../pages/admin/Category.jsx";
 // import AddCategory from "../pages/admin/AddCategory.jsx";
 
 // // Route Guards
@@ -145,7 +137,7 @@
 //           <Route path="/checkout" element={<Checkout />} />
 //           <Route path="/wishlist" element={<WishlistPage />} />
 //           <Route path="/cart" element={<CartPage />} />
-//           <Route path="/products/:id" element={<ProductDetailsPage />} />   
+//           <Route path="/products/:id" element={<ProductDetailsPage />} />
 //           {/* Add Wishlist or Profile pages here */}
 //         </Route>
 
@@ -176,7 +168,6 @@
 //   );
 // }
 
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
@@ -189,13 +180,14 @@ import Checkout from "../pages/Checkout.jsx";
 import OrderSuccess from "../pages/orderSuccess.jsx";
 import MyOrders from "../pages/MyOrder.jsx";
 import NotificationsPage from "../pages/Notfication.jsx";
+import BlogDetails from "../pages/BlogDetails.jsx";
 
 // Admin Pages
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
 import Products from "../pages/admin/Products.jsx";
 import AddProduct from "../pages/admin/AddProduct.jsx";
 import EditProduct from "../pages/admin/EditProduct.jsx";
-import Categories from "../pages/admin/Category.jsx"; 
+import Categories from "../pages/admin/Category.jsx";
 import AddCategory from "../pages/admin/AddCategory.jsx";
 import AdminOrdersPage from "../pages/admin/AdminOrderpage.jsx";
 
@@ -210,6 +202,12 @@ import WishlistPage from "../pages/wishlistPage.jsx";
 import AllProductsPage from "../pages/allProductPage.jsx";
 import CartPage from "../pages/cart.jsx";
 import ProductDetailsPage from "../pages/plantDetails.jsx";
+import AdminUsersPage from "../pages/admin/AdminUsersPage.jsx";
+import AdminAnalyticsPage from "../pages/admin/AdminAnalyticsPage.jsx";
+import AdminSettingsPage from "../pages/admin/AdminSettingsPage.jsx";
+import Blogs from "../pages/blogs.jsx";
+import BlogForm from "../pages/admin/BlogForm.jsx";
+import AdminBlogs from "../pages/admin/AdminBlogs.jsx";
 
 export default function AppRouter() {
   return (
@@ -224,6 +222,8 @@ export default function AppRouter() {
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/products" element={<AllProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:id" element={<BlogDetails />} />
         </Route>
 
         {/* ================= GUEST-ONLY ROUTES ================= */}
@@ -253,8 +253,19 @@ export default function AppRouter() {
             <Route path="/admin/products/edit/:id" element={<EditProduct />} />
             <Route path="/admin/categories" element={<Categories />} />
             <Route path="/admin/categories/add" element={<AddCategory />} />
-            <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
+            <Route
+              path="/admin/categories/edit/:id"
+              element={<EditCategory />}
+            />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/customers" element={<AdminUsersPage />} />{" "}
+            {/* Same as users */}
+            <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
+            <Route path="/admin/settings" element={<AdminSettingsPage />} />
+            <Route path="/admin/blogs" element={<AdminBlogs />} />
+            <Route path="/admin/create" element={<BlogForm />} />
+            <Route path="/admin/edit/:id" element={<BlogForm />} />
           </Route>
         </Route>
 

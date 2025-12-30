@@ -3,7 +3,7 @@ const cartService = require("../services/cartService");
 class CartController {
   async getCart(req, res) {
     try {
-      const cart = await cartService.getUserCart(req.user.id);
+      const cart = await cartService.getUserCart(req.user._id);
       res.json({ success: true, cart });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });
@@ -12,13 +12,18 @@ class CartController {
 
   async addToCart(req, res) {
     try {
+          console.log('req.user:', req.user); // ADD THIS LINE
+
       const { productId, quantity } = req.body;
+                console.log('productId:', productId, 'quantity:', quantity); // ADD THIS TOO
+
 
       const cart = await cartService.addToCart(
-        req.user.id,
+        req.user._id,
         productId,
         quantity
       );
+
 
       res.json({ success: true, cart });
     } catch (err) {
@@ -31,7 +36,7 @@ class CartController {
       const { productId, quantity } = req.body;
 
       const cart = await cartService.updateQuantity(
-        req.user.id,
+        req.user._id,
         productId,
         quantity
       );
@@ -49,7 +54,7 @@ class CartController {
     try {
       const { productId } = req.params;
 
-      const cart = await cartService.removeItem(req.user.id, productId);
+      const cart = await cartService.removeItem(req.user._id, productId);
 
       res.json({ success: true, cart });
     } catch (err) {
@@ -59,7 +64,7 @@ class CartController {
 
   async clearCart(req, res) {
     try {
-      await cartService.clearCart(req.user.id);
+      await cartService.clearCart(req.user._id);
       res.json({ success: true, message: "Cart cleared" });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });

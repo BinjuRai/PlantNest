@@ -1,36 +1,33 @@
-// const express = require("express");
-// const router = express.Router();
-// const trackingController = require("../controllers/deliveryTrackingController");
-// const { isAuthenticated, isAdmin } = require("../middlewares/authMiddleware");
 
-// // Admin: create tracking manually (optional)
-// router.post("/create", isAuthenticated, isAdmin, trackingController.createTracking);
-
-// // User: get tracking for their order
-// router.get("/:orderId", isAuthenticated, trackingController.getTracking);
-
-// // Admin: update status & location
-// router.put("/:orderId/status", isAuthenticated, isAdmin, trackingController.updateStatus);
-
-// // Admin: get all tracking records
-// router.get("/admin/all", isAuthenticated, isAdmin, trackingController.getAllTracking);
-
-// module.exports = router;
 const express = require("express");
 const router = express.Router();
 const trackingController = require("../controllers/deliveryTrackingController");
-const { auth, adminOnly } = require("../middlewares/authMiddleware");
+const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
 
-// Admin: create tracking manually
-router.post("/create", auth, adminOnly, trackingController.createTracking);
+router.post(
+  "/create",
+  authenticate,
+  isAdmin,
+  trackingController.createTracking
+);
 
-// User: get tracking for their order
-router.get("/:orderId", auth, trackingController.getTracking);
+router.get(
+  "/admin/all",
+  authenticate,
+  isAdmin,
+  trackingController.getAllTracking
+);
 
-// Admin: update status & location
-router.put("/:orderId/status", auth, adminOnly, trackingController.updateStatus);
+router.get(
+  "/:orderId",
+  authenticate,
+  trackingController.getTracking
+);
 
-// Admin: get all tracking records
-router.get("/admin/all", auth, adminOnly, trackingController.getAllTracking);
-
+router.put(
+  "/:orderId/status",
+  authenticate,
+  isAdmin,
+  trackingController.updateStatus
+);
 module.exports = router;

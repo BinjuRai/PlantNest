@@ -1,90 +1,6 @@
 
-// // // const jwt = require("jsonwebtoken");
-// // // const User = require("../models/userModel");
-
-
-// // // export const auth = (req, res, next) => {
-// // //   const token = req.headers.authorization?.split(" ")[1];
-// // //   if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-// // //   try {
-// // //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-// // //     req.user = decoded;
-// // //     next();
-// // //   } catch {
-// // //     return res.status(403).json({ message: "Invalid token" });
-// // //   }
-// // // };
-
-// // // export const adminOnly = (req, res, next) => {
-// // //   if (req.user.role !== "admin")
-// // //     return res.status(403).json({ message: "Admins only" });
-// // //   next();
-// // // };
-
-// // // // module.exports = (req, res, next) => {
-// // // //   if (!req.user || req.user.role !== "admin")
-// // // //     return res.status(403).json({ message: "Admin access denied" });
-
-// // // //   next();
-
-// // const jwt = require("jsonwebtoken");
-// // const User = require("../models/userModel");
-
-// // const auth = (req, res, next) => {
-// //   const token = req.headers.authorization?.split(" ")[1];
-// //   if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-// //   try {
-// //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-// //     req.user = decoded;
-// //     next();
-// //   } catch {
-// //     return res.status(403).json({ message: "Invalid token" });
-// //   }
-// // };
-
-// // const adminOnly = (req, res, next) => {
-// //   if (req.user.role !== "admin")
-// //     return res.status(403).json({ message: "Admins only" });
-// //   next();
-// // };
-
-// // module.exports = { auth, adminOnly };
-
-// const jwt = require("jsonwebtoken");
-
-// const auth = (req, res, next) => {
-//   const token = req.headers.authorization?.split(" ")[1];
-//   if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//     req.user = {
-//       id: decoded._id,  
-//       role: decoded.role,
-//       email: decoded.email,
-//     };
-
-//     next();
-//   } catch (err) {
-//     return res.status(403).json({ message: "Invalid token" });
-//   }
-// };
-
-// const adminOnly = (req, res, next) => {
-//   if (req.user.role !== "admin") {
-//     return res.status(403).json({ message: "Admins only" });
-//   }
-//   next();
-// };
-
-// module.exports = { auth, adminOnly };
-
-
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/userModel");
 
 // Authenticate user
 const authenticate = async (req, res, next) => {
@@ -92,22 +8,26 @@ const authenticate = async (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({ 
-        success: false, 
-        message: "No token provided" 
+      return res.status(401).json({
+        success: false,
+        message: "No token provided",
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     // Attach user info to request
     req.user = decoded;
-    
+    // req.user = {
+    //   id: decoded.id, // make sure this matches your User model _id
+    //   role: decoded.role,
+    // };
+
     next();
   } catch (error) {
-    return res.status(401).json({ 
-      success: false, 
-      message: "Invalid or expired token" 
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
     });
   }
 };
@@ -116,16 +36,16 @@ const authenticate = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   try {
     if (req.user.role !== "admin") {
-      return res.status(403).json({ 
-        success: false, 
-        message: "Admin access required" 
+      return res.status(403).json({
+        success: false,
+        message: "Admin access required",
       });
     }
     next();
   } catch (error) {
-    return res.status(403).json({ 
-      success: false, 
-      message: "Access denied" 
+    return res.status(403).json({
+      success: false,
+      message: "Access denied",
     });
   }
 };

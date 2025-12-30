@@ -46,29 +46,3 @@ class DeliveryTrackingController {
 
 module.exports = new DeliveryTrackingController();
 
-
-// const deliveryService = require("../services/delivery.service");
-
-// class DeliveryController {
-  
-//   async create(req, res) {
-//     const tracking = await deliveryService.createTracking(req.body.orderId);
-//     res.json({ success: true, tracking });
-//   }
-
-//   async update(req, res) {
-//     const tracking = await deliveryService.updateTracking(
-//       req.params.deliveryId,
-//       req.body.status,
-//       req.body.location
-//     );
-//     res.json({ success: true, tracking });
-//   }
-
-//   async track(req, res) {
-//     const tracking = await deliveryService.trackOrder(req.params.orderId);
-//     res.json({ success: true, tracking });
-//   }
-// }
-
-// module.exports = new DeliveryController();

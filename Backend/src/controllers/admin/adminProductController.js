@@ -1,95 +1,3 @@
-// // const Product = require("../../models/productModel");
-
-// // exports.adminCreateProduct = async (req, res) => {
-// //     try {
-// //         const newProduct = await Product.create(req.body);
-// //         res.json({ message: "Product created", newProduct });
-// //     } catch (err) {
-// //         res.status(500).json({ error: err.message });
-// //     }
-// // };
-
-// // exports.adminUpdateProduct = async (req, res) => {
-// //     try {
-// //         const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-// //         res.json(updated);
-// //     } catch (err) {
-// //         res.status(500).json({ error: err.message });
-// //     }
-// // };
-
-// // exports.adminDeleteProduct = async (req, res) => {
-// //     try {
-// //         await Product.findByIdAndDelete(req.params.id);
-// //         res.json({ message: "Product deleted" });
-// //     } catch (err) {
-// //         res.status(500).json({ error: err.message });
-// //     }
-// // };
-
-// // exports.adminGetAllProducts = async (req, res) => {
-// //     try {
-// //         const products = await Product.find().populate("category");
-// //         res.json(products);
-// //     } catch (err) {
-// //         res.status(500).json({ error: err.message });
-// //     }
-// // };
-
-// const productService = require("../../services/productService");
-
-// class ProductController {
-//   async createProduct(req, res) {
-//     try {
-//       const product = await productService.createProduct(req.body);
-//       res.status(201).json({ success: true, product });
-//     } catch (err) {
-//       res.status(400).json({ success: false, message: err.message });
-//     }
-//   }
-
-//   async getProducts(req, res) {
-//     try {
-//       const products = await productService.getAllProducts();
-//       res.json({ success: true, products });
-//     } catch (err) {
-//       res.status(500).json({ success: false, message: err.message });
-//     }
-//   }
-
-//   async getProduct(req, res) {
-//     try {
-//       const product = await productService.getProductById(req.params.id);
-//       if (!product)
-//         return res.status(404).json({ success: false, message: "Product not found" });
-
-//       res.json({ success: true, product });
-//     } catch (err) {
-//       res.status(500).json({ success: false, message: err.message });
-//     }
-//   }
-
-//   async updateProduct(req, res) {
-//     try {
-//       const updated = await productService.updateProduct(req.params.id, req.body);
-//       res.json({ success: true, updated });
-//     } catch (err) {
-//       res.status(400).json({ success: false, message: err.message });
-//     }
-//   }
-
-//   async deleteProduct(req, res) {
-//     try {
-//       await productService.deleteProduct(req.params.id);
-//       res.json({ success: true, message: "Product deleted" });
-//     } catch (err) {
-//       res.status(500).json({ success: false, message: err.message });
-//     }
-//   }
-// }
-
-// module.exports = new ProductController();
-
 const productService = require("../../services/productService");
 
 // ✅ Create Product
@@ -106,8 +14,9 @@ exports.createProduct = async (req, res) => {
       plantType: req.body.plantType,
       stock: req.body.stock || 0,
       careInstructions: req.body.careInstructions,
-      isFeatured: req.body.isFeatured === "true" || req.body.isFeatured === true,
-      scientificName: req.body.scientificName
+      isFeatured:
+        req.body.isFeatured === "true" || req.body.isFeatured === true,
+      scientificName: req.body.scientificName,
     };
 
     // Add image path if uploaded
@@ -126,17 +35,17 @@ exports.createProduct = async (req, res) => {
     const product = await productService.createProduct(productData);
     console.log("✅ Product saved:", product);
 
-    res.status(201).json({ 
+    res.status(201).json({
       success: true,
-      message: "Product created successfully", 
-      product 
+      message: "Product created successfully",
+      product,
     });
   } catch (err) {
     console.error("❌ Create product error:", err);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: "Error creating product", 
-      error: err.message 
+      message: "Error creating product",
+      error: err.message,
     });
   }
 };
@@ -148,7 +57,9 @@ exports.getAllProducts = async (req, res) => {
     res.status(200).json({ success: true, products });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Error fetching products" });
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching products" });
   }
 };
 
@@ -157,7 +68,9 @@ exports.getProductById = async (req, res) => {
   try {
     const product = await productService.getProductById(req.params.id);
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
     res.status(200).json({ success: true, product });
   } catch (err) {
@@ -180,8 +93,9 @@ exports.updateProduct = async (req, res) => {
       plantType: req.body.plantType,
       stock: req.body.stock,
       careInstructions: req.body.careInstructions,
-      isFeatured: req.body.isFeatured === "true" || req.body.isFeatured === true,
-      scientificName: req.body.scientificName
+      isFeatured:
+        req.body.isFeatured === "true" || req.body.isFeatured === true,
+      scientificName: req.body.scientificName,
     };
 
     // Add new image if uploaded
@@ -196,23 +110,28 @@ exports.updateProduct = async (req, res) => {
       console.log("✅ New video filename:", req.files.filepath[0].filename);
     }
 
-    const updated = await productService.updateProduct(req.params.id, updateData);
-    
+    const updated = await productService.updateProduct(
+      req.params.id,
+      updateData
+    );
+
     if (!updated) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
-      message: "Product updated successfully", 
-      product: updated 
+      message: "Product updated successfully",
+      product: updated,
     });
   } catch (err) {
     console.error("❌ Update product error:", err);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       message: "Error updating product",
-      error: err.message 
+      error: err.message,
     });
   }
 };
@@ -221,12 +140,16 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     const deleted = await productService.deleteProduct(req.params.id);
-    
+
     if (!deleted) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
 
-    res.status(200).json({ success: true, message: "Product deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Product deleted successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Error deleting product" });

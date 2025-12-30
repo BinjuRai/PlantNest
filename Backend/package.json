@@ -1,11 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "dev": "nodemon index.js",
-    "prod": "NODE_ENV=production node index.js"
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js",
+    "prod": "NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
