@@ -1,33 +1,60 @@
 
-import { Link } from "react-router-dom";
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+// import CategoryTabs from "../common/CategoryTabs";
 import CategoryCard from "./CategoryCard";
 
 const CategorySection = ({ categories }) => {
-  // Safety check - don't render if no categories
-  if (!categories || !Array.isArray(categories) || categories.length === 0) {
-    return null;
-  }
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  if (!categories || categories.length === 0) return null;
+
+  const filteredCategories =
+    activeCategory === "all"
+      ? categories
+      : categories.filter(cat => cat._id === activeCategory);
 
   return (
     <section className="py-12 px-4 bg-surface-light dark:bg-surface-dark">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-text-light dark:text-text-dark">
+        
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-serif font-semibold text-[#274E36]">
             Shop by Category
           </h2>
+
           {categories.length > 4 && (
-            <Link
-              to="/categories"
-              className="text-green-700 dark:text-green-400 font-semibold hover:underline"
+            <button
+              onClick={() => navigate("/products")}
+              className="inline-flex items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition"
             >
-              View All →
-            </Link>
+              View More
+              <span className="bg-[#EAB87B] text-black rounded-full px-2 py-1">
+                ➜
+              </span>
+            </button>
           )}
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.slice(0, 8).map((category) => (
-            <CategoryCard key={category._id} category={category} />
+
+        {/* Tabs */}
+        {/* <CategoryTabs
+          categories={categories}
+          active={activeCategory}
+          onChange={setActiveCategory}
+        /> */}
+
+        {/* Cards */}
+        <div className="overflow-x-auto flex gap-6 py-8">
+          {filteredCategories.map((category) => (
+            <div key={category._id} className="flex-shrink-0 w-72">
+              <CategoryCard
+                category={category}
+                onClick={() => navigate(`/products?category=${category._id}`)}
+              />
+            </div>
           ))}
         </div>
       </div>

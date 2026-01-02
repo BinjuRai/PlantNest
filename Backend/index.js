@@ -1,5 +1,3 @@
-
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -23,6 +21,9 @@ const cartRoute = require("./src/routes/cartRoute");
 
 const notificationRoutes = require("./src/routes/notificationRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
+const profileRoutes = require("./src/routes/profileRoutes");
+
+
 
 // const adminBlogRoutes = require("./src/routes/admin/blogRoutes");
 // Connect to MongoDB
@@ -33,21 +34,22 @@ const app = express();
 // Middleware
 const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // Static files
 app.use("/uploads", express.static("uploads"));
@@ -68,8 +70,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoute);
 app.use("/api/notifications", notificationRoutes);
-
-app.use("/api/admin/blogs", blogRoutes);
+app.use("/api/users", profileRoutes)
+app.use("/api", blogRoutes);
 
 // Test route
 app.get("/test", (req, res) => {
@@ -80,7 +82,7 @@ app.get("/test", (req, res) => {
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found"
+    message: "Route not found",
   });
 });
 
@@ -89,7 +91,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    message: err.message || "Something went wrong"
+    message: err.message || "Something went wrong",
   });
 });
 

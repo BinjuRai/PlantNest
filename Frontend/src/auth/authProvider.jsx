@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
@@ -16,6 +15,26 @@ const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [redirectPath, setRedirectPath] = useState(null);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const token = localStorage.getItem("token");
+
+  //   if (token) {
+  //     fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.success) setUser(data.data); // update user with latest info
+  //         else logout();
+  //       })
+  //       .catch(() => logout())
+  //       .finally(() => setIsLoading(false));
+  //   } else {
+  //     setUser(null);
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
   // Initialize auth state from localStorage
   useEffect(() => {

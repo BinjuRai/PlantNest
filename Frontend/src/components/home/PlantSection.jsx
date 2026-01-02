@@ -27,7 +27,7 @@ const PlantSection = ({ plants }) => {
             </span>
           </button>
         </div>
-        <div className="bg-[#538767] dark:bg-[#3b4f44] rounded-3xl p-6">
+        <div className=" bg-[#cdddcf] rounded-3xl p-6">
         {displayPlants.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
             {displayPlants.map((plant) => (

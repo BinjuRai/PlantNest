@@ -443,7 +443,7 @@ const Header = () => {
             Wishlist
           </NavLink>
 
-          <NavLink to="/blog" className={navItemClass}>
+          <NavLink to="/blogs" className={navItemClass}>
             Blog
           </NavLink>
         </ul>

@@ -23,7 +23,7 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
 app.use("/api/tracking", require("./routes/deliveryTrackingRoutes"));
 app.use("/api/notifications", "./routes/notificationRoutes");
-app.use("/api/blogs", require("./routes/blog.routes"));
+app.use("/api/blogs", require("./routes/blogRoutes"));
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("DB Connected"))
   .catch(err => console.log(err));

@@ -1,20 +1,27 @@
-const Blog = require("../models/admin/blogModel");
 
-const createBlog = (data) => Blog.create(data);
 
-const getAllBlogs = () => Blog.find().sort({ createdAt: -1 });
+const blogService = require("../models/admin/blogModel"); // Admin blog model
 
-const getBlogById = (id) => Blog.findById(id);
+// Create a new blog
+const createBlog = async (data) => blogService.create(data);
 
-const updateBlog = (id, data) =>
-  Blog.findByIdAndUpdate(id, data, { new: true });
+// Get all blogs (admin/public)
+const getAllBlogs = async () => blogService.find().sort({ createdAt: -1 });
 
-const deleteBlog = (id) => Blog.findByIdAndDelete(id);
+// Get single blog by ID
+const getBlogById = async (id) => blogService.findById(id);
+
+// Update blog by ID
+const updateBlog = async (id, data) =>
+  blogService.findByIdAndUpdate(id, data, { new: true });
+
+// Delete blog by ID
+const deleteBlog = async (id) => blogService.findByIdAndDelete(id);
 
 module.exports = {
   createBlog,
   getAllBlogs,
   getBlogById,
   updateBlog,
-  deleteBlog
+  deleteBlog,
 };

@@ -35,6 +35,7 @@ const WishlistPage = () => {
   try {
     setLoading(true);
     const data = await getWishlist();
+  
     console.log("Wishlist API:", data); // debug structure
     setWishlist({ products: data.wishlist?.products || data.products || [] });
   } catch (err) {

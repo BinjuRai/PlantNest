@@ -1,4 +1,3 @@
-
 // import { useEffect, useState } from "react";
 // import { useSearchParams, useNavigate } from "react-router-dom";
 // import { useQuery } from "@tanstack/react-query";
@@ -280,6 +279,15 @@ const Checkout = () => {
   const { user } = useAuth();
   const { cart, getCartTotal, fetchCart } = useCart();
 
+  const [isGift, setIsGift] = useState(false);
+
+  const [giftInfo, setGiftInfo] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    message: "",
+  });
+
   const [shippingInfo, setShippingInfo] = useState({
     fullName: user?.name || "",
     phone: user?.phone || "",
@@ -303,11 +311,57 @@ const Checkout = () => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
   };
 
+  const handleGiftChange = (e) => {
+    setGiftInfo({ ...giftInfo, [e.target.name]: e.target.value });
+  };
+
+  // const validateForm = () => {
+  //   if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || !shippingInfo.city) {
+  //     toast.error("Please fill all required fields");
+  //     return false;
+  //   }
+  //   return true;
+  // };
+  // const validateForm = () => {
+  //   if (
+  //     !shippingInfo.fullName ||
+  //     !shippingInfo.phone ||
+  //     !shippingInfo.address ||
+  //     !shippingInfo.city
+  //   ) {
+  //     toast.error("Please fill all required fields");
+  //     return false;
+  //   }
+
+  //   if (isGift && (!giftInfo.name || !giftInfo.phone || !giftInfo.address)) {
+  //     toast.error("Please fill gift recipient details");
+  //     return false;
+  //   }
+
+  //   return true;
+  // };
   const validateForm = () => {
-    if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || !shippingInfo.city) {
-      toast.error("Please fill all required fields");
-      return false;
+    // 🧾 If NOT a gift → normal address required
+    if (!isGift) {
+      if (
+        !shippingInfo.fullName ||
+        !shippingInfo.phone ||
+        !shippingInfo.address ||
+        !shippingInfo.city
+      ) {
+        toast.error("Please fill shipping address details");
+        return false;
+      }
     }
+
+    // 🎁 If gift → gift address required
+    if (isGift) {
+      if (!giftInfo.name || !giftInfo.phone || !giftInfo.address) {
+        toast.error("Please fill gift recipient details");
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -318,13 +372,84 @@ const Checkout = () => {
     setLoading(true);
     try {
       // Construct payload for backend
+      // const orderData = {
+      //   shippingInfo: {
+      //     address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
+      //     fullName: shippingInfo.fullName,
+      //     phone: shippingInfo.phone,
+      //   },
+      //   paymentMethod,
+      // };
+      // const orderData = {
+      //   shippingInfo: {
+      //     address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
+      //     fullName: shippingInfo.fullName,
+      //     phone: shippingInfo.phone,
+      //   },
+      //   paymentMethod,
+      //   isGift,
+      //   giftInfo: isGift
+      //     ? {
+      //         name: giftInfo.name,
+      //         phone: giftInfo.phone,
+      //         address: giftInfo.address,
+      //         message: giftInfo.message,
+      //       }
+      //     : null,
+      // };
+      //      const orderData = {
+      //   shippingInfo: isGift
+      //     ? {
+      //         // 🎁 Deliver to gift recipient
+      //         fullName: giftInfo.name,
+      //         phone: giftInfo.phone,
+      //         address: giftInfo.address,
+      //       }
+      //     : {
+      //         // 📦 Normal delivery
+      //         fullName: shippingInfo.fullName,
+      //         phone: shippingInfo.phone,
+      //         address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
+      //       },
+
+      //   paymentMethod,
+      //   isGift,
+
+      //   giftInfo: isGift
+      //     ? {
+      //         name: giftInfo.name,
+      //         phone: giftInfo.phone,
+      //         address: giftInfo.address,
+      //         message: giftInfo.message,
+      //       }
+      //     : null,
+      // };
       const orderData = {
-        shippingInfo: {
-          address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
-          fullName: shippingInfo.fullName,
-          phone: shippingInfo.phone,
-        },
+        shippingInfo: isGift
+          ? {
+              // 🎁 Delivery goes to recipient
+              fullName: giftInfo.name,
+              phone: giftInfo.phone,
+              address: giftInfo.address,
+            }
+          : {
+              // 📦 Normal delivery
+              fullName: shippingInfo.fullName,
+              phone: shippingInfo.phone,
+              address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
+            },
+
         paymentMethod,
+        isGift,
+
+        giftInfo: isGift
+          ? {
+              name: giftInfo.name,
+              phone: giftInfo.phone,
+              address: giftInfo.address,
+              message: giftInfo.message,
+            }
+          : null,
       };
 
       const token = localStorage.getItem("token");
@@ -359,8 +484,11 @@ const Checkout = () => {
         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
           <div className="space-y-4 max-h-96 overflow-y-auto">
-            {cart.items.map(item => (
-              <div key={item._id} className="flex gap-4 p-4 bg-white dark:bg-gray-700 rounded-lg">
+            {cart.items.map((item) => (
+              <div
+                key={item._id}
+                className="flex gap-4 p-4 bg-white dark:bg-gray-700 rounded-lg"
+              >
                 <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 flex items-center justify-center rounded-lg">
                   🌱
                 </div>
@@ -372,6 +500,26 @@ const Checkout = () => {
               </div>
             ))}
           </div>
+          {isGift && (
+            <div className="mt-4 p-4 border rounded-lg bg-green-50 dark:bg-gray-700">
+              <h3 className="font-bold text-lg mb-2">🎁 Gift Details</h3>
+
+              <p>
+                <strong>Recipient:</strong> {giftInfo.name}
+              </p>
+              <p>
+                <strong>Phone:</strong> {giftInfo.phone}
+              </p>
+              <p>
+                <strong>Address:</strong> {giftInfo.address}
+              </p>
+
+              {giftInfo.message && (
+                <p className="mt-2 italic">💌 “{giftInfo.message}”</p>
+              )}
+            </div>
+          )}
+
           <div className="pt-4 border-t mt-4">
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
@@ -428,6 +576,63 @@ const Checkout = () => {
               onChange={handleInputChange}
               className="w-full p-2 rounded border"
             />
+            {/* 🎁 Gift Option */}
+            <div className="mt-4">
+              <label className="flex items-center gap-2 font-semibold">
+                <input
+                  type="checkbox"
+                  checked={isGift}
+                  onChange={(e) => setIsGift(e.target.checked)}
+                />
+                This order is a gift 🎁
+              </label>
+            </div>
+
+            {/* 🎁 Gift Details */}
+            {isGift && (
+              <div className="mt-4 space-y-3 p-4 border rounded-lg bg-white dark:bg-gray-700">
+                <h3 className="font-bold text-lg">Gift Recipient Details</h3>
+
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Recipient Name"
+                  value={giftInfo.name}
+                  onChange={handleGiftChange}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Recipient Phone"
+                  value={giftInfo.phone}
+                  onChange={handleGiftChange}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Recipient Address"
+                  value={giftInfo.address}
+                  onChange={handleGiftChange}
+                  className="w-full p-2 rounded border"
+                  required
+                />
+
+                <textarea
+                  name="message"
+                  placeholder="Gift Message (optional)"
+                  value={giftInfo.message}
+                  onChange={handleGiftChange}
+                  className="w-full p-2 rounded border"
+                  rows={3}
+                />
+              </div>
+            )}
 
             <div>
               <h3 className="font-semibold mb-2">Payment Method</h3>

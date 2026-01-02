@@ -3,33 +3,20 @@
 const express = require("express");
 const router = express.Router();
 
-const upload = require("../../src/middlewares/fileuploads");
-const { authenticate, isAdmin } = require("../../src/middlewares/authMiddleware");
+const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
 const blogController = require("../controllers/admin/blogController");
+const upload = require("../../utils/multer");
 
-router.post(
-  "/blogs",
-  authenticate,
-  isAdmin,
-  upload.single("image"),
-  blogController.createBlog
-);
+/* ================= ADMIN BLOG ROUTES ================= */
+router.get("/admin/blogs", authenticate, isAdmin, blogController.getAllBlogsAdmin);
+router.post("/admin/blogs", authenticate, isAdmin, upload.single("image"), blogController.createBlog);
+router.put("/admin/blogs/:id", authenticate, isAdmin, upload.single("image"), blogController.updateBlog);
+router.delete("/admin/blogs/:id", authenticate, isAdmin, blogController.deleteBlog);
 
-router.get("/blogs", blogController.getAllBlogs);
-
-router.put(
-  "/blogs/:id",
-  authenticate,
-  isAdmin,
-  upload.single("image"),
-  blogController.updateBlog
-);
-
-router.delete(
-  "/blogs/:id",
-  authenticate,
-  isAdmin,
-  blogController.deleteBlog
-);
+/* ================= PUBLIC BLOG ROUTES ================= */
+router.get("/blogs", blogController.getAllBlogsPublic);
+router.get("/blogs/:id", blogController.getBlogByIdPublic);
 
 module.exports = router;
+
+

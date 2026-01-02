@@ -1,64 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-// const wishlistController = require("../controllers/wishlistController");
-// const { auth } = require("../middlewares/authMiddleware");
-
-// // Get user's wishlist
-// router.get("/", auth, wishlistController.list);
-
-// // Toggle product in wishlist (add/remove)
-// router.post("/toggle", auth, wishlistController.toggle);
-
-// // Add item to wishlist
-// router.post("/add", auth, wishlistController.add);
-
-// // Remove item from wishlist
-// router.delete("/remove/:productId", auth, wishlistController.remove);
-
-// // module.exports = router;
-// const express = require("express");
-// const router = express.Router();
-// const wishlistController = require("../controllers/wishlistController");
-// const { auth } = require("../middlewares/authMiddleware");
-
-// // All routes require authentication
-// // router.get("/", auth, wishlistController.list);
-// router.get("/", (req, res) => {
-//   res.json({ success: true, message: "Wishlist route working", wishlist: [] });
-// });
-// router.post("/toggle", auth, wishlistController.toggle);
-// router.post("/add", auth, wishlistController.add);
-// router.delete("/remove/:productId", auth, wishlistController.remove);
-
-// module.exports = router;
-
-const express = require("express");
-const router = express.Router();
-const wishlistController = require("../controllers/wishlistController");
-const { auth } = require("../middlewares/authMiddleware");
-
-// Temporary test routes - comment out the controller routes
-router.get("/", (req, res) => {
-  res.json({ success: true, message: "Wishlist route working", wishlist: [] });
-});
-
-router.post("/toggle", (req, res) => {
-  res.json({ success: true, message: "Toggle working (temp)" });
-});
-
-router.post("/add", (req, res) => {
-  res.json({ success: true, message: "Add working (temp)" });
-});
-
-router.delete("/remove/:productId", (req, res) => {
-  res.json({ success: true, message: "Remove working (temp)" });
-});
-
-// // router.post("/toggle", auth, wishlistController.toggle);
-// // router.post("/add", auth, wishlistController.add);
-// // router.delete("/remove/:productId", auth, wishlistController.remove);
-
-module.exports = router;
 
 // const express = require("express");
 // const router = express.Router();
@@ -72,3 +11,23 @@ module.exports = router;
 // router.delete("/remove/:productId", authenticate, wishlistController.remove);
 
 // module.exports = router;
+const { authenticate } = require("../middlewares/authMiddleware");
+const wishlistController = require("../controllers/wishlistController");
+const router = require("express").Router();
+
+// All wishlist routes require authentication
+router.use(authenticate);
+
+// Get wishlist
+router.get("/", wishlistController.list);
+
+// Toggle product
+router.post("/toggle", wishlistController.toggle);
+
+// Add product
+router.post("/add", wishlistController.add);
+
+// Remove product
+router.delete("/remove/:productId", wishlistController.remove);
+
+module.exports = router;

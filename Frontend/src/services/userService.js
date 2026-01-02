@@ -34,3 +34,46 @@ export const loginAdminApi = (data) => {
     }
   );
 };
+
+
+// // Get token from localStorage (or pass it as parameter)
+// const getAuthHeader = () => {
+//   const token = localStorage.getItem("token");
+//   if (!token) throw new Error("No auth token found");
+//   return { Authorization: `Bearer ${token}` };
+// };
+
+// ---------------- Profile APIs ----------------
+export const fetchProfileApi = async () => {
+  const headers = getAuthHeader();
+  const response = await axios.get("/users/profile", { headers });
+  return response.data;
+};
+
+export const updateProfileApi = async (updates) => {
+  const headers = getAuthHeader();
+  const response = await axios.put("/users/profile", updates, { headers });
+  return response.data;
+};
+
+export const uploadProfileImageApi = async (file) => {
+  const headers = {
+    ...getAuthHeader(),
+    "Content-Type": "multipart/form-data",
+  };
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await axios.put("/users/profile/image", formData, { headers });
+  return response.data;
+};
+
+export const changePasswordApi = async (oldPassword, newPassword) => {
+  const headers = getAuthHeader();
+  const response = await axios.put(
+    "/users/profile/password",
+    { oldPassword, newPassword },
+    { headers }
+  );
+  return response.data;
+};

@@ -208,6 +208,8 @@ import AdminSettingsPage from "../pages/admin/AdminSettingsPage.jsx";
 import Blogs from "../pages/blogs.jsx";
 import BlogForm from "../pages/admin/BlogForm.jsx";
 import AdminBlogs from "../pages/admin/AdminBlogs.jsx";
+import Contact from "../pages/contact.jsx";
+import ProfilePage from "../pages/ProfilePage.jsx";
 
 export default function AppRouter() {
   return (
@@ -224,6 +226,7 @@ export default function AppRouter() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
 
         {/* ================= GUEST-ONLY ROUTES ================= */}
@@ -241,6 +244,7 @@ export default function AppRouter() {
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>
 

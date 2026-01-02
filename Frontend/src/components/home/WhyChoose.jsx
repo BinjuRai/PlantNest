@@ -1,53 +1,44 @@
 
+
 import { Leaf, Truck, ShieldCheck, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function WhyChoose() {
   const items = [
-    { icon: Leaf, title: "Healthy Plants", desc: "We nurture and handpick every plant with care" },
-    { icon: Truck, title: "Fast Delivery", desc: "Carefully packed & delivered fresh to you" },
-    { icon: ShieldCheck, title: "Eco-Friendly", desc: "100% sustainable & recyclable packaging" },
-    { icon: Headphones, title: "Care Support", desc: "Expert help & satisfaction guarantee" },
+    {
+      icon: Leaf,
+      title: "Smart Plant & Tree Care",
+      desc: "We nurture every plant carefully to ensure long-lasting health.",
+    },
+    {
+      icon: Truck,
+      title: "Nursery Direct",
+      desc: "Plants delivered directly from our nursery to your home.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Plant Sentry",
+      desc: "Quality checks and eco-safe handling at every step.",
+    },
+    {
+      icon: Headphones,
+      title: "Plant Renovation",
+      desc: "Expert guidance and support for your growing journey.",
+    },
   ];
 
   return (
-    <section className="relative py-12 bg-[#538767e8] overflow-hidden">
-      
-      {/* Decorative blur */}
-      <div className="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+    <section className="py-14 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* HEADING */}
+        <h2 className="text-center text-3xl font-bold font-serif text-[#274E36] mb-16">
+          Why Choose <span className="text-[#edab5a]">PlantNest?</span>
+        </h2>
 
-      <h2 className="text-center text-4xl font-serif text-white mb-16">
-        Why Choose <span className="text-[#edab5a]">PlantNest?</span>
-      </h2>
-
-      <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-16 px-6">
-        
-        {/* LEFT */}
-        <div className="space-y-12">
-          {items.slice(0, 2).map((item, i) => (
-            <Feature key={i} {...item} />
-          ))}
-        </div>
-
-        {/* CENTER IMAGE */}
-        <motion.div
-          initial={{ scale: 0.7, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white/90 backdrop-blur-lg rounded-full p-12 shadow-2xl flex justify-center"
-        >
-          <img
-            src="src/assets/images/whyypp.png"
-            className="h-64 drop-shadow-xl"
-            alt="Plant"
-          />
-        </motion.div>
-
-        {/* RIGHT */}
-        <div className="space-y-12">
-          {items.slice(2).map((item, i) => (
-            <Feature key={i} {...item} />
+        {/* FEATURES */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-14">
+          {items.map((item, i) => (
+            <Feature key={i} {...item} delay={i * 0.1} />
           ))}
         </div>
       </div>
@@ -55,18 +46,24 @@ export default function WhyChoose() {
   );
 }
 
-const Feature = ({ icon: Icon, title, desc }) => (
+const Feature = ({ icon: Icon, title, desc, delay }) => (
   <motion.div
-    whileHover={{ y: -6 }}
-    transition={{ type: "spring", stiffness: 300 }}
-    className="flex items-start gap-5 text-white group"
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay }}
+    className="text-center flex flex-col items-center"
   >
-    <div className="bg-white/20 p-4 rounded-full group-hover:bg-[#c8f3d2] group-hover:text-[#2f4f3c] transition-all duration-300 shadow-lg">
-      <Icon size={26} />
+    {/* ICON */}
+    <div className="mb-6 bg-[#eaf4ee] p-6 rounded-full">
+      <Icon size={30} className="text-[#538767]" />
     </div>
-    <div>
-      <h4 className="text-lg font-semibold tracking-wide">{title}</h4>
-      <p className="text-sm text-white/80 leading-relaxed">{desc}</p>
-    </div>
+
+    {/* TEXT */}
+    <h4 className="text-lg font-semibold text-[#274E36] mb-2">
+      {title}
+    </h4>
+    <p className="text-sm text-[#274E36]/70 leading-relaxed max-w-xs">
+      {desc}
+    </p>
   </motion.div>
 );

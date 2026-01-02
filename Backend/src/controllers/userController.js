@@ -13,6 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
+
 exports.registerUser = async (req, res) => {
   console.log(">>> registerUser called");
   const { name, email, password, phone } = req.body;
