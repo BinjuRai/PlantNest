@@ -19,18 +19,8 @@ const WishlistPage = () => {
     fetchWishlist();
   }, [user, navigate]);
 
-  // const fetchWishlist = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const data = await getWishlist();
-  //     setWishlist(data.wishlist);
-  //   } catch (err) {
-  //     console.error("Failed to fetch wishlist:", err);
-  //     toast.error("Failed to load wishlist");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
+ 
   const fetchWishlist = async () => {
   try {
     setLoading(true);

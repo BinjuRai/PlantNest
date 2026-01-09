@@ -187,12 +187,21 @@ const HeroSection = () => {
           </p>
 
           {/* CTA (UNCHANGED) */}
-          <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-7 py-2.5 rounded-full hover:bg-green-700 transition">
+           <button 
+            onClick={() => navigate("/products")}
+            className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition"
+          >
+            Get Started
+            <span className="bg-[#EAB87B] text-black secondary-font font-light rounded-full px-2 py-1 flex items-center justify-center">
+              ➜
+            </span>
+          </button>
+          {/* <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-7 py-2.5 rounded-full hover:bg-green-700 transition">
             Get Started
             <span className="bg-[#EAB87B] text-black rounded-full px-3 py-1.5">
               ➜
             </span>
-          </button>
+          </button> */}
         </div>
 
         {/* RIGHT IMAGE */}

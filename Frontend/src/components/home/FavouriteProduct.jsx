@@ -3,9 +3,12 @@ import { useState, useEffect } from "react";
 import { FavouriteCard } from "../card/FavouriteProductCard.jsx";
 import { getWishlist } from "../../services/wishlistService";
 import { useAuth } from "../../auth/authProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function FavouriteProducts({ plants }) {
+  
   const { user } = useAuth();
+   const navigate = useNavigate(); 
   const [wishlistIds, setWishlistIds] = useState([]);
 
   useEffect(() => {
@@ -44,12 +47,21 @@ export default function FavouriteProducts({ plants }) {
           Our Favourite Products
         </h2>
         
-        <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
+        {/* <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
           View More
           <span className="bg-[#EAB87B] text-black secondary-font font-light rounded-full px-2 py-1 flex items-center justify-center">
             ➜
           </span>
-        </button>
+        </button> */}
+         <button 
+            onClick={() => navigate("/wishlist")}
+            className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-5 py-2 rounded-full hover:bg-green-700 transition"
+          >
+            View More
+            <span className="bg-[#EAB87B] text-black secondary-font font-light rounded-full px-2 py-1 flex items-center justify-center">
+              ➜
+            </span>
+          </button>
       </div>
 
       <div className="bg-[#cdddcf] dark:bg-[#3b4f44] rounded-3xl p-6">

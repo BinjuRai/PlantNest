@@ -4,6 +4,7 @@ import { Package, Clock, Truck, CheckCircle, XCircle, Eye } from "lucide-react";
 import { toast } from "react-toastify";
 import { formatDistanceToNow } from "date-fns";
 import { getMyOrders } from "../services/orderService";
+const IMAGE_BASE_URL = "http://localhost:5050/uploads/";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -145,12 +146,16 @@ const MyOrders = () => {
                   <div className="flex items-center gap-4 mb-3">
                     {order.items.slice(0, 3).map((item, idx) => (
                       <img
-                        key={idx}
-                        src={item.product?.image || "/placeholder.png"}
+                        src={
+                          item.product?.imagepath
+                            ? `http://localhost:5050/uploads/${item.product.imagepath}`
+                            : "/placeholder.png"
+                        }
                         alt={item.product?.name || "Product"}
                         className="w-16 h-16 object-cover rounded"
                       />
                     ))}
+
                     {order.items.length > 3 && (
                       <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
                         <span className="text-gray-600 font-semibold">

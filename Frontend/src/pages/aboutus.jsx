@@ -17,8 +17,8 @@ export default function Aboutus() {
       <MissionVision />
       <WhyChoose />
      
-      <OurJourney />
-      <AboutCTA />
+      {/* <OurJourney />
+      <AboutCTA /> */}
 
     </>
   );

@@ -1,4 +1,3 @@
-
 const NotificationService = require("../services/notificationService");
 
 // Get all notifications for logged-in user
@@ -6,18 +5,20 @@ exports.getNotifications = async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
 
-    const notifications = await NotificationService.getNotificationsByUser(userId);
+    const notifications = await NotificationService.getNotificationsByUser(
+      userId
+    );
     const unreadCount = await NotificationService.getUnreadCount(userId);
 
     res.status(200).json({
       success: true,
       notifications,
-      unreadCount
+      unreadCount,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -30,12 +31,12 @@ exports.getUnreadCount = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      count
+      count,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -46,23 +47,26 @@ exports.markAsRead = async (req, res) => {
     const { notificationId } = req.params;
     const userId = req.user.id || req.user._id;
 
-    const notification = await NotificationService.markAsRead(notificationId, userId);
+    const notification = await NotificationService.markAsRead(
+      notificationId,
+      userId
+    );
 
     if (!notification) {
       return res.status(404).json({
         success: false,
-        message: "Notification not found"
+        message: "Notification not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      data: notification
+      data: notification,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -75,12 +79,12 @@ exports.markAllAsRead = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "All notifications marked as read"
+      message: "All notifications marked as read",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -91,23 +95,26 @@ exports.deleteNotification = async (req, res) => {
     const { notificationId } = req.params;
     const userId = req.user.id || req.user._id;
 
-    const notification = await NotificationService.deleteNotification(notificationId, userId);
+    const notification = await NotificationService.deleteNotification(
+      notificationId,
+      userId
+    );
 
     if (!notification) {
       return res.status(404).json({
         success: false,
-        message: "Notification not found"
+        message: "Notification not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Notification deleted"
+      message: "Notification deleted",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };

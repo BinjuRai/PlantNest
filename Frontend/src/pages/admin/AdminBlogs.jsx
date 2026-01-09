@@ -231,12 +231,153 @@
 // };
 
 // export default AdminBlogs;
- import { useEffect, useState } from "react";
+//  import { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import { toast } from "react-toastify";
+// import { getBlogs, deleteBlog } from "../../services/blogApi";
+
+// const Blogs = () => {
+//   const [blogs, setBlogs] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     loadBlogs();
+//   }, []);
+
+//   const loadBlogs = async () => {
+//     try {
+//       setLoading(true);
+//       const { data } = await getBlogs();
+//       setBlogs(data.blogs || data);
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Failed to load blogs");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleDelete = async (id, title) => {
+//     if (!window.confirm(`Delete blog "${title}"?`)) return;
+
+//     try {
+//       await deleteBlog(id);
+//       toast.success(`Blog "${title}" deleted`);
+//       loadBlogs();
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Failed to delete blog");
+//     }
+//   };
+
+//   if (loading) {
+//     return (
+//       <div className="flex items-center justify-center h-64">
+//         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="p-6">
+//       <div className="flex justify-between items-center mb-6">
+//         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+//           Blog Management
+//         </h2>
+//         <Link
+//           to="/admin/create"
+//           className="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-lg font-semibold transition"
+//         >
+//           + Add Blog
+//         </Link>
+//       </div>
+
+//       {blogs.length === 0 ? (
+//         <div className="text-center text-gray-500 p-12">
+//           No blogs found. Add your first blog!
+//         </div>
+//       ) : (
+//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+//           {blogs.map((b) => (
+//             <div
+//               key={b._id}
+//               className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden flex flex-col"
+//             >
+//               <div className="h-48 w-full relative">
+//                 {b.imagepath ? (
+//                   <img
+//                     src={`http://localhost:5050/uploads/${b.imagepath}`}
+//                     alt={b.title}
+//                     className="w-full h-full object-cover"
+//                     onError={(e) => {
+//                       e.target.style.display = "none";
+//                       e.target.nextElementSibling.style.display = "flex";
+//                     }}
+//                   />
+//                 ) : null}
+//                 <div
+//                   className={`w-full h-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-4xl ${
+//                     b.imagepath ? "hidden" : ""
+//                   }`}
+//                 >
+//                   📝
+//                 </div>
+//               </div>
+
+//               <div className="p-4 flex-1 flex flex-col justify-between">
+//                 <div>
+//                   <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
+//                     {b.title}
+//                   </h3>
+//                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+//                     {b.category?.name || "Uncategorized"}
+//                   </p>
+//                   <span
+//                     className={`px-2 py-1 rounded-full text-xs font-semibold ${
+//                       b.status === "published"
+//                         ? "bg-green-100 text-green-800"
+//                         : "bg-yellow-100 text-yellow-800"
+//                     }`}
+//                   >
+//                     {b.status || "draft"}
+//                   </span>
+//                 </div>
+
+//                 <div className="mt-4 flex justify-between">
+//                   <Link
+//                     to={`/admin/blogs/edit/${b._id}`}
+//                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+//                   >
+//                     Edit
+//                   </Link>
+//                   <button
+//                     onClick={() => handleDelete(b._id, b.title)}
+//                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+//                   >
+//                     Delete
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+
+//       <div className="mt-6 text-sm text-gray-600 dark:text-gray-400">
+//         Total Blogs: <span className="font-semibold">{blogs.length}</span>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Blogs;
+
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getBlogs, deleteBlog } from "../../services/blogApi";
+import { getAdminBlogs, deleteBlog } from "../../services/blogApi"; // ✅ Use getAdminBlogs
 
-const Blogs = () => {
+const AdminBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -247,7 +388,7 @@ const Blogs = () => {
   const loadBlogs = async () => {
     try {
       setLoading(true);
-      const { data } = await getBlogs();
+      const { data } = await getAdminBlogs(); // ✅ Changed from getBlogs
       setBlogs(data.blogs || data);
     } catch (err) {
       console.error(err);
@@ -345,7 +486,7 @@ const Blogs = () => {
 
                 <div className="mt-4 flex justify-between">
                   <Link
-                    to={`/admin/blogs/edit/${b._id}`}
+                    to={`/admin/edit/${b._id}`}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
                   >
                     Edit
@@ -370,4 +511,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default AdminBlogs;

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 export default function CTASection() {
+   const navigate = useNavigate(); 
   return (
 
 <section
@@ -24,7 +25,8 @@ export default function CTASection() {
         Join thousands of happy plant parents and transform your space.
       </p>
 
-      <button className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-7 py-2 rounded-full hover:bg-green-700 transition">
+      <button onClick={() => navigate("/products")}
+       className="inline-flex shadow-lg items-center gap-3 bg-[#274E36] text-white px-7 py-2 rounded-full hover:bg-green-700 transition">
         Browse Collection
         <span className="bg-[#EAB87B] text-black secondary-font font-light rounded-full px-3 py-1.5 flex items-center justify-center">
           ➜

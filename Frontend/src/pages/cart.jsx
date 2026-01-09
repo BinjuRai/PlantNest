@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/cartContext";
 import { useAuth } from "../auth/authProvider";
 import { Minus, Plus, Trash2 } from "lucide-react";
 

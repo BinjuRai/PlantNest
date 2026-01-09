@@ -2,32 +2,93 @@
 
 // const orderSchema = new mongoose.Schema(
 //   {
-//     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+//     user: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "User",
+//       required: true,
+//     },
+
 //     items: [
 //       {
-//         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-//         quantity: { type: Number, required: true },
-//         price: { type: Number, required: true }
-//       }
+//         product: {
+//           type: mongoose.Schema.Types.ObjectId,
+//           ref: "Product",
+//           required: true,
+//         },
+//         quantity: {
+//           type: Number,
+//           required: true,
+//         },
+//         price: {
+//           type: Number,
+//           required: true,
+//         },
+//       },
 //     ],
-//     totalAmount: { type: Number, required: true },
-//     payment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
+
+//     shippingInfo: {
+//       fullName: {
+//         type: String,
+//         required: true,
+//       },
+//       phone: {
+//         type: String,
+//         required: true,
+//       },
+//       address: {
+//         type: String,
+//         required: true,
+//       },
+//     },
+
+//     subtotal: {
+//       type: Number,
+//       required: true,
+//     },
+
+//     shippingFee: {
+//       type: Number,
+//       required: true,
+//     },
+
+//     totalAmount: {
+//       type: Number,
+//       required: true,
+//     },
+
+//     paymentMethod: {
+//       type: String,
+//       enum: ["cod", "esewa", "khalti"],
+//       required: true,
+//     },
+
+//     payment: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "Payment",
+//     },
+//     paymentStatus: {
+//       type: String,
+//       enum: ["pending", "paid", "failed"],
+//       default: "pending",
+//     },
+//     transactionId: String,
+//     paidAt: Date,
+
 //     status: {
 //       type: String,
 //       enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
-//       default: "pending"
+//       default: "pending",
 //     },
+
 //     deliveryTracking: {
 //       type: mongoose.Schema.Types.ObjectId,
-//       ref: "DeliveryTracking"
+//       ref: "DeliveryTracking",
 //     },
-//     address: { type: String, required: true }
 //   },
 //   { timestamps: true }
 // );
 
 // module.exports = mongoose.model("Order", orderSchema);
-
 
 const mongoose = require("mongoose");
 
@@ -36,7 +97,7 @@ const orderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
 
     items: [
@@ -44,70 +105,105 @@ const orderSchema = new mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
-          required: true
+          required: true,
         },
         quantity: {
           type: Number,
-          required: true
+          required: true,
         },
         price: {
           type: Number,
-          required: true
-        }
-      }
+          required: true,
+        },
+      },
     ],
 
     shippingInfo: {
       fullName: {
         type: String,
-        required: true
+        required: true,
       },
       phone: {
         type: String,
-        required: true
+        required: true,
       },
       address: {
         type: String,
-        required: true
-      }
+        required: true,
+      },
     },
 
     subtotal: {
       type: Number,
-      required: true
+      required: true,
     },
 
     shippingFee: {
       type: Number,
-      required: true
+      required: true,
     },
 
     totalAmount: {
       type: Number,
-      required: true
+      required: true,
     },
 
     paymentMethod: {
       type: String,
       enum: ["cod", "esewa", "khalti"],
-      required: true
+      required: true,
     },
 
     payment: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment"
+      ref: "Payment",
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
+
+    transactionId: {
+      type: String,
+    },
+
+    paidAt: {
+      type: Date,
     },
 
     status: {
       type: String,
       enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
-      default: "pending"
+      default: "pending",
     },
 
     deliveryTracking: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "DeliveryTracking"
-    }
+      ref: "DeliveryTracking",
+    },
+
+    // Gift order fields
+    isGift: {
+      type: Boolean,
+      default: false,
+    },
+
+    giftInfo: {
+      name: {
+        type: String,
+      },
+      phone: {
+        type: String,
+      },
+      address: {
+        type: String,
+      },
+      message: {
+        type: String,
+      },
+    },
   },
   { timestamps: true }
 );

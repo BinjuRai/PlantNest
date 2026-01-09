@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const router = express.Router();
 const OrderController = require("../controllers/orderController");
@@ -9,6 +7,7 @@ const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
 router.post("/", authenticate, OrderController.createOrder);
 router.get("/my-orders", authenticate, OrderController.getMyOrders);
 router.get("/:orderId", authenticate, OrderController.getOrderById);
+router.post("/verify-payment", authenticate, OrderController.verifyPayment);
 
 // Admin routes
 router.get("/admin/all", authenticate, isAdmin, OrderController.adminGetOrders);

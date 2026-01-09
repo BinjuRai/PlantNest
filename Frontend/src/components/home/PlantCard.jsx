@@ -158,35 +158,303 @@
 
 // export default PlantCard;
 
+// import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useCart } from "../../context/cartContext";
+// import { toast } from "react-toastify";
+// import { toggleWishlist, getWishlist } from "../../services/wishlistService";
+
+// const PlantCard = ({ plant }) => {
+//   const navigate = useNavigate();
+//   const { addToCart } = useCart();
+//   const [inWishlist, setInWishlist] = useState(false);
+
+//   // ✅ Fetch wishlist status
+//   const fetchWishlist = async () => {
+//     try {
+//       const response = await getWishlist();
+//       // Assuming response is { data: [...] }
+//       const wishlistItems = response.data || response; // adjust depending on your API
+//       setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+//     } catch (err) {
+//       console.error("Failed to fetch wishlist", err);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchWishlist();
+//   }, [plant]);
+
+//   const handleToggleWishlist = async (e) => {
+//     e.stopPropagation();
+//     try {
+//       await toggleWishlist(plant._id);
+//       setInWishlist((prev) => !prev);
+//       toast.success(
+//         !inWishlist
+//           ? `${plant.name} added to wishlist 💚`
+//           : `${plant.name} removed from wishlist`
+//       );
+//     } catch (err) {
+//       toast.error("Failed to update wishlist");
+//     }
+//   };
+
+//   const handleAddToCart = async (e) => {
+//     e.stopPropagation();
+//     try {
+//       await addToCart(plant._id, 1);
+//       toast.success(`${plant.name} added to cart 🛒`);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   return (
+//     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+//       {/* Heart */}
+//       <button
+//         onClick={handleToggleWishlist}
+//         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+//       >
+//         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+//       </button>
+
+//       {/* Image */}
+//       <img
+//         src={
+//           plant.imagepath
+//             ? `http://localhost:5050/uploads/${plant.imagepath}`
+//             : "/default.png"
+//         }
+//         alt={plant.name}
+//         className="w-full h-64 object-cover"
+//       />
+
+//       {/* Details */}
+//       <div className="p-4">
+//         <h3 className="font-bold text-lg">{plant.name}</h3>
+//         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
+
+//         <button
+//           onClick={handleAddToCart}
+//           className="mt-2 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold transition"
+//         >
+//           🛒 Add to Cart
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PlantCard;
+
+
+
+// import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useCart } from "../../context/cartContext";
+// import { useAuth } from "../../auth/authProvider";
+// import { toast } from "react-toastify";
+// import { toggleWishlist, getWishlist } from "../../services/wishlistService";
+
+// const PlantCard = ({ plant }) => {
+//   const navigate = useNavigate();
+//   const { addToCart } = useCart();
+//   const { user } = useAuth();
+//   const [inWishlist, setInWishlist] = useState(false);
+
+//   // ✅ Fetch wishlist status ONLY if user is logged in
+//   const fetchWishlist = async () => {
+//     if (!user) {
+//       setInWishlist(false);
+//       return;
+//     }
+
+//     try {
+//       const response = await getWishlist();
+//       const wishlistItems = response.data || response;
+      
+//       if (Array.isArray(wishlistItems)) {
+//         setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+//       } else {
+//         setInWishlist(false);
+//       }
+//     } catch (err) {
+//       console.error("Failed to fetch wishlist", err);
+//       setInWishlist(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchWishlist();
+//   }, [plant, user]);
+
+//   const handleToggleWishlist = async (e) => {
+//     e.stopPropagation();
+    
+//     if (!user) {
+//       toast.info("Please login to add to wishlist");
+//       navigate("/login");
+//       return;
+//     }
+
+//     try {
+//       await toggleWishlist(plant._id);
+//       setInWishlist((prev) => !prev);
+//       toast.success(
+//         !inWishlist
+//           ? `${plant.name} added to wishlist 💚`
+//           : `${plant.name} removed from wishlist`
+//       );
+//     } catch (err) {
+//       toast.error("Failed to update wishlist");
+//     }
+//   };
+
+//   const handleAddToCart = async (e) => {
+//     e.stopPropagation();
+    
+//     if (!user) {
+//       toast.info("Please login to add to cart");
+//       navigate("/login");
+//       return;
+//     }
+
+//     try {
+//       await addToCart(plant._id, 1);
+//       toast.success(`${plant.name} added to cart 🛒`);
+//     } catch (err) {
+//       console.error(err);
+//       toast.error("Failed to add to cart");
+//     }
+//   };
+
+//   // ✅ Buy Now handler
+//   const handleBuyNow = async (e) => {
+//     e.stopPropagation();
+
+//     if (plant.stock === 0) return;
+
+//     if (!user) {
+//       toast.info("Please login to continue");
+//       navigate("/login");
+//       return;
+//     }
+
+//     // Add to cart first
+//     await handleAddToCart(e);
+    
+//     // Navigate to checkout after a short delay
+//     setTimeout(() => {
+//       navigate(`/checkout?plantId=${plant._id}`);
+//     }, 500);
+//   };
+
+//   return (
+//     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+//       {/* Heart */}
+//       <button
+//         onClick={handleToggleWishlist}
+//         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+//       >
+//         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+//       </button>
+
+//       {/* Image */}
+//       <img
+//         src={
+//           plant.imagepath
+//             ? `http://localhost:5050/uploads/${plant.imagepath}`
+//             : "/default.png"
+//         }
+//         alt={plant.name}
+//         className="w-full h-64 object-cover"
+//       />
+
+//       {/* Details */}
+//       <div className="p-4">
+//         <h3 className="font-bold text-lg">{plant.name}</h3>
+//         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
+
+//         {/* Stock Status */}
+//         {plant.stock === 0 && (
+//           <p className="text-red-500 text-sm mt-1">Out of Stock</p>
+//         )}
+
+//         {/* Button Group */}
+//         <div className="flex gap-2 mt-3">
+//           <button
+//             onClick={handleAddToCart}
+//             disabled={plant.stock === 0}
+//             className="flex-1 bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+//           >
+//             🛒 Add to Cart
+//           </button>
+
+//           <button
+//             onClick={handleBuyNow}
+//             disabled={plant.stock === 0}
+//             className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+//           >
+//             💳 Buy Now
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PlantCard;
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/cartContext";
+import { useAuth } from "../../auth/authProvider";
 import { toast } from "react-toastify";
 import { toggleWishlist, getWishlist } from "../../services/wishlistService";
 
 const PlantCard = ({ plant }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const [inWishlist, setInWishlist] = useState(false);
 
-  // ✅ Fetch wishlist status
+  // ✅ Fetch wishlist status ONLY if user is logged in
   const fetchWishlist = async () => {
+    if (!user) {
+      setInWishlist(false);
+      return;
+    }
+
     try {
       const response = await getWishlist();
-      // Assuming response is { data: [...] }
-      const wishlistItems = response.data || response; // adjust depending on your API
-      setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+      const wishlistItems = response.data || response;
+      
+      if (Array.isArray(wishlistItems)) {
+        setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+      } else {
+        setInWishlist(false);
+      }
     } catch (err) {
       console.error("Failed to fetch wishlist", err);
+      setInWishlist(false);
     }
   };
 
   useEffect(() => {
     fetchWishlist();
-  }, [plant]);
+  }, [plant, user]);
 
   const handleToggleWishlist = async (e) => {
     e.stopPropagation();
+    
+    if (!user) {
+      toast.info("Please login to add to wishlist");
+      navigate("/login");
+      return;
+    }
+
     try {
       await toggleWishlist(plant._id);
       setInWishlist((prev) => !prev);
@@ -202,20 +470,57 @@ const PlantCard = ({ plant }) => {
 
   const handleAddToCart = async (e) => {
     e.stopPropagation();
+    
+    if (!user) {
+      toast.info("Please login to add to cart");
+      navigate("/login");
+      return;
+    }
+
     try {
       await addToCart(plant._id, 1);
       toast.success(`${plant.name} added to cart 🛒`);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to add to cart");
     }
   };
 
+  // ✅ Buy Now handler
+  const handleBuyNow = async (e) => {
+    e.stopPropagation();
+
+    if (plant.stock === 0) return;
+
+    if (!user) {
+      toast.info("Please login to continue");
+      navigate("/login");
+      return;
+    }
+
+    // Add to cart first
+    await handleAddToCart(e);
+    
+    // Navigate to checkout after a short delay
+    setTimeout(() => {
+      navigate(`/checkout?plantId=${plant._id}`);
+    }, 500);
+  };
+
+  // ✅ Navigate to product details when card is clicked
+  const handleCardClick = () => {
+    navigate(`/products/${plant._id}`);
+  };
+
   return (
-    <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+    <div 
+      onClick={handleCardClick} // ✅ Added onClick to navigate to details
+      className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer"
+    >
       {/* Heart */}
       <button
         onClick={handleToggleWishlist}
-        className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+        className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition z-10"
       >
         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
       </button>
@@ -236,15 +541,33 @@ const PlantCard = ({ plant }) => {
         <h3 className="font-bold text-lg">{plant.name}</h3>
         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
 
-        <button
-          onClick={handleAddToCart}
-          className="mt-2 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold transition"
-        >
-          🛒 Add to Cart
-        </button>
+        {/* Stock Status */}
+        {plant.stock === 0 && (
+          <p className="text-red-500 text-sm mt-1">Out of Stock</p>
+        )}
+
+        {/* Button Group */}
+        <div className="flex gap-2 mt-3">
+          <button
+            onClick={handleAddToCart}
+            disabled={plant.stock === 0}
+            className="flex-1 bg-[#274E36] hover:bg-green-800 text-white py-2 rounded-lg border-1 border-[#d9a768] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+          >
+            🛒 Add to Cart
+          </button>
+
+          <button
+            onClick={handleBuyNow}
+            disabled={plant.stock === 0}
+            className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg border-1 border-[#274E36] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+          >
+            💳 Buy Now
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default PlantCard;
+     
