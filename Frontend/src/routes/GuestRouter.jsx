@@ -14,14 +14,13 @@ export default function GuestRoute() {
     );
   }
 
-  // If user is logged in, redirect based on role
+
   if (user) {
     if (user.role === "admin") return <Navigate to="/admin" replace />;
 ;
-    return <Navigate to="/" replace />; // Normal users go to homepage
+    return <Navigate to="/" replace />; 
   }
 
-  // If not logged in, allow access to login/register pages
   return <Outlet />;
 }
 

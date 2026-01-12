@@ -1,124 +1,8 @@
-// import { Heart} from "lucide-react";
-
-// export default function PlantNest() {
-//   return (
-//     <div className="font-sans text-slate-800">
-     
-//       {/* Hero Section */}
-//       <section className="px-8 py-16 grid md:grid-cols-2 gap-10 items-center">
-//         <div>
-//           <h1 className="text-4xl font-semibold mb-4">Welcome to Plant-Nest</h1>
-//           <p className="text-slate-600 mb-6">
-//             Discover our curated collection of beautiful, healthy plants that
-//             will transform your living space into a green sanctuary.
-//           </p>
-//           <button className="bg-green-700 text-white px-6 py-2 rounded">
-//             Get Started
-//           </button>
-//         </div>
-
-//         <div className="flex justify-center">
-//           <div className="w-72 h-72 bg-green-100 rounded-full" />
-//         </div>
-//       </section>
-
-//       {/* Latest Products */}
-//       <section className="px-8 py-12 bg-green-50">
-//         <div className="flex justify-between items-center mb-6">
-//           <h2 className="text-2xl font-semibold">Latest updated Products</h2>
-//           <button className="text-sm bg-green-700 text-white px-4 py-1 rounded">
-//             View More
-//           </button>
-//         </div>
-
-//         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-//           {[1, 2, 3, 4].map((item) => (
-//             <div
-//               key={item}
-//               className="bg-white rounded-xl shadow p-4 relative"
-//             >
-//               <Heart className="absolute top-3 right-3 text-green-700" />
-//               <div className="h-40 bg-slate-100 rounded mb-4" />
-//               <h3 className="font-medium">Indoor Plants one</h3>
-//               <p className="text-sm text-slate-600">Rs. 500</p>
-//               <div className="flex gap-2 mt-3">
-//                 <button className="flex-1 border border-green-700 text-green-700 text-sm py-1 rounded">
-//                   Add to cart
-//                 </button>
-//                 <button className="flex-1 bg-green-700 text-white text-sm py-1 rounded">
-//                   Buy Now
-//                 </button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </section>
-
-//       {/* Why Choose Us */}
-//       <section className="bg-green-700 text-white py-16 px-8">
-//         <h2 className="text-3xl font-semibold text-center mb-10">
-//           Why Choose Plant Nest?
-//         </h2>
-
-//         <div className="grid md:grid-cols-3 gap-10 items-center">
-//           <div className="space-y-6 text-sm">
-//             <p>✔ Healthy & Fresh Plants</p>
-//             <p>✔ Fast Delivery</p>
-//           </div>
-
-//           <div className="flex justify-center">
-//             <div className="w-52 h-52 bg-white rounded-full" />
-//           </div>
-
-//           <div className="space-y-6 text-sm">
-//             <p>✔ Eco Friendly</p>
-//             <p>✔ Customer Support</p>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* Favourite Products */}
-//       <section className="px-8 py-16">
-//         <div className="flex justify-between items-center mb-6">
-//           <h2 className="text-2xl font-semibold">Our Favourite Products</h2>
-//           <button className="text-sm bg-green-700 text-white px-4 py-1 rounded">
-//             View More
-//           </button>
-//         </div>
-
-//         <div className="grid md:grid-cols-3 gap-6">
-//           <div className="md:row-span-2 bg-slate-100 rounded-xl h-96" />
-//           <div className="bg-slate-100 rounded-xl h-44" />
-//           <div className="bg-slate-100 rounded-xl h-44" />
-//           <div className="bg-slate-100 rounded-xl h-44" />
-//           <div className="bg-slate-100 rounded-xl h-44" />
-//         </div>
-//       </section>
-
-//       {/* CTA */}
-//       <section className="relative py-20 px-8 bg-green-100 text-center">
-//         <h2 className="text-3xl font-semibold mb-4">
-//           Start Your Plant Journey Today.
-//         </h2>
-//         <p className="text-slate-700 mb-6">
-//           Join thousands of happy plant parents and transform your space.
-//         </p>
-//         <button className="bg-green-700 text-white px-6 py-2 rounded">
-//           Browse Collection
-//         </button>
-//       </section>
-
-      
-//     </div>
-//   );
-// }
-
 import { useQuery } from "@tanstack/react-query";
 import { getAllPlantsApi } from "../services/plantService";
 import { getAllCategoriesApi } from "../services/categoryService";
 import { toast } from "react-toastify";
 
-// Components
 import Loading from "../components/common/Loading";
 import ErrorMessage from "../components/common/ErrorMessage";
 import HeroSection from "../components/home/HeroSection";
@@ -130,43 +14,37 @@ import FavouriteProducts from "../components/home/FavouriteProduct";
 import indoorPlant from "/src/assets/images/indoorpl.png";
 
 const Homepage = () => {
-  // Fetch plants
-  const { 
-    data: plants, 
-    isLoading: plantsLoading, 
+  const {
+    data: plants,
+    isLoading: plantsLoading,
     error: plantsError,
-    refetch: refetchPlants 
+    refetch: refetchPlants,
   } = useQuery({
     queryKey: ["plants"],
     queryFn: getAllPlantsApi,
   });
 
-  // Fetch categories
-  const { 
-    data: categories, 
+  const {
+    data: categories,
     isLoading: categoriesLoading,
     error: categoriesError,
-    refetch: refetchCategories 
+    refetch: refetchCategories,
   } = useQuery({
     queryKey: ["categories"],
     queryFn: getAllCategoriesApi,
   });
 
-  // Handle add to cart
   const handleAddToCart = (plant) => {
     toast.success(`${plant.name} added to cart! 🛒`);
-    // TODO: Implement actual cart functionality
   };
 
-  // Loading state
   if (plantsLoading || categoriesLoading) {
     return <Loading message="Loading..." />;
   }
 
-  // Error state for plants
   if (plantsError) {
     return (
-      <ErrorMessage 
+      <ErrorMessage
         title="Failed to load plants"
         message={plantsError.response?.data?.message || plantsError.message}
         onRetry={refetchPlants}
@@ -177,23 +55,16 @@ const Homepage = () => {
   // Error state for categories
   if (categoriesError) {
     console.error("Categories error:", categoriesError);
-    // Don't block the entire page, just log the error
-    // Categories section will handle empty state
   }
-
-  // Log for debugging
-  console.log("Plants data:", plants);
-  console.log("Categories data:", categories);
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
       <HeroSection />
-      
-      {/* Categories Section - only show if we have categories */}
+
       {categories && categories.length > 0 && (
         <CategorySection categories={categories} />
       )}
-      
+
       <PlantSection plants={plants} onAddToCart={handleAddToCart} />
       <WhyChoose />
       <FavouriteProducts plants={plants || samplePlants} />

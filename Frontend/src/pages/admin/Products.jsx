@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -27,7 +26,7 @@ const Products = () => {
 
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete "${name}"?`)) return;
-    
+
     try {
       await api.delete(`/admin/products/${id}`);
       toast.success(`Product "${name}" deleted`);
@@ -82,8 +81,8 @@ const Products = () => {
               </tr>
             ) : (
               products.map((p) => (
-                <tr 
-                  key={p._id} 
+                <tr
+                  key={p._id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 >
                   <td className="p-3">
@@ -98,35 +97,41 @@ const Products = () => {
                         }}
                       />
                     ) : null}
-                    <div className={`w-16 h-16 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center text-2xl ${p.imagepath ? "hidden" : ""}`}>
+                    <div
+                      className={`w-16 h-16 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center text-2xl ${
+                        p.imagepath ? "hidden" : ""
+                      }`}
+                    >
                       🌿
                     </div>
                   </td>
-                  
+
                   <td className="p-3 font-medium text-gray-900 dark:text-white">
                     {p.name}
                   </td>
-                  
+
                   <td className="p-3 text-gray-700 dark:text-gray-300">
                     Rs. {p.price}
                   </td>
-                  
+
                   <td className="p-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      p.stock > 10 
-                        ? "bg-green-100 text-green-800" 
-                        : p.stock > 0 
-                        ? "bg-yellow-100 text-yellow-800" 
-                        : "bg-red-100 text-red-800"
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        p.stock > 10
+                          ? "bg-green-100 text-green-800"
+                          : p.stock > 0
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
                       {p.stock > 0 ? `${p.stock} in stock` : "Out of stock"}
                     </span>
                   </td>
-                  
+
                   <td className="p-3 text-gray-600 dark:text-gray-300">
                     {p.categoryId?.name || "-"}
                   </td>
-                  
+
                   <td className="p-3 text-center space-x-2">
                     <Link
                       to={`/admin/products/edit/${p._id}`}

@@ -12,13 +12,13 @@ const getAuthHeader = () => {
   };
 };
 
-// Get user's cart
+
 export const getCart = async () => {
   const res = await axios.get(API_URL, getAuthHeader());
   return res.data;
 };
 
-// Add item to cart
+
 export const addToCart = async (productId, quantity = 1) => {
   const res = await axios.post(
     `${API_URL}/add`,
@@ -28,7 +28,7 @@ export const addToCart = async (productId, quantity = 1) => {
   return res.data;
 };
 
-// Update cart item quantity
+
 export const updateCartQuantity = async (productId, quantity) => {
   const res = await axios.put(
     `${API_URL}/update`,
@@ -38,7 +38,7 @@ export const updateCartQuantity = async (productId, quantity) => {
   return res.data;
 };
 
-// Remove item from cart
+
 export const removeFromCart = async (productId) => {
   const res = await axios.delete(
     `${API_URL}/remove/${productId}`,
@@ -47,7 +47,6 @@ export const removeFromCart = async (productId) => {
   return res.data;
 };
 
-// Clear entire cart
 export const clearCart = async () => {
   const res = await axios.delete(`${API_URL}/clear`, getAuthHeader());
   return res.data;

@@ -108,6 +108,7 @@ export default function Footer() {
               <li><Link to="/login" className="hover:text-white">Login</Link></li>
               <li><Link to="/cart" className="hover:text-white">My Cart</Link></li>
               <li><Link to="/wishlist" className="hover:text-white">My Wishlist</Link></li>
+              <li><Link to="/faq" className="hover:text-white">FAQ</Link></li>
             </ul>
           </div>
 
@@ -148,16 +149,16 @@ export default function Footer() {
         <div className="border-t border-white/30 my-10"></div>
 
         {/* BOTTOM */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-white/90 secondary-font">
+<div className="flex flex-col items-center justify-center text-center text-white/90 secondary-font">
 
           <p>© 2025 PlantNest — Lalitpur, Nepal</p>
 
           {/* SOCIALS */}
-          <div className="flex gap-6">
+          {/* <div className="flex gap-6">
             <a href="#" aria-label="Facebook"><Facebook size={22} /></a>
             <a href="#" aria-label="Instagram"><Instagram size={22} /></a>
             <a href="#" aria-label="YouTube"><Youtube size={22} /></a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

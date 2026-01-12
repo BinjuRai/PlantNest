@@ -50,7 +50,7 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-8 secondary-font ">Shopping Cart</h1>
 
         {items.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">

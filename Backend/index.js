@@ -23,6 +23,9 @@ const notificationRoutes = require("./src/routes/notificationRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const profileRoutes = require("./src/routes/profileRoutes");
 
+const reviewRoutes = require("./src/routes/reviewRoutes");
+
+
 
 
 // const adminBlogRoutes = require("./src/routes/admin/blogRoutes");
@@ -72,6 +75,7 @@ app.use("/api/cart", cartRoute);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/users", profileRoutes)
 app.use("/api", blogRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Test route
 app.get("/test", (req, res) => {

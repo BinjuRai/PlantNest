@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { loginUserApi, registerUserApi} from "../services/userService";
-// import { useAuth } from "../hooks/useAuth";
+
 import { useAuth } from "../auth/authProvider";
 
 import { toast } from "react-toastify";
@@ -21,7 +21,7 @@ const Register = () => {
   const navigate = useNavigate();
   const { login, redirectPath, setRedirectPath } = useAuth();
 
-  // Auto-login after registration
+
   const loginMutation = useMutation({
     mutationFn: loginUserApi,
     onSuccess: (response) => {
@@ -29,7 +29,7 @@ const Register = () => {
       login(user, token);
       toast.success(`Welcome to PlantNest, ${user.name}! 🌿`);
 
-      // Redirect to saved path or home
+  
       const destination = redirectPath || "/";
       setRedirectPath(null);
       navigate(destination);
@@ -40,7 +40,7 @@ const Register = () => {
     mutationFn: registerUserApi,
     onSuccess: () => {
       toast.success("Registration successful! Logging you in...");
-      // Auto-login after successful registration
+
       loginMutation.mutate({
         email: formData.email,
         password: formData.password,
@@ -64,20 +64,20 @@ const Register = () => {
   };
 
 return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-  {/* Floating leaves */}
+
   <div className="absolute top-10 left-10 w-16 h-16 bg-leaf bg-no-repeat bg-contain animate-float-slow opacity-70" data-speed="0.2"></div>
   <div className="absolute top-1/3 right-20 w-12 h-12 bg-leaf bg-no-repeat bg-contain animate-float-slow delay-2000 opacity-60" data-speed="0.3"></div>
   <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-leaf bg-no-repeat bg-contain animate-float-slow delay-4000 opacity-50" data-speed="0.1"></div>
 
-  {/* Central container */}
+
   <div className="relative flex flex-col md:flex-row bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden w-full max-w-6xl">
     
-    {/* PlantNest Logo - Top Right */}
+
     <div className="absolute top-4 left-4 z-10">
       <img src="src/assets/images/plantnestlogo.svg" alt="PlantNest Logo" className="w-32 h-auto" />
     </div>
 
-    {/* Left side - Form */}
+
     <div className="md:w-1/2 p-8 mt-8 md:p-12 flex flex-col justify-center relative z-0">
       <h2 className="text-2xl font-bold text-center mb-6 text-[#274E36] secondary-font">
         Connect. Grow. Thrive. <br />With PlantNest 🌿

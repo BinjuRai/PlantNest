@@ -17,7 +17,7 @@ const OrderSuccessPage = () => {
       fetchOrderDetails();
     }
     
-    // Stop confetti after 5 seconds
+   
     const timer = setTimeout(() => setShowConfetti(false), 5000);
     return () => clearTimeout(timer);
   }, [orderId]);
@@ -51,7 +51,7 @@ const OrderSuccessPage = () => {
           <p className="text-xl text-gray-600">Order not found</p>
           <button
             onClick={() => navigate('/')}
-            className="mt-4 bg-[#538767] text-white px-6 py-2 rounded-lg hover:bg-[#274E36] transition-colors"
+            className="mt-4 bg-[#538767] text-white px-6 py-2 secondary-font rounded-lg hover:bg-[#274E36] transition-colors"
           >
             Go to Home
           </button>
@@ -65,7 +65,7 @@ const OrderSuccessPage = () => {
       {showConfetti && <Confetti numberOfPieces={200} recycle={false} />}
       
       <div className="max-w-3xl mx-auto px-4">
-        {/* Success Message */}
+ 
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 animate-bounce">
             <CheckCircle size={48} className="text-[#538767]" />
@@ -86,11 +86,10 @@ const OrderSuccessPage = () => {
           </div>
         </div>
 
-        {/* Order Details */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <h2 className="text-xl font-bold text-[#274E36] mb-6">Order Details</h2>
           
-          {/* Timeline */}
+   
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
@@ -147,7 +146,7 @@ const OrderSuccessPage = () => {
             </div>
           </div>
 
-          {/* Products */}
+       
           <div className="border-t pt-6">
             <h3 className="font-semibold text-[#274E36] mb-4">Items Ordered</h3>
             {order.items.map((item, index) => (
@@ -166,7 +165,7 @@ const OrderSuccessPage = () => {
             ))}
           </div>
 
-          {/* Summary */}
+         
           <div className="border-t pt-6">
             <div className="flex justify-between mb-2">
               <span className="text-gray-600">Subtotal</span>
@@ -182,13 +181,13 @@ const OrderSuccessPage = () => {
             </div>
           </div>
 
-          {/* Delivery Address */}
+  
           <div className="border-t pt-6 mt-6">
             <h3 className="font-semibold text-[#274E36] mb-2">Delivery Address</h3>
             <p className="text-gray-600">{order.address}</p>
           </div>
 
-          {/* Payment Info */}
+      
           <div className="border-t pt-6 mt-6">
             <h3 className="font-semibold text-[#274E36] mb-2">Payment Information</h3>
             <p className="text-gray-600">
@@ -204,7 +203,7 @@ const OrderSuccessPage = () => {
           </div>
         </div>
 
-        {/* Actions */}
+
         <div className="flex gap-4">
           <button
             onClick={() => navigate('/orders')}

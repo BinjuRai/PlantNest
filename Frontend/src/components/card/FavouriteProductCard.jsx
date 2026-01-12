@@ -23,37 +23,6 @@ export const FavouriteCard = ({
     ? `http://localhost:5050/uploads/${plant.imagepath}`
     : null;
 
-  // const handleWishlistClick = async (e) => {
-  //   e.stopPropagation();
-
-  //   if (!user) {
-  //     toast.error("Please login to add to wishlist");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     setIsLoading(true);
-  //     const response = await toggleWishlist(plant._id);
-
-  //     setIsInWishlist(response.added);
-
-  //     if (onWishlistUpdate) {
-  //       onWishlistUpdate(plant._id, response.added);
-  //     }
-
-  //     toast.success(
-  //       response.added
-  //         ? `💚 ${plant.name} added to wishlist!`
-  //         : `Removed ${plant.name} from wishlist`
-  //     );
-  //   } catch (err) {
-  //     console.error("Wishlist error:", err);
-  //     toast.error("Failed to update wishlist");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
   const handleWishlistClick = async (e) => {
     e.stopPropagation();
 
@@ -117,9 +86,9 @@ export const FavouriteCard = ({
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       {/* Product Info - Shows on Hover */}
-      <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-        <h3 className="text-white font-bold text-lg mb-1">{plant.name}</h3>
-        <p className="text-green-100 text-sm mb-2">
+      <div className="absolute inset-x-0  primary-font bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        <h3 className="text-white primary-font font-bold text-lg mb-1">{plant.name}</h3>
+        <p className="text-green-100 primary-font text-sm mb-2">
           {plant.scientificName || plant.plantType}
         </p>
         <div className="flex items-center justify-between">
@@ -170,7 +139,7 @@ export const FavouriteCard = ({
             e.stopPropagation();
             handleCardClick();
           }}
-          className="bg-white text-green-800 px-6 py-2 rounded-full font-semibold hover:bg-green-100 transition"
+          className="bg-white text-green-800 px-6 py-2 rounded-full primary-font font-semibold hover:bg-green-100 transition"
         >
           View Details
         </button>

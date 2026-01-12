@@ -84,7 +84,7 @@ const MyOrders = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#274E36] mb-2">My Orders</h1>
+          <h1 className="text-3xl secondary-font font-bold text-[#274E36] mb-2">My Orders</h1>
           <p className="text-gray-600">Track and manage your plant orders</p>
         </div>
 

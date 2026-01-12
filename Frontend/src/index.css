@@ -11,6 +11,9 @@
   }
 }
 
+.primary-font {
+  font-family: "Inter", sans-serif;
+}
 .secondary-font {
   font-family: "Arima", system-ui;
 }

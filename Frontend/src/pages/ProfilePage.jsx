@@ -22,7 +22,7 @@ const ProfilePage = () => {
 
   const headers = { Authorization: `Bearer ${token}` };
 
-  // Update profile info
+
   const handleUpdateProfile = async () => {
     try {
       const res = await axios.put(
@@ -37,7 +37,7 @@ const ProfilePage = () => {
     }
   };
 
-  // Upload profile image
+
   const handleUploadImage = async () => {
     if (!image) return toast.warn("Please select an image first!");
     const formData = new FormData();
@@ -54,7 +54,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Change password
   const handleChangePassword = async () => {
     try {
       await axios.put(
@@ -73,9 +72,9 @@ const ProfilePage = () => {
   return (
     <div className="max-w-3xl mx-auto p-6 bg-green-50 shadow-xl rounded-2xl mt-6 mb-6">
       <ToastContainer position="top-right" autoClose={3000} />
-      <h1 className="text-3xl font-bold mb-6 text-green-800 text-center">🌿 My Profile</h1>
+      <h1 className="text-3xl font-bold mb-6 text-green-800 text-center secondary-font">🌿 My Profile</h1>
 
-      {/* Role Badge */}
+     
       <p className="mb-6 text-center text-gray-700">
         Role:{" "}
         <span className={user.role === "admin" ? "text-red-600" : "text-green-700"}>
@@ -83,7 +82,7 @@ const ProfilePage = () => {
         </span>
       </p>
 
-      {/* Profile Image */}
+
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
@@ -117,7 +116,7 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* Profile Info */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
           <label className="block mb-1 text-green-700 font-medium">Name</label>
@@ -172,7 +171,7 @@ const ProfilePage = () => {
 
       <hr className="my-6 border-green-200" />
 
-      {/* Change Password */}
+
       <h2 className="text-2xl font-semibold mb-4 text-green-700 text-center">🔒 Change Password</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>

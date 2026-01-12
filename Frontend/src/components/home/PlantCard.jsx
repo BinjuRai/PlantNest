@@ -1,255 +1,411 @@
 
 
-// import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useCart } from "../../context/cartContext";
-// import { toast } from "react-toastify";
-// import { getWishlist, toggleWishlist } from "../../services/wishlistService";
+// // import { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import { useCart } from "../../context/cartContext";
+// // import { toast } from "react-toastify";
+// // import { getWishlist, toggleWishlist } from "../../services/wishlistService";
 
-// const PlantCard = ({ plant }) => {
-//   const navigate = useNavigate();
-//   const { addToCart } = useCart();
+// // const PlantCard = ({ plant }) => {
+// //   const navigate = useNavigate();
+// //   const { addToCart } = useCart();
 
-//   const imageUrl = plant.imagepath
-//     ? `http://localhost:5050/uploads/${plant.imagepath}`
-//     : null;
+// //   const imageUrl = plant.imagepath
+// //     ? `http://localhost:5050/uploads/${plant.imagepath}`
+// //     : null;
 
-//   const [inWishlist, setInWishlist] = useState(false);
+// //   const [inWishlist, setInWishlist] = useState(false);
 
-//   // Load wishlist status
-//   useEffect(() => {
-//     const fetchWishlist = async () => {
-//       try {
-//         const wishlist = await getWishlist();
-//         const exists = wishlist.some((item) => item._id === plant._id);
-//         setInWishlist(exists);
-//       } catch (err) {
-//         console.error("Failed to fetch wishlist", err);
-//       }
-//     };
-//     fetchWishlist();
-//   }, [plant._id]);
+// //   // Load wishlist status
+// //   useEffect(() => {
+// //     const fetchWishlist = async () => {
+// //       try {
+// //         const wishlist = await getWishlist();
+// //         const exists = wishlist.some((item) => item._id === plant._id);
+// //         setInWishlist(exists);
+// //       } catch (err) {
+// //         console.error("Failed to fetch wishlist", err);
+// //       }
+// //     };
+// //     fetchWishlist();
+// //   }, [plant._id]);
 
-//   const handleAddToCart = async (e) => {
-//     e.stopPropagation(); // Prevent navigation
+// //   const handleAddToCart = async (e) => {
+// //     e.stopPropagation(); // Prevent navigation
 
-//     if (plant.stock === 0) {
-//       toast.error("Product is out of stock");
-//       return;
-//     }
+// //     if (plant.stock === 0) {
+// //       toast.error("Product is out of stock");
+// //       return;
+// //     }
 
-//     try {
-//       await addToCart(plant._id, 1);
-//       toast.success(`${plant.name} added to cart 🛒`);
-//     } catch (err) {
-//       console.error(err);
-//       toast.error("Failed to add to cart");
-//     }
-//   };
+// //     try {
+// //       await addToCart(plant._id, 1);
+// //       toast.success(`${plant.name} added to cart 🛒`);
+// //     } catch (err) {
+// //       console.error(err);
+// //       toast.error("Failed to add to cart");
+// //     }
+// //   };
 
-//   const handleBuyNow = (e) => {
-//     e.stopPropagation(); // Prevent navigation
+// //   const handleBuyNow = (e) => {
+// //     e.stopPropagation(); // Prevent navigation
 
-//     if (plant.stock === 0) return;
+// //     if (plant.stock === 0) return;
 
-//     handleAddToCart(e);
-//     setTimeout(() => {
-//       navigate(`/checkout?plantId=${plant._id}`);
-//     }, 500);
-//   };
+// //     handleAddToCart(e);
+// //     setTimeout(() => {
+// //       navigate(`/checkout?plantId=${plant._id}`);
+// //     }, 500);
+// //   };
 
-//   const handleToggleWishlist = async (e) => {
-//     e.stopPropagation(); // Prevent navigation
-//     try {
-//       await toggleWishlist(plant._id);
-//       setInWishlist((prev) => !prev);
-//       toast.success(
-//         inWishlist
-//           ? `${plant.name} removed from wishlist 💔`
-//           : `${plant.name} added to wishlist ❤️`
-//       );
-//     } catch (err) {
-//       console.error(err);
-//       toast.error("Failed to update wishlist");
-//     }
-//   };
+// //   const handleToggleWishlist = async (e) => {
+// //     e.stopPropagation(); // Prevent navigation
+// //     try {
+// //       await toggleWishlist(plant._id);
+// //       setInWishlist((prev) => !prev);
+// //       toast.success(
+// //         inWishlist
+// //           ? `${plant.name} removed from wishlist 💔`
+// //           : `${plant.name} added to wishlist ❤️`
+// //       );
+// //     } catch (err) {
+// //       console.error(err);
+// //       toast.error("Failed to update wishlist");
+// //     }
+// //   };
 
-//   const handleCardClick = () => {
-//     navigate(`/products/${plant._id}`);
-//   };
+// //   const handleCardClick = () => {
+// //     navigate(`/products/${plant._id}`);
+// //   };
 
-//   return (
-//     <div
-//       onClick={handleCardClick}
-//       className="bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer relative"
-//     >
-//       {/* Image */}
-//       <div className="h-64 bg-gray-200 dark:bg-gray-700 overflow-hidden relative">
-//         {imageUrl ? (
-//           <img
-//             src={imageUrl}
-//             alt={plant.name}
-//             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-//           />
-//         ) : (
-//           <div className="w-full h-full flex items-center justify-center text-6xl">
-//             🌱
-//           </div>
-//         )}
+// //   return (
+// //     <div
+// //       onClick={handleCardClick}
+// //       className="bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer relative"
+// //     >
+// //       {/* Image */}
+// //       <div className="h-64 bg-gray-200 dark:bg-gray-700 overflow-hidden relative">
+// //         {imageUrl ? (
+// //           <img
+// //             src={imageUrl}
+// //             alt={plant.name}
+// //             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+// //           />
+// //         ) : (
+// //           <div className="w-full h-full flex items-center justify-center text-6xl">
+// //             🌱
+// //           </div>
+// //         )}
 
-//         {/* Wishlist Button */}
-//         {/* <button
-//           onClick={handleToggleWishlist}
-//           className="absolute top-2 left-2 text-2xl p-1 rounded-full bg-white/80 hover:bg-red-200 transition"
-//         >
-//           {inWishlist ? "❤️" : "🤍"}
-//         </button> */}
-//         <button
-//           onClick={handleToggleWishlist}
-//           className={`absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition`}
-//         >
-//           <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
-//         </button>
+// //         {/* Wishlist Button */}
+// //         {/* <button
+// //           onClick={handleToggleWishlist}
+// //           className="absolute top-2 left-2 text-2xl p-1 rounded-full bg-white/80 hover:bg-red-200 transition"
+// //         >
+// //           {inWishlist ? "❤️" : "🤍"}
+// //         </button> */}
+// //         <button
+// //           onClick={handleToggleWishlist}
+// //           className={`absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition`}
+// //         >
+// //           <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+// //         </button>
 
-//         {plant.isFeatured && (
-//           <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">
-//             ⭐ Featured
-//           </span>
-//         )}
+// //         {plant.isFeatured && (
+// //           <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">
+// //             ⭐ Featured
+// //           </span>
+// //         )}
 
-//         {plant.stock === 0 && (
-//           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-//             <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold">
-//               Out of Stock
-//             </span>
-//           </div>
-//         )}
-//       </div>
+// //         {plant.stock === 0 && (
+// //           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+// //             <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold">
+// //               Out of Stock
+// //             </span>
+// //           </div>
+// //         )}
+// //       </div>
 
-//       {/* Details */}
-//       <div className="p-4">
-//         <h3 className="font-bold text-lg mb-1 line-clamp-1">{plant.name}</h3>
+// //       {/* Details */}
+// //       <div className="p-4">
+// //         <h3 className="font-bold text-lg mb-1 line-clamp-1">{plant.name}</h3>
 
-//         <p className="text-2xl font-bold text-primary mb-3">
-//           Rs. {plant.price.toFixed(2)}
-//         </p>
+// //         <p className="text-2xl font-bold text-primary mb-3">
+// //           Rs. {plant.price.toFixed(2)}
+// //         </p>
 
-//         <div className="flex gap-2">
-//           <button
-//             onClick={handleAddToCart}
-//             disabled={plant.stock === 0}
-//             className="flex-1 bg-[#274E36] hover:bg-primary-hover text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-//           >
-//             🛒 Add to Cart
-//           </button>
+// //         <div className="flex gap-2">
+// //           <button
+// //             onClick={handleAddToCart}
+// //             disabled={plant.stock === 0}
+// //             className="flex-1 bg-[#274E36] hover:bg-primary-hover text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+// //           >
+// //             🛒 Add to Cart
+// //           </button>
 
-//           <button
-//             onClick={handleBuyNow}
-//             disabled={plant.stock === 0}
-//             className="flex-1 bg-[#EAB87B] hover:bg-green-700 text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-//           >
-//             💳 Buy Now
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+// //           <button
+// //             onClick={handleBuyNow}
+// //             disabled={plant.stock === 0}
+// //             className="flex-1 bg-[#EAB87B] hover:bg-green-700 text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+// //           >
+// //             💳 Buy Now
+// //           </button>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
 
-// export default PlantCard;
+// // export default PlantCard;
 
-// import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useCart } from "../../context/cartContext";
-// import { toast } from "react-toastify";
-// import { toggleWishlist, getWishlist } from "../../services/wishlistService";
+// // import { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import { useCart } from "../../context/cartContext";
+// // import { toast } from "react-toastify";
+// // import { toggleWishlist, getWishlist } from "../../services/wishlistService";
 
-// const PlantCard = ({ plant }) => {
-//   const navigate = useNavigate();
-//   const { addToCart } = useCart();
-//   const [inWishlist, setInWishlist] = useState(false);
+// // const PlantCard = ({ plant }) => {
+// //   const navigate = useNavigate();
+// //   const { addToCart } = useCart();
+// //   const [inWishlist, setInWishlist] = useState(false);
 
-//   // ✅ Fetch wishlist status
-//   const fetchWishlist = async () => {
-//     try {
-//       const response = await getWishlist();
-//       // Assuming response is { data: [...] }
-//       const wishlistItems = response.data || response; // adjust depending on your API
-//       setInWishlist(wishlistItems.some((item) => item._id === plant._id));
-//     } catch (err) {
-//       console.error("Failed to fetch wishlist", err);
-//     }
-//   };
+// //   // ✅ Fetch wishlist status
+// //   const fetchWishlist = async () => {
+// //     try {
+// //       const response = await getWishlist();
+// //       // Assuming response is { data: [...] }
+// //       const wishlistItems = response.data || response; // adjust depending on your API
+// //       setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+// //     } catch (err) {
+// //       console.error("Failed to fetch wishlist", err);
+// //     }
+// //   };
 
-//   useEffect(() => {
-//     fetchWishlist();
-//   }, [plant]);
+// //   useEffect(() => {
+// //     fetchWishlist();
+// //   }, [plant]);
 
-//   const handleToggleWishlist = async (e) => {
-//     e.stopPropagation();
-//     try {
-//       await toggleWishlist(plant._id);
-//       setInWishlist((prev) => !prev);
-//       toast.success(
-//         !inWishlist
-//           ? `${plant.name} added to wishlist 💚`
-//           : `${plant.name} removed from wishlist`
-//       );
-//     } catch (err) {
-//       toast.error("Failed to update wishlist");
-//     }
-//   };
+// //   const handleToggleWishlist = async (e) => {
+// //     e.stopPropagation();
+// //     try {
+// //       await toggleWishlist(plant._id);
+// //       setInWishlist((prev) => !prev);
+// //       toast.success(
+// //         !inWishlist
+// //           ? `${plant.name} added to wishlist 💚`
+// //           : `${plant.name} removed from wishlist`
+// //       );
+// //     } catch (err) {
+// //       toast.error("Failed to update wishlist");
+// //     }
+// //   };
 
-//   const handleAddToCart = async (e) => {
-//     e.stopPropagation();
-//     try {
-//       await addToCart(plant._id, 1);
-//       toast.success(`${plant.name} added to cart 🛒`);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
+// //   const handleAddToCart = async (e) => {
+// //     e.stopPropagation();
+// //     try {
+// //       await addToCart(plant._id, 1);
+// //       toast.success(`${plant.name} added to cart 🛒`);
+// //     } catch (err) {
+// //       console.error(err);
+// //     }
+// //   };
 
-//   return (
-//     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
-//       {/* Heart */}
-//       <button
-//         onClick={handleToggleWishlist}
-//         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
-//       >
-//         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
-//       </button>
+// //   return (
+// //     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+// //       {/* Heart */}
+// //       <button
+// //         onClick={handleToggleWishlist}
+// //         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+// //       >
+// //         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+// //       </button>
 
-//       {/* Image */}
-//       <img
-//         src={
-//           plant.imagepath
-//             ? `http://localhost:5050/uploads/${plant.imagepath}`
-//             : "/default.png"
-//         }
-//         alt={plant.name}
-//         className="w-full h-64 object-cover"
-//       />
+// //       {/* Image */}
+// //       <img
+// //         src={
+// //           plant.imagepath
+// //             ? `http://localhost:5050/uploads/${plant.imagepath}`
+// //             : "/default.png"
+// //         }
+// //         alt={plant.name}
+// //         className="w-full h-64 object-cover"
+// //       />
 
-//       {/* Details */}
-//       <div className="p-4">
-//         <h3 className="font-bold text-lg">{plant.name}</h3>
-//         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
+// //       {/* Details */}
+// //       <div className="p-4">
+// //         <h3 className="font-bold text-lg">{plant.name}</h3>
+// //         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
 
-//         <button
-//           onClick={handleAddToCart}
-//           className="mt-2 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold transition"
-//         >
-//           🛒 Add to Cart
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
+// //         <button
+// //           onClick={handleAddToCart}
+// //           className="mt-2 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold transition"
+// //         >
+// //           🛒 Add to Cart
+// //         </button>
+// //       </div>
+// //     </div>
+// //   );
+// // };
 
-// export default PlantCard;
+// // export default PlantCard;
 
 
+
+// // import { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import { useCart } from "../../context/cartContext";
+// // import { useAuth } from "../../auth/authProvider";
+// // import { toast } from "react-toastify";
+// // import { toggleWishlist, getWishlist } from "../../services/wishlistService";
+
+// // const PlantCard = ({ plant }) => {
+// //   const navigate = useNavigate();
+// //   const { addToCart } = useCart();
+// //   const { user } = useAuth();
+// //   const [inWishlist, setInWishlist] = useState(false);
+
+// //   // ✅ Fetch wishlist status ONLY if user is logged in
+// //   const fetchWishlist = async () => {
+// //     if (!user) {
+// //       setInWishlist(false);
+// //       return;
+// //     }
+
+// //     try {
+// //       const response = await getWishlist();
+// //       const wishlistItems = response.data || response;
+      
+// //       if (Array.isArray(wishlistItems)) {
+// //         setInWishlist(wishlistItems.some((item) => item._id === plant._id));
+// //       } else {
+// //         setInWishlist(false);
+// //       }
+// //     } catch (err) {
+// //       console.error("Failed to fetch wishlist", err);
+// //       setInWishlist(false);
+// //     }
+// //   };
+
+// //   useEffect(() => {
+// //     fetchWishlist();
+// //   }, [plant, user]);
+
+// //   const handleToggleWishlist = async (e) => {
+// //     e.stopPropagation();
+    
+// //     if (!user) {
+// //       toast.info("Please login to add to wishlist");
+// //       navigate("/login");
+// //       return;
+// //     }
+
+// //     try {
+// //       await toggleWishlist(plant._id);
+// //       setInWishlist((prev) => !prev);
+// //       toast.success(
+// //         !inWishlist
+// //           ? `${plant.name} added to wishlist 💚`
+// //           : `${plant.name} removed from wishlist`
+// //       );
+// //     } catch (err) {
+// //       toast.error("Failed to update wishlist");
+// //     }
+// //   };
+
+// //   const handleAddToCart = async (e) => {
+// //     e.stopPropagation();
+    
+// //     if (!user) {
+// //       toast.info("Please login to add to cart");
+// //       navigate("/login");
+// //       return;
+// //     }
+
+// //     try {
+// //       await addToCart(plant._id, 1);
+// //       toast.success(`${plant.name} added to cart 🛒`);
+// //     } catch (err) {
+// //       console.error(err);
+// //       toast.error("Failed to add to cart");
+// //     }
+// //   };
+
+// //   // ✅ Buy Now handler
+// //   const handleBuyNow = async (e) => {
+// //     e.stopPropagation();
+
+// //     if (plant.stock === 0) return;
+
+// //     if (!user) {
+// //       toast.info("Please login to continue");
+// //       navigate("/login");
+// //       return;
+// //     }
+
+// //     // Add to cart first
+// //     await handleAddToCart(e);
+    
+// //     // Navigate to checkout after a short delay
+// //     setTimeout(() => {
+// //       navigate(`/checkout?plantId=${plant._id}`);
+// //     }, 500);
+// //   };
+
+// //   return (
+// //     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+// //       {/* Heart */}
+// //       <button
+// //         onClick={handleToggleWishlist}
+// //         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+// //       >
+// //         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+// //       </button>
+
+// //       {/* Image */}
+// //       <img
+// //         src={
+// //           plant.imagepath
+// //             ? `http://localhost:5050/uploads/${plant.imagepath}`
+// //             : "/default.png"
+// //         }
+// //         alt={plant.name}
+// //         className="w-full h-64 object-cover"
+// //       />
+
+// //       {/* Details */}
+// //       <div className="p-4">
+// //         <h3 className="font-bold text-lg">{plant.name}</h3>
+// //         <p className="text-green-700 font-bold">Rs. {plant.price}</p>
+
+// //         {/* Stock Status */}
+// //         {plant.stock === 0 && (
+// //           <p className="text-red-500 text-sm mt-1">Out of Stock</p>
+// //         )}
+
+// //         {/* Button Group */}
+// //         <div className="flex gap-2 mt-3">
+// //           <button
+// //             onClick={handleAddToCart}
+// //             disabled={plant.stock === 0}
+// //             className="flex-1 bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+// //           >
+// //             🛒 Add to Cart
+// //           </button>
+
+// //           <button
+// //             onClick={handleBuyNow}
+// //             disabled={plant.stock === 0}
+// //             className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+// //           >
+// //             💳 Buy Now
+// //           </button>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default PlantCard;
 
 // import { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
@@ -263,6 +419,7 @@
 //   const { addToCart } = useCart();
 //   const { user } = useAuth();
 //   const [inWishlist, setInWishlist] = useState(false);
+//    const [isLoading, setIsLoading] = useState(false);
 
 //   // ✅ Fetch wishlist status ONLY if user is logged in
 //   const fetchWishlist = async () => {
@@ -290,27 +447,60 @@
 //     fetchWishlist();
 //   }, [plant, user]);
 
-//   const handleToggleWishlist = async (e) => {
+//   const handleWishlistClick = async (e) => {
 //     e.stopPropagation();
-    
+
 //     if (!user) {
-//       toast.info("Please login to add to wishlist");
+//       toast.error("Please login to add to wishlist");
 //       navigate("/login");
 //       return;
 //     }
 
 //     try {
-//       await toggleWishlist(plant._id);
-//       setInWishlist((prev) => !prev);
+//       setIsLoading(true);
+//       const response = await toggleWishlist(plant._id);
+
+//       // Check API response
+//       const added = response.added ?? true; // fallback to true if missing
+//       setIsInWishlist(added);
+
+//       if (onWishlistUpdate) {
+//         onWishlistUpdate(plant._id, added);
+//       }
+
 //       toast.success(
-//         !inWishlist
-//           ? `${plant.name} added to wishlist 💚`
-//           : `${plant.name} removed from wishlist`
+//         added
+//           ? `💚 ${plant.name} added to wishlist!`
+//           : `Removed ${plant.name} from wishlist`
 //       );
 //     } catch (err) {
+//       console.error("Wishlist error:", err);
 //       toast.error("Failed to update wishlist");
+//     } finally {
+//       setIsLoading(false);
 //     }
 //   };
+//   // const handleToggleWishlist = async (e) => {
+//   //   e.stopPropagation();
+    
+//   //   if (!user) {
+//   //     toast.info("Please login to add to wishlist");
+//   //     navigate("/login");
+//   //     return;
+//   //   }
+
+//   //   try {
+//   //     await toggleWishlist(plant._id);
+//   //     setInWishlist((prev) => !prev);
+//   //     toast.success(
+//   //       !inWishlist
+//   //         ? `${plant.name} added to wishlist 💚`
+//   //         : `${plant.name} removed from wishlist`
+//   //     );
+//   //   } catch (err) {
+//   //     toast.error("Failed to update wishlist");
+//   //   }
+//   // };
 
 //   const handleAddToCart = async (e) => {
 //     e.stopPropagation();
@@ -351,14 +541,38 @@
 //     }, 500);
 //   };
 
+//   // ✅ Navigate to product details when card is clicked
+//   const handleCardClick = () => {
+//     navigate(`/products/${plant._id}`);
+//   };
+
 //   return (
-//     <div className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer">
+//     <div 
+//       onClick={handleCardClick} // ✅ Added onClick to navigate to details
+//       className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer"
+//     >
 //       {/* Heart */}
-//       <button
+//       {/* <button
 //         onClick={handleToggleWishlist}
-//         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition"
+//         className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition z-10"
 //       >
 //         <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
+//       </button> */}
+//         <button
+//         onClick={handleWishlistClick}
+//         disabled={isLoading}
+//         className={`absolute top-3 right-3 p-2.5 rounded-full shadow-lg transition-all duration-300 z-10 ${
+//           isInWishlist
+//             ? "bg-red-500 hover:bg-red-600"
+//             : "bg-white/90 hover:bg-white"
+//         } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+//       >
+//         <Heart
+//           size={20}
+//           className={`transition-all ${
+//             isInWishlist ? "fill-white text-white" : "text-gray-700"
+//           }`}
+//         />
 //       </button>
 
 //       {/* Image */}
@@ -387,7 +601,7 @@
 //           <button
 //             onClick={handleAddToCart}
 //             disabled={plant.stock === 0}
-//             className="flex-1 bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+//             className="flex-1 bg-[#274E36] hover:bg-green-800 text-white py-2 rounded-lg border-1 border-[#d9a768] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
 //           >
 //             🛒 Add to Cart
 //           </button>
@@ -395,7 +609,7 @@
 //           <button
 //             onClick={handleBuyNow}
 //             disabled={plant.stock === 0}
-//             className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+//             className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg border-1 border-[#274E36] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
 //           >
 //             💳 Buy Now
 //           </button>
@@ -406,6 +620,7 @@
 // };
 
 // export default PlantCard;
+     
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -413,42 +628,46 @@ import { useCart } from "../../context/cartContext";
 import { useAuth } from "../../auth/authProvider";
 import { toast } from "react-toastify";
 import { toggleWishlist, getWishlist } from "../../services/wishlistService";
+import { WishlistButton } from "../common/WishlistButton";
 
 const PlantCard = ({ plant }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { user } = useAuth();
+
   const [inWishlist, setInWishlist] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ Fetch wishlist status ONLY if user is logged in
-  const fetchWishlist = async () => {
-    if (!user) {
-      setInWishlist(false);
-      return;
-    }
+  // ✅ Fetch wishlist status (only if logged in)
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!user) {
+        setInWishlist(false);
+        return;
+      }
 
-    try {
-      const response = await getWishlist();
-      const wishlistItems = response.data || response;
-      
-      if (Array.isArray(wishlistItems)) {
-        setInWishlist(wishlistItems.some((item) => item._id === plant._id));
-      } else {
+      try {
+        const response = await getWishlist();
+        const wishlistItems = response.data || response;
+
+        if (Array.isArray(wishlistItems)) {
+          setInWishlist(
+            wishlistItems.some((item) => item._id === plant._id)
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch wishlist", err);
         setInWishlist(false);
       }
-    } catch (err) {
-      console.error("Failed to fetch wishlist", err);
-      setInWishlist(false);
-    }
-  };
+    };
 
-  useEffect(() => {
     fetchWishlist();
-  }, [plant, user]);
+  }, [plant._id, user]);
 
-  const handleToggleWishlist = async (e) => {
+  // ❤️ Wishlist toggle
+  const handleWishlistClick = async (e) => {
     e.stopPropagation();
-    
+
     if (!user) {
       toast.info("Please login to add to wishlist");
       navigate("/login");
@@ -456,24 +675,38 @@ const PlantCard = ({ plant }) => {
     }
 
     try {
-      await toggleWishlist(plant._id);
-      setInWishlist((prev) => !prev);
+      setIsLoading(true);
+      const response = await toggleWishlist(plant._id);
+
+      // backend may or may not return `added`
+      const added = response?.added ?? !inWishlist;
+      setInWishlist(added);
+
       toast.success(
-        !inWishlist
+        added
           ? `${plant.name} added to wishlist 💚`
           : `${plant.name} removed from wishlist`
       );
     } catch (err) {
+      console.error(err);
       toast.error("Failed to update wishlist");
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // 🛒 Add to cart
   const handleAddToCart = async (e) => {
     e.stopPropagation();
-    
+
     if (!user) {
       toast.info("Please login to add to cart");
       navigate("/login");
+      return;
+    }
+
+    if (plant.stock === 0) {
+      toast.error("Out of stock");
       return;
     }
 
@@ -486,11 +719,9 @@ const PlantCard = ({ plant }) => {
     }
   };
 
-  // ✅ Buy Now handler
+  // 💳 Buy now
   const handleBuyNow = async (e) => {
     e.stopPropagation();
-
-    if (plant.stock === 0) return;
 
     if (!user) {
       toast.info("Please login to continue");
@@ -498,32 +729,31 @@ const PlantCard = ({ plant }) => {
       return;
     }
 
-    // Add to cart first
+    if (plant.stock === 0) return;
+
     await handleAddToCart(e);
-    
-    // Navigate to checkout after a short delay
+
     setTimeout(() => {
       navigate(`/checkout?plantId=${plant._id}`);
     }, 500);
   };
 
-  // ✅ Navigate to product details when card is clicked
+  // 🔍 Card click
   const handleCardClick = () => {
     navigate(`/products/${plant._id}`);
   };
 
   return (
-    <div 
-      onClick={handleCardClick} // ✅ Added onClick to navigate to details
+    <div
+      onClick={handleCardClick}
       className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer"
     >
-      {/* Heart */}
-      <button
-        onClick={handleToggleWishlist}
-        className="absolute top-2 left-2 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-red-100 transition z-10"
-      >
-        <span className="text-xl">{inWishlist ? "❤️" : "🤍"}</span>
-      </button>
+      {/* ❤️ Wishlist Heart */}
+      <WishlistButton
+        active={inWishlist}
+        onClick={handleWishlistClick}
+        disabled={isLoading}
+      />
 
       {/* Image */}
       <img
@@ -539,19 +769,19 @@ const PlantCard = ({ plant }) => {
       {/* Details */}
       <div className="p-4">
         <h3 className="font-bold text-lg">{plant.name}</h3>
-        <p className="text-green-700 font-bold">Rs. {plant.price}</p>
+        <p className="text-green-700 font-bold">
+          Rs. {plant.price}
+        </p>
 
-        {/* Stock Status */}
         {plant.stock === 0 && (
           <p className="text-red-500 text-sm mt-1">Out of Stock</p>
         )}
 
-        {/* Button Group */}
         <div className="flex gap-2 mt-3">
           <button
             onClick={handleAddToCart}
             disabled={plant.stock === 0}
-            className="flex-1 bg-[#274E36] hover:bg-green-800 text-white py-2 rounded-lg border-1 border-[#d9a768] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+            className="flex-1 bg-[#274E36] hover:bg-green-800 text-white py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
           >
             🛒 Add to Cart
           </button>
@@ -559,7 +789,7 @@ const PlantCard = ({ plant }) => {
           <button
             onClick={handleBuyNow}
             disabled={plant.stock === 0}
-            className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg border-1 border-[#274E36] font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+            className="flex-1 bg-[#EAB87B] hover:bg-[#d9a768] text-black py-2 rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed transition"
           >
             💳 Buy Now
           </button>
@@ -570,4 +800,3 @@ const PlantCard = ({ plant }) => {
 };
 
 export default PlantCard;
-     

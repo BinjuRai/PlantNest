@@ -36,11 +36,11 @@ export default function CategoryPage({ plants = [] }) {
   return (
     <>
       {/* HERO */}
-      <div className="bg-[#6e8f7a] text-white text-center py-20">
+      <div className="bg-[#6e8f7a] text-white py-20 flex flex-col items-center justify-center text-center">
         <p className="text-sm opacity-80">
           Discover our full collection of beautiful plants
         </p>
-        <h1 className="text-4xl font-serif mt-2">All Plants</h1>
+        <h2 className="text-4xl secondary-font mt-2">All Plants</h2>
       </div>
 
       {/* CATEGORY TABS */}
@@ -62,23 +62,16 @@ export default function CategoryPage({ plants = [] }) {
             setSort={setSort}
           />
 
-          {/* GRID */}
+     
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {paginatedPlants.map((plant) => (
-              <PlantCard
-                key={plant._id}
-                plant={plant}
-              />
+              <PlantCard key={plant._id} plant={plant} />
             ))}
           </div>
 
-          {/* PAGINATION */}
+    
           {totalPages > 1 && (
-            <Pagination
-              current={page}
-              total={totalPages}
-              onChange={setPage}
-            />
+            <Pagination current={page} total={totalPages} onChange={setPage} />
           )}
         </div>
       </div>

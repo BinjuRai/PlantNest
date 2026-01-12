@@ -137,7 +137,7 @@ const AllProductsPage = () => {
       <div className="relative overflow-hidden bg-gradient-to-r from-[#6a8b76] via-[#508967] to-[#1d472e] text-white">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top,_white,_transparent_60%)]" />
         <div className="relative max-w-7xl mx-auto px-6 py-24">
-          <h1 className="text-4xl md:text-5xl font-serif font-semibold mb-4">
+          <h1 className="text-4xl md:text-5xl font-semibold secondary-font mb-4">
             Our Plants
           </h1>
           <p className="text-lg text-green-100 max-w-xl">

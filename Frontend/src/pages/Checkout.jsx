@@ -471,63 +471,18 @@ const Checkout = () => {
 
   const initiateEsewaPayment = async (orderId, amount) => {
     try {
-      // Since eSewa v2 requires signature and test environment is having issues,
-      // we'll use the mock payment page which works perfectly for college demo
+    
       console.log("Initiating eSewa payment:", { orderId, amount });
 
       toast.info("Opening eSewa payment page...");
 
-      // Redirect to mock eSewa page
+
       window.location.href = `/esewa-mock.html?tAmt=${amount}&pid=${orderId}&su=${encodeURIComponent(
         `${window.location.origin}/payment/success`
       )}&fu=${encodeURIComponent(`${window.location.origin}/payment/failure`)}`;
 
-      /* 
-      // REAL eSewa v2 Integration (for production with proper signature):
-      // This requires backend to generate HMAC-SHA256 signature
       
-      const path = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
       
-      // Get signature from backend
-      const signatureResponse = await axios.post(
-        "http://localhost:5050/api/payment/esewa-signature",
-        {
-          total_amount: amount,
-          transaction_uuid: orderId,
-          product_code: "EPAYTEST"
-        }
-      );
-      
-      const params = {
-        amount: amount,
-        tax_amount: 0,
-        total_amount: amount,
-        transaction_uuid: orderId,
-        product_code: "EPAYTEST",
-        product_service_charge: 0,
-        product_delivery_charge: 0,
-        success_url: `${window.location.origin}/payment/success`,
-        failure_url: `${window.location.origin}/payment/failure`,
-        signed_field_names: "total_amount,transaction_uuid,product_code",
-        signature: signatureResponse.data.signature
-      };
-      
-      // Create and submit form
-      const form = document.createElement("form");
-      form.setAttribute("method", "POST");
-      form.setAttribute("action", path);
-
-      for (const key in params) {
-        const hiddenField = document.createElement("input");
-        hiddenField.setAttribute("type", "hidden");
-        hiddenField.setAttribute("name", key);
-        hiddenField.setAttribute("value", params[key]);
-        form.appendChild(hiddenField);
-      }
-
-      document.body.appendChild(form);
-      form.submit();
-      */
     } catch (error) {
       console.error("eSewa payment error:", error);
       toast.error("Opening demo payment page...");

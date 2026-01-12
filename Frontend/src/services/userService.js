@@ -2,10 +2,7 @@
 
 import axios from "../api/api";
 
-// export const loginUserApi = async (credentials) => {
-//   const response = await axios.post("/auth/login", credentials);
-//   return response.data;
-// };
+
 export const loginUserApi = (data) => {
   return axios.post(
     "http://localhost:5050/api/auth/login",
@@ -36,14 +33,7 @@ export const loginAdminApi = (data) => {
 };
 
 
-// // Get token from localStorage (or pass it as parameter)
-// const getAuthHeader = () => {
-//   const token = localStorage.getItem("token");
-//   if (!token) throw new Error("No auth token found");
-//   return { Authorization: `Bearer ${token}` };
-// };
 
-// ---------------- Profile APIs ----------------
 export const fetchProfileApi = async () => {
   const headers = getAuthHeader();
   const response = await axios.get("/users/profile", { headers });

@@ -70,7 +70,7 @@ const WishlistPage = () => {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Heart className="w-8 h-8 text-red-500 fill-red-500" />
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white secondary-font">
               My Wishlist
             </h1>
           </div>
@@ -79,7 +79,7 @@ const WishlistPage = () => {
           </p>
         </div>
 
-        {/* Empty State */}
+
         {products.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center">
             <div className="text-6xl mb-4">💔</div>
@@ -182,7 +182,7 @@ const WishlistPage = () => {
           </div>
         )}
 
-        {/* Summary */}
+
         {products.length > 0 && (
           <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between">

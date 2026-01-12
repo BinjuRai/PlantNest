@@ -2,13 +2,13 @@ export default function Contact() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
 
-      <h1 className="text-4xl font-bold text-green-700 mb-10">
+      <h1 className="text-4xl secondary-font font-bold text-green-700 mb-10">
         Contact Us
       </h1>
 
       <div className="grid md:grid-cols-2 gap-12">
 
-        {/* CONTACT INFO */}
+     
         <div className="space-y-6 text-lg">
           <p>
             📞 <a href="tel:+9779800000000" className="text-green-700 underline">
