@@ -41,6 +41,12 @@ const AddProduct = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (name === "price" || name === "stock") {
+      if (value.includes("-")) return;
+      if (Number(value) < 0) return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -81,18 +87,18 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.price || !formData.categoryId) {
       return toast.error("Name, price, and category are required!");
     }
 
     const data = new FormData();
-    
+
     // Append all form fields
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       data.append(key, formData[key]);
     });
-    
+
     // Append files
     if (imageFile) data.append("imagepath", imageFile);
     if (videoFile) data.append("filepath", videoFile);
@@ -102,7 +108,7 @@ const AddProduct = () => {
       const response = await api.post("/admin/products/add-product", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
+
       toast.success("✅ Product created successfully!");
       navigate("/admin/products");
     } catch (err) {
@@ -150,7 +156,7 @@ const AddProduct = () => {
         </div>
 
         {/* Price & Stock */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold mb-2">
               Price (Rs) <span className="text-red-500">*</span>
@@ -164,12 +170,11 @@ const AddProduct = () => {
               className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
               required
             />
+        
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">
-              Stock
-            </label>
+            <label className="block text-sm font-semibold mb-2">Stock</label>
             <input
               name="stock"
               type="number"
@@ -178,7 +183,31 @@ const AddProduct = () => {
               placeholder="10"
               className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600"
             />
+        
           </div>
+        </div> */}
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            name="price"
+            type="number"
+            min="0"
+            step="0.01"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Price *"
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+          <input
+            name="stock"
+            type="number"
+            min="0"
+            step="1"
+            value={formData.stock}
+            onChange={handleChange}
+            placeholder="Stock"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
         </div>
 
         {/* Description */}
@@ -270,9 +299,9 @@ const AddProduct = () => {
           <label className="block text-sm font-semibold mb-2">
             Product Image
           </label>
-          <input 
-            type="file" 
-            accept="image/*" 
+          <input
+            type="file"
+            accept="image/*"
             onChange={handleImageChange}
             className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
           />
@@ -302,9 +331,9 @@ const AddProduct = () => {
           <label className="block text-sm font-semibold mb-2">
             Product Video (Optional)
           </label>
-          <input 
-            type="file" 
-            accept="video/*" 
+          <input
+            type="file"
+            accept="video/*"
             onChange={handleVideoChange}
             className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
           />
@@ -343,3 +372,233 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { toast } from "react-toastify";
+// import api from "../../api/api";
+// import { getAdminCategories } from "../../api/categoryApi";
+
+// const AddProduct = () => {
+//   const navigate = useNavigate();
+//   const [categories, setCategories] = useState([]);
+
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     price: "",
+//     description: "",
+//     categoryId: "",
+//     plantType: "",
+//     stock: "",
+//     careInstructions: "",
+//     scientificName: "",
+//     isFeatured: false,
+//   });
+
+//   const [imagePreview, setImagePreview] = useState(null);
+//   const [videoPreview, setVideoPreview] = useState(null);
+//   const [imageFile, setImageFile] = useState(null);
+//   const [videoFile, setVideoFile] = useState(null);
+//   const [loading, setLoading] = useState(false);
+
+//   // Fetch categories
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         const { data } = await getAdminCategories();
+//         setCategories(data);
+//       } catch (err) {
+//         console.error(err);
+//         toast.error("Failed to load categories");
+//       }
+//     };
+//     fetchCategories();
+//   }, []);
+
+//   // Handle input change with validation
+//   const handleChange = (e) => {
+//     const { name, value, type, checked } = e.target;
+
+//     // Prevent negative values for price & stock
+//     if ((name === "price" || name === "stock") && Number(value) < 0) {
+//       return;
+//     }
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: type === "checkbox" ? checked : value,
+//     }));
+//   };
+
+//   // Image validation
+//   const handleImageChange = (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+
+//     if (!file.type.startsWith("image/")) {
+//       toast.error("Please select a valid image file");
+//       return;
+//     }
+
+//     if (file.size > 5 * 1024 * 1024) {
+//       toast.error("Image size should be less than 5MB");
+//       return;
+//     }
+
+//     setImageFile(file);
+//     setImagePreview(URL.createObjectURL(file));
+//   };
+
+//   // Video validation
+//   const handleVideoChange = (e) => {
+//     const file = e.target.files[0];
+//     if (!file) return;
+
+//     if (!file.type.startsWith("video/")) {
+//       toast.error("Please select a valid video file");
+//       return;
+//     }
+
+//     if (file.size > 25 * 1024 * 1024) {
+//       toast.error("Video size should be less than 25MB");
+//       return;
+//     }
+
+//     setVideoFile(file);
+//     setVideoPreview(URL.createObjectURL(file));
+//   };
+
+//   // Submit
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!formData.name || !formData.price || !formData.categoryId) {
+//       return toast.error("Name, price, and category are required!");
+//     }
+
+//     if (Number(formData.price) < 0) {
+//       return toast.error("Price cannot be negative");
+//     }
+
+//     if (Number(formData.stock) < 0) {
+//       return toast.error("Stock cannot be negative");
+//     }
+
+//     const data = new FormData();
+//     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+
+//     if (imageFile) data.append("imagepath", imageFile);
+//     if (videoFile) data.append("filepath", videoFile);
+
+//     try {
+//       setLoading(true);
+//       await api.post("/admin/products/add-product", data, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
+
+//       toast.success("✅ Product created successfully!");
+//       navigate("/admin/products");
+//     } catch (err) {
+//       console.error(err);
+//       toast.error(err.response?.data?.message || "Failed to create product");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg max-w-3xl mx-auto mt-6">
+//       <h2 className="text-3xl font-bold mb-6 text-green-800 dark:text-green-400">
+//         🌿 Add New Product
+//       </h2>
+
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {/* Product Name */}
+//         <input
+//           name="name"
+//           value={formData.name}
+//           onChange={handleChange}
+//           placeholder="Product Name *"
+//           className="w-full px-4 py-2 border rounded-lg"
+//           required
+//         />
+
+//         {/* Scientific Name */}
+//         <input
+//           name="scientificName"
+//           value={formData.scientificName}
+//           onChange={handleChange}
+//           placeholder="Scientific Name"
+//           className="w-full px-4 py-2 border rounded-lg"
+//         />
+
+//         {/* Price & Stock */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <input
+//             name="price"
+//             type="number"
+//             min="0"
+//             step="0.01"
+//             value={formData.price}
+//             onChange={handleChange}
+//             placeholder="Price *"
+//             className="w-full px-4 py-2 border rounded-lg"
+//             required
+//           />
+//           <input
+//             name="stock"
+//             type="number"
+//             min="0"
+//             step="1"
+//             value={formData.stock}
+//             onChange={handleChange}
+//             placeholder="Stock"
+//             className="w-full px-4 py-2 border rounded-lg"
+//           />
+//         </div>
+
+//         {/* Category */}
+//         <select
+//           name="categoryId"
+//           value={formData.categoryId}
+//           onChange={handleChange}
+//           className="w-full px-4 py-2 border rounded-lg"
+//           required
+//         >
+//           <option value="">Select Category *</option>
+//           {categories.map((c) => (
+//             <option key={c._id} value={c._id}>
+//               {c.name}
+//             </option>
+//           ))}
+//         </select>
+
+//         {/* Plant Type */}
+//         <select
+//           name="plantType"
+//           value={formData.plantType}
+//           onChange={handleChange}
+//           className="w-full px-4 py-2 border rounded-lg"
+//         >
+//           <option value="">Select Plant Type</option>
+//           <option value="indoor">Indoor</option>
+//           <option value="outdoor">Outdoor</option>
+//           <option value="hanging">Hanging</option>
+//           <option value="succulent">Succulent</option>
+//           <option value="flowering">Flowering</option>
+//         </select>
+
+//         {/* Submit */}
+//         <button
+//           type="submit"
+//           disabled={loading}
+//           className="w-full bg-green-700 text-white py-3 rounded-lg font-semibold"
+//         >
+//           {loading ? "Creating..." : "Create Product"}
+//         </button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default AddProduct;
