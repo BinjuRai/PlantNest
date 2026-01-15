@@ -1,27 +1,15 @@
-
-
-
 import api from "../api/api";
 
+export const getAdminBlogs = (params) => api.get("/admin/blogs", { params });
 
-export const getAdminBlogs = (params) =>
-  api.get("/admin/blogs", { params });
+export const getAdminBlog = (id) => api.get(`/admin/blogs/${id}`);
 
-export const getAdminBlog = (id) =>
-  api.get(`/admin/blogs/${id}`);
+export const createBlog = (data) => api.post("/admin/blogs", data);
 
-export const createBlog = (data) =>
-  api.post("/admin/blogs", data);
+export const updateBlog = (id, data) => api.put(`/admin/blogs/${id}`, data);
 
-export const updateBlog = (id, data) =>
-  api.put(`/admin/blogs/${id}`, data);
+export const deleteBlog = (id) => api.delete(`/admin/blogs/${id}`);
 
-export const deleteBlog = (id) =>
-  api.delete(`/admin/blogs/${id}`);
+export const getBlogs = (params) => api.get("/blogs", { params });
 
-
-export const getBlogs = (params) =>
-  api.get("/blogs", { params });
-
-export const getBlog = (id) =>
-  api.get(`/blogs/${id}`);
+export const getBlog = (id) => api.get(`/blogs/${id}`);

@@ -23,39 +23,80 @@ export const FavouriteCard = ({
     ? `http://localhost:5050/uploads/${plant.imagepath}`
     : null;
 
+  // const handleWishlistClick = async (e) => {
+  //   e.stopPropagation();
+
+  //   if (!user) {
+  //     toast.error("Please login to add to wishlist");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await toggleWishlist(plant._id);
+
+  //     // Check API response
+  //     const added = response.added ?? true; // fallback to true if missing
+  //     setIsInWishlist(added);
+
+  //     if (onWishlistUpdate) {
+  //       onWishlistUpdate(plant._id, added);
+  //     }
+
+  //     toast.success(
+  //       added
+  //         ? `💚 ${plant.name} added to wishlist!`
+  //         : `Removed ${plant.name} from wishlist`
+  //     );
+  //   } catch (err) {
+  //     console.error("Wishlist error:", err);
+  //     toast.error("Failed to update wishlist");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const handleWishlistClick = async (e) => {
-    e.stopPropagation();
+  e.stopPropagation();
 
-    if (!user) {
-      toast.error("Please login to add to wishlist");
-      navigate("/login");
-      return;
+  if (!user) {
+    toast.error("Please login to add to wishlist");
+    navigate("/login");
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+
+    // Optimistic toggle
+    const nextState = !isInWishlist;
+    setIsInWishlist(nextState);
+
+    if (onWishlistUpdate) {
+      onWishlistUpdate(plant._id, nextState);
     }
 
-    try {
-      setIsLoading(true);
-      const response = await toggleWishlist(plant._id);
+    const response = await toggleWishlist(plant._id);
 
-      // Check API response
-      const added = response.added ?? true; // fallback to true if missing
-      setIsInWishlist(added);
+    // backend may or may not return `added`
+    const added = response?.added ?? nextState;
 
-      if (onWishlistUpdate) {
-        onWishlistUpdate(plant._id, added);
-      }
+    setIsInWishlist(added);
+    onWishlistUpdate?.(plant._id, added);
 
-      toast.success(
-        added
-          ? `💚 ${plant.name} added to wishlist!`
-          : `Removed ${plant.name} from wishlist`
-      );
-    } catch (err) {
-      console.error("Wishlist error:", err);
-      toast.error("Failed to update wishlist");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    toast.success(
+      added
+        ? `💚 ${plant.name} added to wishlist!`
+        : `${plant.name} removed from wishlist`
+    );
+  } catch (err) {
+    console.error("Wishlist error:", err);
+    toast.error("Failed to update wishlist");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleCardClick = () => {
     navigate(`/products/${plant._id}`);
@@ -87,7 +128,9 @@ export const FavouriteCard = ({
 
       {/* Product Info - Shows on Hover */}
       <div className="absolute inset-x-0  primary-font bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-        <h3 className="text-white primary-font font-bold text-lg mb-1">{plant.name}</h3>
+        <h3 className="text-white primary-font font-bold text-lg mb-1">
+          {plant.name}
+        </h3>
         <p className="text-green-100 primary-font text-sm mb-2">
           {plant.scientificName || plant.plantType}
         </p>
@@ -131,6 +174,7 @@ export const FavouriteCard = ({
           }`}
         />
       </button>
+     
 
       {/* Quick View on Hover (Optional) */}
       <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

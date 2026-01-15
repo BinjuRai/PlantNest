@@ -1,22 +1,29 @@
 
-import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
+import axios from "axios";
+
+const API_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5050/api";
 
 const instance = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // ✅ REMOVED hardcoded Content-Type - let axios set it automatically
 });
 
 // Add token to all requests
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // ✅ Only set Content-Type for non-FormData requests
+    // If it's FormData, browser will set multipart/form-data automatically
+    if (!(config.data instanceof FormData)) {
+      config.headers["Content-Type"] = "application/json";
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -27,8 +34,8 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      localStorage.removeItem("token");
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

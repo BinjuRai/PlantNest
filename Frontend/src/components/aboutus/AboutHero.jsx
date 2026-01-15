@@ -8,7 +8,7 @@ export default function AboutHero() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-5xl mx-auto text-center px-6 text-white"
       >
-        <h1 className="text-5xl secondary-font mb-6">About PlantNest</h1>
+        <h1 className="text-5xl secondary-font font-semibold mb-6">About PlantNest</h1>
         <p className="text-lg text-white/90 max-w-2xl mx-auto">
           We bring nature closer to your home by delivering healthy,
           hand-picked plants with care and love.

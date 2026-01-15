@@ -44,6 +44,7 @@ import AdminRoute from "./AdminRouter.jsx";
 import PaymentSuccess from "../pages/esewa/PaymentSuccess.jsx";
 import PaymentFailure from "../pages/esewa/PaymentFailure.jsx";
 import FAQ from "../pages/faq.jsx";
+import HelpPage from "../pages/helpPage.jsx";
 
 export default function AppRouter() {
   return (
@@ -60,6 +61,7 @@ export default function AppRouter() {
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/help" element={<HelpPage />} />
         </Route>
 
      

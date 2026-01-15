@@ -1,398 +1,7 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../auth/authProvider";
-// import { useCart } from "../context/cartContext";
-// import { toast } from "react-toastify";
-// import axios from "axios";
 
-// const Checkout = () => {
-//   const navigate = useNavigate();
-//   const { user } = useAuth();
-//   const { cart, getCartTotal, fetchCart } = useCart();
 
-//   const [isGift, setIsGift] = useState(false);
 
-//   const [giftInfo, setGiftInfo] = useState({
-//     name: "",
-//     phone: "",
-//     address: "",
-//     message: "",
-//   });
 
-//   const [shippingInfo, setShippingInfo] = useState({
-//     fullName: user?.name || "",
-//     phone: user?.phone || "",
-//     address: "",
-//     city: "",
-//     zipCode: "",
-//   });
-
-//   const [paymentMethod, setPaymentMethod] = useState("cod");
-//   const [loading, setLoading] = useState(false);
-
-//   if (!cart || !cart.items || cart.items.length === 0) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center">
-//         <h2>Your cart is empty. Add items to checkout.</h2>
-//       </div>
-//     );
-//   }
-
-//   const handleInputChange = (e) => {
-//     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
-//   };
-
-//   const handleGiftChange = (e) => {
-//     setGiftInfo({ ...giftInfo, [e.target.name]: e.target.value });
-//   };
-
-//   // const validateForm = () => {
-//   //   if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || !shippingInfo.city) {
-//   //     toast.error("Please fill all required fields");
-//   //     return false;
-//   //   }
-//   //   return true;
-//   // };
-//   // const validateForm = () => {
-//   //   if (
-//   //     !shippingInfo.fullName ||
-//   //     !shippingInfo.phone ||
-//   //     !shippingInfo.address ||
-//   //     !shippingInfo.city
-//   //   ) {
-//   //     toast.error("Please fill all required fields");
-//   //     return false;
-//   //   }
-
-//   //   if (isGift && (!giftInfo.name || !giftInfo.phone || !giftInfo.address)) {
-//   //     toast.error("Please fill gift recipient details");
-//   //     return false;
-//   //   }
-
-//   //   return true;
-//   // };
-//   const validateForm = () => {
-//     // 🧾 If NOT a gift → normal address required
-//     if (!isGift) {
-//       if (
-//         !shippingInfo.fullName ||
-//         !shippingInfo.phone ||
-//         !shippingInfo.address ||
-//         !shippingInfo.city
-//       ) {
-//         toast.error("Please fill shipping address details");
-//         return false;
-//       }
-//     }
-
-//     // 🎁 If gift → gift address required
-//     if (isGift) {
-//       if (!giftInfo.name || !giftInfo.phone || !giftInfo.address) {
-//         toast.error("Please fill gift recipient details");
-//         return false;
-//       }
-//     }
-
-//     return true;
-//   };
-
-//   const handlePlaceOrder = async (e) => {
-//     e.preventDefault();
-//     if (!validateForm()) return;
-
-//     setLoading(true);
-//     try {
-//       // Construct payload for backend
-//       // const orderData = {
-//       //   shippingInfo: {
-//       //     address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
-//       //     fullName: shippingInfo.fullName,
-//       //     phone: shippingInfo.phone,
-//       //   },
-//       //   paymentMethod,
-//       // };
-//       // const orderData = {
-//       //   shippingInfo: {
-//       //     address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
-//       //     fullName: shippingInfo.fullName,
-//       //     phone: shippingInfo.phone,
-//       //   },
-//       //   paymentMethod,
-//       //   isGift,
-//       //   giftInfo: isGift
-//       //     ? {
-//       //         name: giftInfo.name,
-//       //         phone: giftInfo.phone,
-//       //         address: giftInfo.address,
-//       //         message: giftInfo.message,
-//       //       }
-//       //     : null,
-//       // };
-//       //      const orderData = {
-//       //   shippingInfo: isGift
-//       //     ? {
-//       //         // 🎁 Deliver to gift recipient
-//       //         fullName: giftInfo.name,
-//       //         phone: giftInfo.phone,
-//       //         address: giftInfo.address,
-//       //       }
-//       //     : {
-//       //         // 📦 Normal delivery
-//       //         fullName: shippingInfo.fullName,
-//       //         phone: shippingInfo.phone,
-//       //         address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
-//       //       },
-
-//       //   paymentMethod,
-//       //   isGift,
-
-//       //   giftInfo: isGift
-//       //     ? {
-//       //         name: giftInfo.name,
-//       //         phone: giftInfo.phone,
-//       //         address: giftInfo.address,
-//       //         message: giftInfo.message,
-//       //       }
-//       //     : null,
-//       // };
-//       const orderData = {
-//         shippingInfo: isGift
-//           ? {
-//               // 🎁 Delivery goes to recipient
-//               fullName: giftInfo.name,
-//               phone: giftInfo.phone,
-//               address: giftInfo.address,
-//             }
-//           : {
-//               // 📦 Normal delivery
-//               fullName: shippingInfo.fullName,
-//               phone: shippingInfo.phone,
-//               address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.zipCode}`,
-//             },
-
-//         paymentMethod,
-//         isGift,
-
-//         giftInfo: isGift
-//           ? {
-//               name: giftInfo.name,
-//               phone: giftInfo.phone,
-//               address: giftInfo.address,
-//               message: giftInfo.message,
-//             }
-//           : null,
-//       };
-
-//       const token = localStorage.getItem("token");
-
-//       // Call backend API
-//       const res = await axios.post(
-//         "http://localhost:5050/api/orders",
-//         orderData,
-//         { headers: { Authorization: `Bearer ${token}` } }
-//       );
-
-//       // Success toast
-//       toast.success("Order placed successfully! 🎉");
-
-//       // Clear cart in frontend
-//       await fetchCart(); // refresh cart after order
-
-//       // Navigate to orders page or success page
-//       navigate("/orders");
-//     } catch (err) {
-//       console.error("Order error:", err);
-//       toast.error(err.response?.data?.message || "Failed to place order");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen py-12 px-4">
-//       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-//         {/* Order Summary */}
-//         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-//           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-//           <div className="space-y-4 max-h-96 overflow-y-auto">
-//             {cart.items.map((item) => (
-//               <div
-//                 key={item._id}
-//                 className="flex gap-4 p-4 bg-white dark:bg-gray-700 rounded-lg"
-//               >
-//                 <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 flex items-center justify-center rounded-lg">
-//                   🌱
-//                 </div>
-//                 <div className="flex-1">
-//                   <h3 className="font-bold">{item.product.name}</h3>
-//                   <p>Qty: {item.quantity}</p>
-//                   <p>Rs. {(item.product.price * item.quantity).toFixed(2)}</p>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//           {isGift && (
-//             <div className="mt-4 p-4 border rounded-lg bg-green-50 dark:bg-gray-700">
-//               <h3 className="font-bold text-lg mb-2">🎁 Gift Details</h3>
-
-//               <p>
-//                 <strong>Recipient:</strong> {giftInfo.name}
-//               </p>
-//               <p>
-//                 <strong>Phone:</strong> {giftInfo.phone}
-//               </p>
-//               <p>
-//                 <strong>Address:</strong> {giftInfo.address}
-//               </p>
-
-//               {giftInfo.message && (
-//                 <p className="mt-2 italic">💌 “{giftInfo.message}”</p>
-//               )}
-//             </div>
-//           )}
-
-//           <div className="pt-4 border-t mt-4">
-//             <div className="flex justify-between font-bold text-lg">
-//               <span>Total</span>
-//               <span>Rs. {getCartTotal().toFixed(2)}</span>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Shipping & Payment */}
-//         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-//           <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
-//           <form onSubmit={handlePlaceOrder} className="space-y-4">
-//             <input
-//               type="text"
-//               name="fullName"
-//               placeholder="Full Name"
-//               value={shippingInfo.fullName}
-//               onChange={handleInputChange}
-//               className="w-full p-2 rounded border"
-//               required
-//             />
-//             <input
-//               type="tel"
-//               name="phone"
-//               placeholder="Phone Number"
-//               value={shippingInfo.phone}
-//               onChange={handleInputChange}
-//               className="w-full p-2 rounded border"
-//               required
-//             />
-//             <input
-//               type="text"
-//               name="address"
-//               placeholder="Address"
-//               value={shippingInfo.address}
-//               onChange={handleInputChange}
-//               className="w-full p-2 rounded border"
-//               required
-//             />
-//             <input
-//               type="text"
-//               name="city"
-//               placeholder="City"
-//               value={shippingInfo.city}
-//               onChange={handleInputChange}
-//               className="w-full p-2 rounded border"
-//               required
-//             />
-//             <input
-//               type="text"
-//               name="zipCode"
-//               placeholder="ZIP Code"
-//               value={shippingInfo.zipCode}
-//               onChange={handleInputChange}
-//               className="w-full p-2 rounded border"
-//             />
-//             {/* 🎁 Gift Option */}
-//             <div className="mt-4">
-//               <label className="flex items-center gap-2 font-semibold">
-//                 <input
-//                   type="checkbox"
-//                   checked={isGift}
-//                   onChange={(e) => setIsGift(e.target.checked)}
-//                 />
-//                 This order is a gift 🎁
-//               </label>
-//             </div>
-
-//             {/* 🎁 Gift Details */}
-//             {isGift && (
-//               <div className="mt-4 space-y-3 p-4 border rounded-lg bg-white dark:bg-gray-700">
-//                 <h3 className="font-bold text-lg">Gift Recipient Details</h3>
-
-//                 <input
-//                   type="text"
-//                   name="name"
-//                   placeholder="Recipient Name"
-//                   value={giftInfo.name}
-//                   onChange={handleGiftChange}
-//                   className="w-full p-2 rounded border"
-//                   required
-//                 />
-
-//                 <input
-//                   type="tel"
-//                   name="phone"
-//                   placeholder="Recipient Phone"
-//                   value={giftInfo.phone}
-//                   onChange={handleGiftChange}
-//                   className="w-full p-2 rounded border"
-//                   required
-//                 />
-
-//                 <input
-//                   type="text"
-//                   name="address"
-//                   placeholder="Recipient Address"
-//                   value={giftInfo.address}
-//                   onChange={handleGiftChange}
-//                   className="w-full p-2 rounded border"
-//                   required
-//                 />
-
-//                 <textarea
-//                   name="message"
-//                   placeholder="Gift Message (optional)"
-//                   value={giftInfo.message}
-//                   onChange={handleGiftChange}
-//                   className="w-full p-2 rounded border"
-//                   rows={3}
-//                 />
-//               </div>
-//             )}
-
-//             <div>
-//               <h3 className="font-semibold mb-2">Payment Method</h3>
-//               <select
-//                 value={paymentMethod}
-//                 onChange={(e) => setPaymentMethod(e.target.value)}
-//                 className="w-full p-2 rounded border"
-//               >
-//                 <option value="cod">Cash on Delivery</option>
-//                 <option value="esewa">eSewa</option>
-//                 <option value="khalti">Khalti</option>
-//               </select>
-//             </div>
-
-//             <button
-//               type="submit"
-//               disabled={loading}
-//               className="w-full bg-green-600 text-white py-2 rounded font-bold mt-4 disabled:opacity-50"
-//             >
-//               {loading ? "Processing..." : "Place Order 🌿"}
-//             </button>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Checkout;
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -422,6 +31,12 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [loading, setLoading] = useState(false);
 
+  const validateNepalPhone = (phone) => {
+    const cleaned = phone.replace(/\s|-/g, "");
+    const regex = /^(?:\+977)?9[4-8]\d{8}$/;
+    return regex.test(cleaned);
+  };
+
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -446,6 +61,17 @@ const Checkout = () => {
     setGiftInfo({ ...giftInfo, [e.target.name]: e.target.value });
   };
 
+  // Handle phone number input with validation
+  const handlePhoneChange = (e, type) => {
+    const value = e.target.value.replace(/\D/g, ""); // Only allow digits
+    
+    if (type === "gift") {
+      setGiftInfo({ ...giftInfo, phone: value });
+    } else {
+      setShippingInfo({ ...shippingInfo, phone: value });
+    }
+  };
+
   const validateForm = () => {
     if (!isGift) {
       if (
@@ -457,11 +83,21 @@ const Checkout = () => {
         toast.error("Please fill shipping address details");
         return false;
       }
+
+      if (!validateNepalPhone(shippingInfo.phone)) {
+        toast.error("Please enter a valid Nepali phone number (10 digits starting with 94-98)");
+        return false;
+      }
     }
 
     if (isGift) {
       if (!giftInfo.name || !giftInfo.phone || !giftInfo.address) {
         toast.error("Please fill gift recipient details");
+        return false;
+      }
+
+      if (!validateNepalPhone(giftInfo.phone)) {
+        toast.error("Please enter a valid gift recipient phone number (10 digits starting with 94-98)");
         return false;
       }
     }
@@ -471,18 +107,13 @@ const Checkout = () => {
 
   const initiateEsewaPayment = async (orderId, amount) => {
     try {
-    
       console.log("Initiating eSewa payment:", { orderId, amount });
 
       toast.info("Opening eSewa payment page...");
 
-
       window.location.href = `/esewa-mock.html?tAmt=${amount}&pid=${orderId}&su=${encodeURIComponent(
         `${window.location.origin}/payment/success`
       )}&fu=${encodeURIComponent(`${window.location.origin}/payment/failure`)}`;
-
-      
-      
     } catch (error) {
       console.error("eSewa payment error:", error);
       toast.error("Opening demo payment page...");
@@ -634,10 +265,11 @@ const Checkout = () => {
                   />
                   <input
                     type="tel"
+                    maxLength={10}
                     name="phone"
-                    placeholder="Phone *"
+                    placeholder="Phone (10 digits: 94XXXXXXXX) *"
                     value={giftInfo.phone}
-                    onChange={handleGiftChange}
+                    onChange={(e) => handlePhoneChange(e, "gift")}
                     className="w-full p-2 rounded border mb-2"
                     required={isGift}
                   />
@@ -675,9 +307,10 @@ const Checkout = () => {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Phone *"
+                    maxLength={10}
+                    placeholder="Phone (10 digits: 94XXXXXXXX) *"
                     value={shippingInfo.phone}
-                    onChange={handleInputChange}
+                    onChange={(e) => handlePhoneChange(e, "shipping")}
                     className="w-full p-2 rounded border"
                     required
                   />

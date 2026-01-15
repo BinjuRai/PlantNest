@@ -25,18 +25,26 @@ export default function FavouriteProducts({ plants }) {
     }
   };
 
+  // const handleWishlistUpdate = (productId, added) => {
+  //   if (added) {
+  //     setWishlistIds([...wishlistIds, productId]);
+  //   } else {
+  //     setWishlistIds(wishlistIds.filter((id) => id !== productId));
+  //   }
+  // };
   const handleWishlistUpdate = (productId, added) => {
-    if (added) {
-      setWishlistIds([...wishlistIds, productId]);
-    } else {
-      setWishlistIds(wishlistIds.filter((id) => id !== productId));
-    }
+    setWishlistIds((prev) => {
+      if (added) {
+        return prev.includes(productId) ? prev : [...prev, productId];
+      }
+      return prev.filter((id) => id !== productId);
+    });
   };
 
   // Filter featured products or use first 5
   const displayPlants =
-    plants?.filter((p) => p.isFeatured).slice(0, 6) ||
-    plants?.slice(0, 6) ||
+    plants?.filter((p) => p.isFeatured).slice(0, 5) ||
+    plants?.slice(0, 5) ||
     [];
 
   if (!displayPlants.length) return null;
@@ -66,9 +74,9 @@ export default function FavouriteProducts({ plants }) {
       </div>
 
       <div className="bg-[#cdddcf] dark:bg-[#3b4f44] rounded-3xl p-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {/* Large featured card */}
-          <div className="col-span-2 row-span-2">
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left large featured card */}
+          <div className="col-span-12 md:col-span-5 row-span-2">
             <FavouriteCard
               plant={displayPlants[0]}
               large
@@ -77,15 +85,29 @@ export default function FavouriteProducts({ plants }) {
             />
           </div>
 
-          {/* Smaller cards */}
-          {displayPlants.slice(1, 6).map((plant) => (
-            <FavouriteCard
-              key={plant._id}
-              plant={plant}
-              isWishlisted={wishlistIds.includes(plant._id)}
-              onWishlistUpdate={handleWishlistUpdate}
-            />
-          ))}
+          {/* Top right two cards */}
+          <div className="col-span-12 md:col-span-7 grid grid-cols-2 gap-6">
+            {displayPlants.slice(1, 3).map((plant) => (
+              <FavouriteCard
+                key={plant._id}
+                plant={plant}
+                isWishlisted={wishlistIds.includes(plant._id)}
+                onWishlistUpdate={handleWishlistUpdate}
+              />
+            ))}
+          </div>
+
+          {/* Bottom right three cards */}
+          <div className="col-span-12 md:col-span-7 grid grid-cols-2 gap-6">
+            {displayPlants.slice(1, 3).map((plant) => (
+              <FavouriteCard
+                key={plant._id}
+                plant={plant}
+                isWishlisted={wishlistIds.includes(plant._id)}
+                onWishlistUpdate={handleWishlistUpdate}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

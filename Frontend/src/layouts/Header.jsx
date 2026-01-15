@@ -1,247 +1,4 @@
-// import { NavLink, useNavigate } from "react-router-dom";
-// import React, { useContext } from "react";
-// import { AuthContext } from "../auth/authProvider";
-// import {
-//   Facebook,
-//   Instagram,
-//   Youtube,
-//   ShoppingCart,
-//   Bell,
-//   User,
-// } from "lucide-react";
 
-// const Header = () => {
-//   const { user, logout } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate("/login");
-//   };
-
-//   const navItemClass = ({ isActive }) =>
-//     `cursor-pointer transition ${
-//       isActive ? "text-green-800 font-bold" : "hover:text-green-700"
-//     }`;
-
-//   return (
-//     <header>
-//       {/* TOP SOCIAL BAR */}
-//       <div className="bg-[#538767e7] text-white flex justify-between items-center py-2 px-4">
-//         <div></div>
-
-//         <span className="text-lg secondary-font">PlantNest NEPAL</span>
-
-//         <div className="flex space-x-3">
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-blue-400 transition">
-//             <Facebook size={18} />
-//           </a>
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-pink-500 transition">
-//             <Instagram size={18} />
-//           </a>
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-red-600 transition">
-//             <Youtube size={18} />
-//           </a>
-//         </div>
-//       </div>
-
-//       {/* MAIN NAV */}
-//       <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-lg">
-//         {/* LOGO */}
-//         <div
-//           className="flex items-center gap-2 cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           <img
-//             src="/src/assets/images/plantnestlogo.svg"
-//             alt="Plant Nest Logo"
-//             className="w-18 h-18"
-//           />
-//         </div>
-
-//         {/* MENU */}
-//         <ul className="hidden md:flex gap-12 text-lg font-semibold text-[#274E36]">
-//           <NavLink to="/aboutus" className={navItemClass}>
-//             About Us
-//           </NavLink>
-
-//           <NavLink to="/products" className={navItemClass}>
-//             All Products
-//           </NavLink>
-
-//           <NavLink to="/wishlist" className={navItemClass}>
-//             Wishlist
-//           </NavLink>
-
-//           <NavLink to="/blog" className={navItemClass}>
-//             Blog
-//           </NavLink>
-//         </ul>
-
-//         {/* ICONS */}
-//         <div className="flex items-center gap-5">
-//           <NavLink to="/cart">
-//             <ShoppingCart size={18} className="hover:text-green-700" />
-//           </NavLink>
-
-//           <NavLink to="/notifications">
-//             <Bell size={18} className="hover:text-green-700" />
-//           </NavLink>
-
-//           <NavLink to={user ? "/profile" : "/login"}>
-//             <User size={18} className="hover:text-green-700" />
-//           </NavLink>
-
-//           {/* AUTH BUTTON */}
-//           {user ? (
-//             <button
-//               onClick={handleLogout}
-//               className="bg-yellow-400 text-black text-sm px-4 py-1 rounded hover:bg-yellow-500 transition"
-//             >
-//               Logout
-//             </button>x
-//           ) : (
-//             <button
-//               onClick={() => navigate("/login")}
-//               className="bg-[#274E36] text-white px-8 py-2 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-lg transition"
-//             >
-//               Login
-//             </button>
-//           )}
-//         </div>
-//       </nav>
-//     </header>
-//   );
-// };
-
-// export default Header;
-
-// import { NavLink, useNavigate } from "react-router-dom";
-// import { useContext } from "react";
-// import { AuthContext } from "../auth/authProvider";
-
-// import { useCart } from "../context/CartContext";
-// import {
-//   Facebook,
-//   Instagram,
-//   Youtube,
-//   ShoppingCart,
-//   Bell,
-//   User,
-// } from "lucide-react";
-
-// const Header = () => {
-//   const { user, logout } = useContext(AuthContext);
-//   const { cartCount } = useCart();
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate("/login");
-//   };
-
-//   const navItemClass = ({ isActive }) =>
-//     `cursor-pointer transition ${
-//       isActive ? "text-green-800 font-bold" : "hover:text-green-700"
-//     }`;
-
-//   return (
-//     <header>
-//       {/* TOP SOCIAL BAR */}
-//       <div className="bg-[#538767e7] text-white flex justify-between items-center py-2 px-4">
-//         <div></div>
-
-//         <span className="text-lg secondary-font">PlantNest NEPAL</span>
-
-//         <div className="flex space-x-3">
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-blue-400 transition">
-//             <Facebook size={18} />
-//           </a>
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-pink-500 transition">
-//             <Instagram size={18} />
-//           </a>
-//           <a className="bg-white text-black p-1.5 rounded-full hover:text-red-600 transition">
-//             <Youtube size={18} />
-//           </a>
-//         </div>
-//       </div>
-
-//       {/* MAIN NAV */}
-//       <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-lg">
-//         {/* LOGO */}
-//         <div
-//           className="flex items-center gap-2 cursor-pointer"
-//           onClick={() => navigate("/")}
-//         >
-//           <img
-//             src="/src/assets/images/plantnestlogo.svg"
-//             alt="Plant Nest Logo"
-//             className="w-18 h-18"
-//           />
-//         </div>
-
-//         {/* MENU */}
-//         <ul className="hidden md:flex gap-12 text-lg font-semibold text-[#274E36]">
-//           <NavLink to="/aboutus" className={navItemClass}>
-//             About Us
-//           </NavLink>
-
-//           <NavLink to="/products" className={navItemClass}>
-//             All Products
-//           </NavLink>
-
-//           <NavLink to="/wishlist" className={navItemClass}>
-//             Wishlist
-//           </NavLink>
-
-//           <NavLink to="/blog" className={navItemClass}>
-//             Blog
-//           </NavLink>
-//         </ul>
-
-//         {/* ICONS */}
-//         <div className="flex items-center gap-5">
-//           {/* Cart with Badge */}
-//           <NavLink to="/cart" className="relative">
-//             <ShoppingCart size={24} className="hover:text-green-700" />
-//             {cartCount > 0 && (
-//               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-//                 {cartCount}
-//               </span>
-//             )}
-//           </NavLink>
-
-//           <NavLink to="/notifications">
-//             <Bell size={24} className="hover:text-green-700" />
-//           </NavLink>
-
-//           <NavLink to={user ? "/profile" : "/login"}>
-//             <User size={24} className="hover:text-green-700" />
-//           </NavLink>
-
-//           {/* AUTH BUTTON */}
-//           {user ? (
-//             <button
-//               onClick={handleLogout}
-//               className="bg-yellow-400 text-black text-sm px-4 py-1 rounded hover:bg-yellow-500 transition"
-//             >
-//               Logout
-//             </button>
-//           ) : (
-//             <button
-//               onClick={() => navigate("/login")}
-//               className="bg-[#274E36] text-white px-8 py-2 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-lg transition"
-//             >
-//               Login
-//             </button>
-//           )}
-//         </div>
-//       </nav>
-//     </header>
-//   );
-// };
-
-// export default Header;
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -261,8 +18,10 @@ import {
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
+import { Menu } from "lucide-react";
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const { cartCount } = useCart();
   const socketContext = useSocket();
@@ -627,6 +386,52 @@ const Header = () => {
               </div>
             )}
           </div>
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+          >
+            <Menu size={26} className="text-[#274E36]" />
+          </button>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-12 left-0 w-full bg-white shadow-lg border-t md:hidden z-40">
+              <ul className="flex flex-col py-4 px-6 space-y-4 text-lg font-semibold text-[#274E36]">
+                <NavLink
+                  to="/aboutus"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={navItemClass}
+                >
+                  About Us
+                </NavLink>
+
+                <NavLink
+                  to="/products"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={navItemClass}
+                >
+                  All Products
+                </NavLink>
+
+                <NavLink
+                  to="/wishlist"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={navItemClass}
+                >
+                  Wishlist
+                </NavLink>
+
+                <NavLink
+                  to="/blogs"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={navItemClass}
+                >
+                  Blog
+                </NavLink>
+              </ul>
+            </div>
+          )}
 
           {/* AUTH BUTTON */}
           {user ? (
