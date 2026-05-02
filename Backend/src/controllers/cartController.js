@@ -12,10 +12,10 @@ class CartController {
 
   async addToCart(req, res) {
     try {
-          console.log('req.user:', req.user); // ADD THIS LINE
+         
 
       const { productId, quantity } = req.body;
-                console.log('productId:', productId, 'quantity:', quantity); // ADD THIS TOO
+                console.log('productId:', productId, 'quantity:', quantity);
 
 
       const cart = await cartService.addToCart(

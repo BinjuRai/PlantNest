@@ -25,9 +25,6 @@ const profileRoutes = require("./src/routes/profileRoutes");
 
 const reviewRoutes = require("./src/routes/reviewRoutes");
 
-
-
-
 // const adminBlogRoutes = require("./src/routes/admin/blogRoutes");
 // Connect to MongoDB
 connectDB();
@@ -48,7 +45,7 @@ app.use(
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -73,16 +70,14 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoute);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/users", profileRoutes)
+app.use("/api/users", profileRoutes);
 app.use("/api", blogRoutes);
 app.use("/api/reviews", reviewRoutes);
 
-// Test route
 app.get("/test", (req, res) => {
   res.send("Server is working!");
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -90,7 +85,6 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -99,10 +93,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-// const PORT = process.env.PORT || 5050;
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on port ${PORT}`);
-// });
-// module.exports = app;
 module.exports = app;

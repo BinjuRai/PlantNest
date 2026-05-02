@@ -1,22 +1,8 @@
-// require("dotenv").config();
-
-// const http = require("http");
-// const app = require("./index");
-
-// const PORT = process.env.PORT || 5050;
-
-// // Create HTTP server
-// const server = http.createServer(app);
-
-// // Start server
-// server.listen(PORT, "0.0.0.0", () => {
-//   console.log(`Server running at http://0.0.0.0:${PORT}`);
-// });
 require("dotenv").config();
 const http = require("http");
 const socketio = require("socket.io");
 const jwt = require("jsonwebtoken");
-const app = require("./index"); // Import your app setup from index.js
+const app = require("./index");
 
 const PORT = process.env.PORT || 5050;
 
@@ -28,14 +14,14 @@ const io = socketio(server, {
   cors: {
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 // Socket.io authentication middleware
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
-  
+
   if (!token) {
     return next(new Error("Authentication error"));
   }
@@ -85,5 +71,7 @@ app.set("io", io);
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running at http://0.0.0.0:${PORT}`);
   console.log(`🔌 Socket.io enabled`);
-  console.log(`🌐 Client URL: ${process.env.CLIENT_URL || "http://localhost:5173"}`);
+  console.log(
+    `🌐 Client URL: ${process.env.CLIENT_URL || "http://localhost:5173"}`,
+  );
 });

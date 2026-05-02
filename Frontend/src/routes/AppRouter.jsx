@@ -2,9 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
-
-// Pages
-import Homepage from "../pages/homepage.jsx";
+import Homepage from "../pages/Homepage.jsx";
 import LoginPage from "../pages/login.jsx";
 import RegisterPage from "../pages/register.jsx";
 import Checkout from "../pages/Checkout.jsx";
@@ -22,7 +20,7 @@ import Blogs from "../pages/blogs.jsx";
 import Contact from "../pages/contact.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 
-// Admin Pages
+
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
 import Products from "../pages/admin/Products.jsx";
 import AddProduct from "../pages/admin/AddProduct.jsx";
@@ -86,7 +84,6 @@ export default function AppRouter() {
             <Route path="/payment/failure" element={<PaymentFailure />} />
           </Route>
         </Route>
-
 
         <Route element={<AdminRoute />}>
           <Route element={<AdminLayout />}>

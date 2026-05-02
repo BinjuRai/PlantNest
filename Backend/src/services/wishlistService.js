@@ -15,7 +15,6 @@ class WishlistService {
       if (!wishlist) {
         wishlist = await Wishlist.create({ user: userId, products: [] });
       }
-
       return wishlist;
     } catch (err) {
       console.error("Get wishlist error:", err);
@@ -25,7 +24,7 @@ class WishlistService {
 
   async addToWishlist(userId, productId) {
     try {
-      // Verify product exists
+      
       const product = await Product.findById(productId);
       if (!product) {
         throw new Error("Product not found");

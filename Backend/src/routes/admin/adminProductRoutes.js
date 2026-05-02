@@ -6,10 +6,7 @@ const controller = require("../../controllers/admin/adminProductController");
 const { authenticate, isAdmin } = require("../../middlewares/authMiddleware");
 const upload = require("../../../utils/multer");
 
-/* ================= ADMIN PRODUCT ROUTES ================= */
 
-
-// Get all products
 router.get(
   "/",
   authenticate,
@@ -17,7 +14,7 @@ router.get(
   controller.getAllProducts
 );
 
-// Get single product
+
 router.get(
   "/:id",
   authenticate,
@@ -25,7 +22,7 @@ router.get(
   controller.getProductById
 );
 
-// Create product with image/video upload
+
 router.post(
   "/",
   authenticate,
@@ -37,7 +34,7 @@ router.post(
   controller.createProduct
 );
 
-// Alternative route for add-product
+
 router.post(
   "/add-product",
   authenticate,
@@ -49,7 +46,7 @@ router.post(
   controller.createProduct
 );
 
-// Update product
+
 router.put(
   "/:id",
   authenticate,
@@ -61,7 +58,7 @@ router.put(
   controller.updateProduct
 );
 
-// Delete product
+
 router.delete(
   "/:id",
   authenticate,
