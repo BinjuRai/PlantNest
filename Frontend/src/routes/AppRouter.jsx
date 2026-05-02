@@ -9,7 +9,7 @@ import Checkout from "../pages/Checkout.jsx";
 import OrderSuccess from "../pages/orderSuccess.jsx";
 import MyOrders from "../pages/MyOrder.jsx";
 import NotificationsPage from "../pages/Notfication.jsx";
-import BlogDetails from "../pages/BlogDetails.jsx";
+import BlogDetails from "../pages/blogDetails.jsx";
 import Aboutus from "../pages/aboutus.jsx";
 import CategoryPage from "../pages/Categories.jsx";
 import WishlistPage from "../pages/wishlistPage.jsx";
